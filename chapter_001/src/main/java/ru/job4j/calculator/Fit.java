@@ -11,9 +11,12 @@ public class Fit {
      * @param height Рост.
      * @return идеальный вес.
      */
+    private static final double R = 1.15;
+    private static final int M = 100;
+    private static final int W = 110;
+
     public double manWeight(double height) {
-        double idealManWeight = (height - 100) * 1.15;
-        return idealManWeight;
+        return (height - M) * R;
     }
     /**
      * Идеальный вес для женщины.
@@ -21,7 +24,6 @@ public class Fit {
      * @return идеальный вес.
      */
     public double womanWeight(double height) {
-        double idealWomanWeight = (height - 110) * 1.15;
-        return idealWomanWeight;
+        return (height - W) * R;
     }
 }
