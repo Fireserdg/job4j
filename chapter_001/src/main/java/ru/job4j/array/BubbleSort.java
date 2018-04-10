@@ -7,16 +7,19 @@ package ru.job4j.array;
  *@since 0.1
  */
 public class BubbleSort {
-
+    /**
+     *
+     * @param array
+     * @return sorted array.
+     */
     public int[] sort(int[] array) {
-
         for (int i = 1; i < array.length; i++) {
-            int a = array [i];
+            int index = array [i];
             for (int j = i - 1; j >= 0; j--) {
-                int b = array [j];
-                if (a < b) {
-                    array[j + 1] = b;
-                    array[j] = a;
+                int data = array [j];
+                if (index < data) {
+                    array[j + 1] = data;
+                    array[j] = index;
                 } else {
                     break;
                 }
