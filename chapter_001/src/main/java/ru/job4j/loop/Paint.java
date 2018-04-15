@@ -14,7 +14,6 @@ public class Paint {
                 (row, column) -> row >= height - column - 1 && row + height - 1 >= column
         );
     }
-
     private String loopBy(int height, int weight, BiPredicate<Integer, Integer> predict) {
         StringBuilder screen = new StringBuilder();
         for (int row = 0; row != height; row++) {

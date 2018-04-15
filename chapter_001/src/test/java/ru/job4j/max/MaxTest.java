@@ -2,7 +2,6 @@ package ru.job4j.max;
 import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-
 /**
 *@author Sergey Filippov (serdg1984@yandex.ru)
 *@version $Id$

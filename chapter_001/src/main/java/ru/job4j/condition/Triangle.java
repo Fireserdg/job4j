@@ -42,7 +42,6 @@ public class Triangle {
         double bc = this.b.distanceTo(this.c);
         double p = this.period(ab, ac, bc);
         if (this.exist(ab, ac, bc)) {
-            // написать формулу для расчета площади треугольника.
             rsl = Math.sqrt(p * (p - ab) * (p - ac) * (p - bc));
         }
         return rsl;
@@ -50,12 +49,11 @@ public class Triangle {
     /**
      * Метод проверяет можно ли построить треугольник с такими длинами сторон.
      *
-     * Подумайте какое надо написать условие, чтобы определить можно ли построить треугольник.
      *
      * @param ab Длина от точки a b.
      * @param ac Длина от точки a c.
      * @param bc Длина от точки b c.
-     * @return возвращает возможность построения треугольника
+     * @return возвращает true или false.
      */
     private boolean exist(double ab, double ac, double bc) {
         return ab < ac + bc && ac < ab + bc && bc < ab + ac;

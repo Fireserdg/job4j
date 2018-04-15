@@ -8,10 +8,10 @@ package ru.job4j.array;
  */
 public class Turn {
     public int[] turn(int[] array) {
-        for (int i = 0; i < array.length / 2; i++) {
-            int param = array [i];
-            array [i] = array [array.length - i - 1];
-            array [array.length - i - 1] = param;
+        for (int value = 0; value < array.length / 2; value++) {
+            int param = array [value];
+            array [value] = array [array.length - value - 1];
+            array [array.length - value - 1] = param;
         }
         return array;
     }

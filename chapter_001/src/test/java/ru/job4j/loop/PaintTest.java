@@ -1,5 +1,4 @@
 package ru.job4j.loop;
-
 import org.junit.Test;
 import java.util.StringJoiner;
 import static org.hamcrest.core.Is.is;
