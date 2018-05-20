@@ -11,18 +11,21 @@ import java.util.Random;
  * @since 08.05.2018.
  */
 public class Tracker {
+
     /**
      * Массив для хранения заявок.
      */
     private final Item[] items = new Item[100];
-    /**
-     * Указатель ячейки для новой заявки.
-     */
-    private int position = 0;
+
     /**
      * Определение случайного числа.
      */
     private static final Random RN = new Random();
+
+    /**
+     * Указатель ячейки для новой заявки.
+     */
+    private int position = 0;
 
     /**
      * Метод добавления заявок.
