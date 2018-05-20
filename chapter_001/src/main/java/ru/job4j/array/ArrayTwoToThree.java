@@ -14,29 +14,20 @@ public class ArrayTwoToThree {
      * @return возвращаем третий отсортированный массив.
      */
     public int[] arraysThree(int[] one, int[] two) {
-        int[] threeArray = new int[one.length + two.length];
-        for (int indexNew = 0, array = 0; indexNew < threeArray.length; indexNew++, array++) {
-            if (indexNew == one.length) {
-                array = 0;
-            }
-            if (indexNew < one.length) {
-                threeArray [indexNew] = one[array];
-            } else {
-                threeArray[indexNew] = two[array];
-            }
+
+        int [] three = new int[one.length + two.length];
+        int i = 0, j = 0, index = 0;
+        while (i < one.length && j < two.length) {
+            three[index++] = one[i]<two[j] ? one[i++] : two[j++];
         }
-        for (int index = 1; index < threeArray.length; index++) {
-            int input = threeArray [index];
-            for (int out = index - 1; out >= 0; out--) {
-                int data = threeArray [out];
-                if (input < data) {
-                    threeArray[out + 1] = data;
-                    threeArray[out] = input;
-                } else {
-                    break;
-                }
-            }
+
+        if (i < one.length) {
+            System.arraycopy(one,i,three,index,one.length - i);
         }
-        return threeArray;
+
+        if (j<two.length) {
+            System.arraycopy(two,j,three, index,two.length - j);
+        }
+       return three;
     }
 }
