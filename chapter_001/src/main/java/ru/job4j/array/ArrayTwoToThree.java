@@ -15,18 +15,18 @@ public class ArrayTwoToThree {
      */
     public int[] arraysThree(int[] one, int[] two) {
 
-        int [] three = new int[one.length + two.length];
+        int[] three = new int[one.length + two.length];
         int i = 0, j = 0, index = 0;
         while (i < one.length && j < two.length) {
-            three[index++] = one[i]<two[j] ? one[i++] : two[j++];
+            three[index++] = one[i] < two[j] ? one[i++] : two[j++];
         }
 
         if (i < one.length) {
-            System.arraycopy(one,i,three,index,one.length - i);
+            System.arraycopy(one, i, three, index, one.length - i);
         }
 
-        if (j<two.length) {
-            System.arraycopy(two,j,three, index,two.length - j);
+        if (j < two.length) {
+            System.arraycopy(two, j, three, index, two.length - j);
         }
        return three;
     }
