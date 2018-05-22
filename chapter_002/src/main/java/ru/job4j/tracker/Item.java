@@ -7,7 +7,9 @@ public class Item {
     private long create;
     private String[] comments;
 
-    public Item() {
+    public Item(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public Item(String name, String description, long create) {
