@@ -71,13 +71,10 @@ public class StartUI {
                 this.editItem();
             } else if (DELETE.equals(answer)) {
                 this.deleteItem();
-
             } else if (FINDBYID.equals(answer)) {
-                this.findItembyID();
-
+                this.findItemByID();
             } else if (FINDBYNAME.equals(answer)) {
-                this.findItembyName();
-
+                this.findItemByName();
             } else if (EXIT.equals(answer)) {
                 exit = true;
             }
@@ -143,7 +140,7 @@ public class StartUI {
     /**
      * Метод реализует поиски заявки по ID.
      */
-    private void findItembyID() {
+    private void findItemByID() {
         System.out.println("------------Найти заявку по ID--------------");
         String answer = this.input.ask("Введите свой ID: ");
         Item[] result = this.tracker.findAll();
@@ -159,13 +156,14 @@ public class StartUI {
     /**
      *  Метод реализует поиск заявки по имени.
      */
-    private void findItembyName() {
+    private void findItemByName() {
         System.out.println("------------Найти заявку по имени--------------");
-        String answer = this.input.ask("Введите имя Вашей заявки: ");
-        Item[] result = this.tracker.findAll();
+        String  name = this.input.ask("Введите имя Вашей заявки: ");
+        Item[] result = this.tracker.findByName(name);
         for (Item item : result) {
-            if (answer.equals(item.getName())) {
-                System.out.println("Описание заявки: " + item.getDescription() + " ID Вашей заявки: " + item.getId());
+            if (name.equals(item.getName())) {
+                System.out.println("Имя заявки: " + item.getName() +
+                        "Описание заявки: " + item.getDescription() + " ID Вашей заявки: " + item.getId());
                 break;
             } else {
                 System.out.println("Заявки с таким именем не существует. Введите верное имя.");
