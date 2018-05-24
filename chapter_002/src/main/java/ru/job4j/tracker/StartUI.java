@@ -162,8 +162,8 @@ public class StartUI {
         Item[] result = this.tracker.findByName(name);
         for (Item item : result) {
             if (name.equals(item.getName())) {
-                System.out.println("Имя заявки: " + item.getName() +
-                        "Описание заявки: " + item.getDescription() + " ID Вашей заявки: " + item.getId());
+                System.out.println("Имя заявки: " + item.getName()
+                        + "Описание заявки: " + item.getDescription() + " ID Вашей заявки: " + item.getId());
                 break;
             } else {
                 System.out.println("Заявки с таким именем не существует. Введите верное имя.");
