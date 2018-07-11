@@ -116,10 +116,9 @@ public class StartUI {
                 Item items = new Item(name, desc);
                 this.tracker.replace(answer, items);
                 break;
-            } else {
-                System.out.println("Вы ввели не верный ID заявки. Введите верный ID.");
             }
         }
+        System.out.println("Вы ввели не верный ID заявки. Введите верный ID.");
     }
     /**
      * Метод реализует удаление заявки.
@@ -132,10 +131,9 @@ public class StartUI {
             if (answer.equals(item.getId())) {
                 this.tracker.delete(item.getId());
                 break;
-            } else {
-                System.out.println("Вы ввели не верный ID заявки. Введите верный ID.");
             }
         }
+        System.out.println("Вы ввели не верный ID заявки. Введите верный ID.");
     }
     /**
      * Метод реализует поиски заявки по ID.
@@ -148,10 +146,9 @@ public class StartUI {
             if (answer.equals(item.getId())) {
                 System.out.println("Имя заявки: " + item.getName() + " Описание заявки: " + item.getDescription());
                 break;
-            } else {
-                System.out.println("Заявки с таким ID не существует. Введите верный ID.");
             }
         }
+        System.out.println("Заявки с таким ID не существует. Введите верный ID.");
     }
     /**
      *  Метод реализует поиск заявки по имени.
@@ -165,10 +162,9 @@ public class StartUI {
                 System.out.println("Имя заявки: " + item.getName()
                         + "Описание заявки: " + item.getDescription() + " ID Вашей заявки: " + item.getId());
                 break;
-            } else {
-                System.out.println("Заявки с таким именем не существует. Введите верное имя.");
             }
         }
+        System.out.println("Заявки с таким именем не существует. Введите верное имя.");
     }
     /**
      * Метод реализует отображение меню Трекера.
