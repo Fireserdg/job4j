@@ -71,11 +71,10 @@ public class Tracker {
      */
     public boolean delete(String id) {
         boolean result = false;
-        for (int index = 0; index != position; index++) {
+        for (int index = 0; index < position; index++) {
             if (this.items[index].getId().equals(id)) {
-                for (int j = index; j != position; j++) {
-                    items[j] = items[j + 1];
-                }
+                System.arraycopy(this.items, index+1, this.items, index,
+                        items.length - (index+1));
                 position--;
                 result = true;
                 break;
