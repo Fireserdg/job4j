@@ -57,7 +57,6 @@ public class Tracker {
             if (this.items[index].getId().equals(id)) {
                 item.setId(this.items[index].getId());
                 this.items[index] = item;
-
             }
         }
     }
