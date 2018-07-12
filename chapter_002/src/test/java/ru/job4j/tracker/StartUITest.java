@@ -12,10 +12,10 @@ import static org.junit.Assert.*;
  * @since 08.05.2018.
  */
 public class StartUITest {
+    private final Tracker tracker = new Tracker();
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        Tracker tracker = new Tracker();
         Input input = new StubInput(new String[]{"0", "test name", "desc", "6"});
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll()[0].getName(), is("test name"));
@@ -23,7 +23,6 @@ public class StartUITest {
 
     @Test
     public void whenUserUpdateThenTrackerHasUpdatedValue() {
-        Tracker tracker = new Tracker();
         Item item = tracker.add(new Item("test name", "desc"));
         Input input = new StubInput(new String[]{"2", item.getId(), "test names", "desc", "6"});
         new StartUI(input, tracker).init();
@@ -32,7 +31,6 @@ public class StartUITest {
 
     @Test
     public void whenUserDeleteThenTrackerHasDeleteValue() {
-        Tracker tracker = new Tracker();
         Item item = tracker.add(new Item("test name", "desc"));
         Item item1 = tracker.add(new Item("test1 name", "desc1"));
         Input input = new StubInput(new String[]{"3", item.getId(), "6"});
@@ -42,7 +40,6 @@ public class StartUITest {
 
     @Test
     public void whenUserFindItemByIdThenTrackerShowIdItem() {
-       Tracker tracker = new Tracker();
        Item item = tracker.add(new Item("test name", "desc"));
        Input input = new StubInput(new String[]{"4", item.getId(), "6"});
        new StartUI(input, tracker).init();
@@ -51,11 +48,19 @@ public class StartUITest {
 
     @Test
     public void whenUserFindItemByIdThenTrackerShowNameItem() {
-        Tracker tracker = new Tracker();
         Item item = tracker.add(new Item("test name", "test desc"));
         Input input = new StubInput(new String[]{"5", item.getName(), "6"});
         String name = item.getName();
         new StartUI(input, tracker).init();
         assertThat(tracker.findByName(name)[0].getName(), is("test name"));
+    }
+    @Test
+    public void whenUserHasSelectedShowByAllItems() {
+        Item item = tracker.add(new Item("test name", "test desc"));
+        Item item1 = tracker.add(new Item("test1 name", "test1 desc"));
+        Item item2 = tracker.add(new Item("test2 name", "test2 name"));
+        Input input = new StubInput(new String[]{"1", "6"});
+        new StartUI(input, tracker).init();
+        assertThat((tracker.findAll()), is(new Item[]{item, item1, item2}));
     }
 }
