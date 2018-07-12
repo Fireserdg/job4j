@@ -52,29 +52,36 @@ public class Tracker {
      * @param id Идентификатор заявки.
      * @param item Заявка.
      */
-    public void replace(String id, Item item) {
+    public boolean replace(String id, Item item) {
+        boolean result = false;
         for (int index = 0; index != position; index++) {
             if (this.items[index].getId().equals(id)) {
                 item.setId(this.items[index].getId());
                 this.items[index] = item;
+                result = true;
+                break;
             }
         }
+        return result;
     }
 
     /**
      * Метод удаления заявок.
      * @param id Идентификатор заявки.
      */
-    public void delete(String id) {
+    public boolean delete(String id) {
+        boolean result = false;
         for (int index = 0; index != position; index++) {
             if (this.items[index].getId().equals(id)) {
                 for (int j = index; j != position; j++) {
                     items[j] = items[j + 1];
                 }
                 position--;
+                result = true;
                 break;
             }
         }
+        return result;
     }
 
     /**
