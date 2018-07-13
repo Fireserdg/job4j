@@ -108,7 +108,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("----List of Items----");
             for (Item item: tracker.findAll()) {
-                System.out.println(String.format("ID: %s. name: %s.", item.getId(), item.getName()));
+                System.out.println(item);
             }
         }
 
@@ -157,8 +157,7 @@ public class MenuTracker {
             String answer = input.ask("Please, provide item ID:");
             Item item = tracker.findById(answer);
             if (item != null) {
-                System.out.println("Name item: " + item.getName() + " Description item: "
-                        + item.getDescription());
+                System.out.println(item);
             } else {
                 System.out.println("Item not found.");
             }
@@ -236,9 +235,7 @@ class FindByName implements UserAction {
         }
         for (Item item : result) {
             if (name.equals(item.getName())) {
-                System.out.println("Name item: " + item.getName()
-                        + " Description item: " + item.getDescription()
-                        + " item ID: " + item.getId());
+                System.out.println(item);
             }
         }
     }
