@@ -1,6 +1,12 @@
 package ru.job4j.tracker;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
@@ -12,7 +18,18 @@ import static org.junit.Assert.*;
  * @since 08.05.2018.
  */
 public class StartUITest {
+    /**
+     * Поле с объектом класса трекер.
+     */
     private final Tracker tracker = new Tracker();
+    /**
+     * Поле содержит дефолтный вывод на консоль.
+     */
+    private final PrintStream stdout = System.out;
+    /**
+     * Поле содержит буфер результата.
+     */
+    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
@@ -47,13 +64,14 @@ public class StartUITest {
     }
 
     @Test
-    public void whenUserFindItemByIdThenTrackerShowNameItem() {
+    public void whenUserFindItemByNameThenTrackerShowNameItem() {
         Item item = tracker.add(new Item("test name", "test desc"));
         Input input = new StubInput(new String[]{"6", item.getName(), "y"});
         String name = item.getName();
         new StartUI(input, tracker).init();
         assertThat(tracker.findByName(name)[0].getName(), is("test name"));
     }
+
     @Test
     public void whenUserHasSelectedShowByAllItems() {
         Item item = tracker.add(new Item("test name", "test desc"));
@@ -62,5 +80,77 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"2", "y"});
         new StartUI(input, tracker).init();
         assertThat((tracker.findAll()), is(new Item[]{item, item1, item2}));
+    }
+
+    /**
+     * Метод реализации меню.
+     * @return возвращает отображение меню Tracker.
+     */
+    public String consoleMenu() {
+        return new StringBuilder().append("1. Add the new Item.\n")
+                .append("2. Show all items.\n")
+                .append("3. Edit the new Item.\n")
+                .append("4. Delete the new Item.\n")
+                .append("5. Find Item by Id .\n")
+                .append("6. Find Item by name.\n")
+                .append("7. Exit Program.\n")
+                .toString();
+    }
+
+    /**
+     * Метод заменяющий вывод на консоль на вывод в память.
+     */
+    @Before
+    public void loadOutput() {
+        System.setOut(new PrintStream(this.out));
+    }
+
+    /**
+     * Метод возвращающий вывод на консоль.
+     */
+    @After
+    public void backOutput() {
+        System.setOut(this.stdout);
+    }
+
+    @Test
+    public void whenUserHasSelectedShowByAllItemThenConsoleShowResult() {
+        Item item1 = tracker.add(new Item("test out", "123"));
+        Item item2 = tracker.add(new Item("test out2", "123"));
+        Input input = new StubInput(new String[]{"2", "y"});
+        new StartUI(input, tracker).init();
+        assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
+                                                    .append("----List of Items----\n")
+                                                    .append("ID item: " + item1.getId())
+                                                    .append(" Name item: " + item1.getName())
+                                                    .append(" Description item: " + item1.getDescription() + "\n")
+                                                    .append("ID item: " + item2.getId())
+                                                    .append(" Name item: " + item2.getName())
+                                                    .append(" Description item: " + item2.getDescription() + "\n")
+                                                )));
+    }
+
+    @Test
+    public void whenUserFindItemByNameThenConsoleShowResult() {
+        Item item = tracker.add(new Item("testID", "descID"));
+        Input input = new StubInput(new String[]{"6", item.getName(), "y"});
+        new StartUI(input, tracker).init();
+        assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
+                                                    .append("------------Find item by Name--------------\n")
+                                                    .append("ID item: " + item.getId())
+                                                    .append(" Name item: " + item.getName())
+                                                    .append(" Description item: " + item.getDescription() + "\n")
+        )));
+    }
+
+    @Test
+    public void whenUserDeleteItemThenConsoleShowResult() {
+        Item item = tracker.add(new Item("test1", "desc1"));
+        Input input = new StubInput(new String[]{"4", item.getId(), "y"});
+        new StartUI(input, tracker).init();
+        assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
+                                                    .append("------------Delete Item--------------\n")
+                                                    .append("Item has deleted\n")
+        )));
     }
 }
