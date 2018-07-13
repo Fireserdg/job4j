@@ -87,13 +87,20 @@ public class StartUITest {
      * @return возвращает отображение меню Tracker.
      */
     public String consoleMenu() {
-        return new StringBuilder().append("1. Add the new Item.\n")
-                .append("2. Show all items.\n")
-                .append("3. Edit the new Item.\n")
-                .append("4. Delete the new Item.\n")
-                .append("5. Find Item by Id .\n")
-                .append("6. Find Item by name.\n")
-                .append("7. Exit Program.\n")
+        return new StringBuilder().append("1. Add the new Item.")
+                .append(System.lineSeparator())
+                .append("2. Show all items.")
+                .append(System.lineSeparator())
+                .append("3. Edit the new Item.")
+                .append(System.lineSeparator())
+                .append("4. Delete the new Item.")
+                .append(System.lineSeparator())
+                .append("5. Find Item by Id .")
+                .append(System.lineSeparator())
+                .append("6. Find Item by name.")
+                .append(System.lineSeparator())
+                .append("7. Exit Program.")
+                .append(System.lineSeparator())
                 .toString();
     }
 
@@ -120,13 +127,16 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"2", "y"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
-                                                    .append("----List of Items----\n")
+                                                    .append("----List of Items----")
+                                                    .append(System.lineSeparator())
                                                     .append("ID item: " + item1.getId())
                                                     .append(" Name item: " + item1.getName())
-                                                    .append(" Description item: " + item1.getDescription() + "\n")
+                                                    .append(" Description item: " + item1.getDescription())
+                                                    .append(System.lineSeparator())
                                                     .append("ID item: " + item2.getId())
                                                     .append(" Name item: " + item2.getName())
-                                                    .append(" Description item: " + item2.getDescription() + "\n")
+                                                    .append(" Description item: " + item2.getDescription())
+                                                    .append(System.lineSeparator())
                                                 )));
     }
 
@@ -136,10 +146,12 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"6", item.getName(), "y"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
-                                                    .append("------------Find item by Name--------------\n")
+                                                    .append("------------Find item by Name--------------")
+                                                    .append(System.lineSeparator())
                                                     .append("ID item: " + item.getId())
                                                     .append(" Name item: " + item.getName())
-                                                    .append(" Description item: " + item.getDescription() + "\n")
+                                                    .append(" Description item: " + item.getDescription())
+                                                    .append(System.lineSeparator())
         )));
     }
 
@@ -149,8 +161,10 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"4", item.getId(), "y"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
-                                                    .append("------------Delete Item--------------\n")
-                                                    .append("Item has deleted\n")
+                                                    .append("------------Delete Item--------------")
+                                                    .append(System.lineSeparator())
+                                                    .append("Item has deleted")
+                                                    .append(System.lineSeparator())
         )));
     }
 }
