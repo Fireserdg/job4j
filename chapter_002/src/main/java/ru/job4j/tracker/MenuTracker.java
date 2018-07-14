@@ -75,7 +75,10 @@ public class MenuTracker {
     public void select(int key) {
         this.actions.get(key).execute(this.input, this.tracker);
     }
-
+    /**
+     * Метод задающий диапозон пунктов меню.
+     *
+     */
     public List<Integer> listValueCreate() {
         List<Integer> range = new ArrayList<>();
         for (int i = 0; i < this.getActionsLength(); i++) {
