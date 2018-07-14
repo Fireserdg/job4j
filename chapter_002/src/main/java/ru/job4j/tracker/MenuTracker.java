@@ -45,7 +45,6 @@ public class MenuTracker {
         this.actions.add(new MenuTracker.DeleteItem());
         this.actions.add(this.new FindById());
         this.actions.add(new FindByName());
-        this.actions.add(this.new ExitProgram());
     }
 
     /**
@@ -59,6 +58,14 @@ public class MenuTracker {
         }
     }
 
+    /**
+     * Метод для получения массива меню.
+     *
+     * @return длину массива
+     */
+    public int getActionsLength() {
+        return this.actions.size();
+    }
     /**
      * Метод в зависимости от указанного ключа, выполняет соотвествующие действие.
      *
@@ -74,7 +81,7 @@ public class MenuTracker {
     private class AddItem implements UserAction {
         @Override
         public int key() {
-            return 1;
+            return 0;
         }
 
         @Override
@@ -101,7 +108,7 @@ public class MenuTracker {
     private static class ShowItems implements UserAction {
         @Override
         public int key() {
-            return 2;
+            return 1;
         }
 
         @Override
@@ -123,7 +130,7 @@ public class MenuTracker {
     private static class DeleteItem implements UserAction {
         @Override
         public int key() {
-            return 4;
+            return 3;
         }
 
         @Override
@@ -148,7 +155,7 @@ public class MenuTracker {
     public class FindById implements UserAction {
         @Override
         public int key() {
-            return 5;
+            return 4;
         }
 
         @Override
@@ -168,25 +175,6 @@ public class MenuTracker {
             return String.format("%s. %s", this.key(), "Find Item by Id .");
         }
     }
-    /**
-     * Внутренний класс, реализующий выход из программы.
-     */
-    public class ExitProgram implements UserAction {
-        @Override
-        public int key() {
-            return 7;
-        }
-
-        @Override
-        public void execute(Input input, Tracker tracker) {
-
-        }
-
-        @Override
-        public String info() {
-            return String.format("%s. %s", this.key(), "Exit Program.");
-        }
-    }
 }
 /**
  * Внутренний "внешний класс", реализующий редактирование заявок.
@@ -194,7 +182,7 @@ public class MenuTracker {
 class EditItem implements UserAction {
     @Override
     public int key() {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -222,7 +210,7 @@ class EditItem implements UserAction {
 class FindByName implements UserAction {
     @Override
     public int key() {
-        return 6;
+        return 5;
     }
 
     @Override
