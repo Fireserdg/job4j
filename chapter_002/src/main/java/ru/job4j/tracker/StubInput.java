@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class StubInput implements Input {
     private final String[] answers;
-    private int positions = 1;
+    private int positions = 0;
 
     public StubInput(String[] answers) {
         this.answers = answers;
@@ -23,6 +23,6 @@ public class StubInput implements Input {
 
     @Override
     public int ask(String question, List<Integer> range) {
-        return Integer.valueOf(answers[0]);
+        return Integer.valueOf(answers[positions++]);
     }
 }

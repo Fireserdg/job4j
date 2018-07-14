@@ -45,6 +45,7 @@ public class MenuTracker {
         this.actions.add(new MenuTracker.DeleteItem());
         this.actions.add(this.new FindById());
         this.actions.add(new FindByName());
+        this.actions.add(new ExitProgram());
     }
 
     /**
@@ -73,6 +74,14 @@ public class MenuTracker {
      */
     public void select(int key) {
         this.actions.get(key).execute(this.input, this.tracker);
+    }
+
+    public List<Integer> listValueCreate() {
+        List<Integer> range = new ArrayList<>();
+        for (int i = 0; i < this.getActionsLength(); i++) {
+            range.add(i);
+        }
+        return range;
     }
 
     /**
@@ -205,7 +214,7 @@ class EditItem implements UserAction {
     }
 }
 /**
- * Внутренний "внешний класс", поиск по Name.
+ * Внутренний "внешний класс", реализующий поиск по Name.
  */
 class FindByName implements UserAction {
     @Override
@@ -231,5 +240,24 @@ class FindByName implements UserAction {
     @Override
     public String info() {
         return String.format("%s. %s", this.key(), "Find Item by name.");
+    }
+}
+/**
+ * Внутренний "внешний класс", реализующий пункт меню Exit Program.
+ */
+class ExitProgram implements UserAction {
+    @Override
+    public int key() {
+        return 6;
+    }
+
+    @Override
+    public void execute(Input input, Tracker tracker) {
+
+    }
+
+    @Override
+    public String info() {
+        return String.format("%s. %s", this.key(), "Exit program.");
     }
 }

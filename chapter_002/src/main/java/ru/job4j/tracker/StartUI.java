@@ -35,21 +35,22 @@ public class StartUI {
      */
     public void init() {
         MenuTracker menu = new MenuTracker(this.input, this.tracker);
-        List<Integer> range = new ArrayList<>();
         menu.fillActions();
-        for (int i = 0; i < menu.getActionsLength(); i++) {
-            range.add(i);
-        }
-        do {
+        boolean outMenu = false;
+        while (!outMenu) {
             menu.show();
-            menu.select(input.ask("Select", range));
-        } while (!"y".equals(this.input.ask("Exit?(y):")));
-
-        /**
-         * Запуск программы.
-         * @param args
-         */
+            int key = input.ask("Select", menu.listValueCreate());
+            if (key == 6) {
+                outMenu = true;
+            } else {
+                menu.select(key);
+            }
+        }
     }
+    /**
+     * Запуск программы.
+     * @param args
+     */
     public static void main(String[] args) {
         new StartUI(new ValidateInput(), new Tracker()).init();
     }

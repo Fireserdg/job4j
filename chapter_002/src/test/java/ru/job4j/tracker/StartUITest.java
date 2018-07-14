@@ -33,7 +33,7 @@ public class StartUITest {
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        Input input = new StubInput(new String[]{"0", "test name", "desc", "y"});
+        Input input = new StubInput(new String[]{"0", "test name", "desc", "6"});
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll()[0].getName(), is("test name"));
     }
@@ -41,7 +41,7 @@ public class StartUITest {
     @Test
     public void whenUserUpdateThenTrackerHasUpdatedValue() {
         Item item = tracker.add(new Item("test name", "desc"));
-        Input input = new StubInput(new String[]{"2", item.getId(), "test names", "desc", "y"});
+        Input input = new StubInput(new String[]{"2", item.getId(), "test names", "desc", "6"});
         new StartUI(input, tracker).init();
         assertThat(tracker.findById(item.getId()).getName(), is("test names"));
     }
@@ -50,7 +50,7 @@ public class StartUITest {
     public void whenUserDeleteThenTrackerHasDeleteValue() {
         Item item = tracker.add(new Item("test name", "desc"));
         Item item1 = tracker.add(new Item("test1 name", "desc1"));
-        Input input = new StubInput(new String[]{"3", item.getId(), "y"});
+        Input input = new StubInput(new String[]{"3", item.getId(), "6"});
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll()[0].getName(), is(item1.getName()));
     }
@@ -58,7 +58,7 @@ public class StartUITest {
     @Test
     public void whenUserFindItemByIdThenTrackerShowIdItem() {
        Item item = tracker.add(new Item("test name", "desc"));
-       Input input = new StubInput(new String[]{"4", item.getId(), "y"});
+       Input input = new StubInput(new String[]{"4", item.getId(), "6"});
        new StartUI(input, tracker).init();
        assertThat(tracker.findAll()[0].getId(), is(item.getId()));
     }
@@ -66,7 +66,7 @@ public class StartUITest {
     @Test
     public void whenUserFindItemByNameThenTrackerShowNameItem() {
         Item item = tracker.add(new Item("test name", "test desc"));
-        Input input = new StubInput(new String[]{"5", item.getName(), "y"});
+        Input input = new StubInput(new String[]{"5", item.getName(), "6"});
         String name = item.getName();
         new StartUI(input, tracker).init();
         assertThat(tracker.findByName(name)[0].getName(), is("test name"));
@@ -77,7 +77,7 @@ public class StartUITest {
         Item item = tracker.add(new Item("test name", "test desc"));
         Item item1 = tracker.add(new Item("test1 name", "test1 desc"));
         Item item2 = tracker.add(new Item("test2 name", "test2 name"));
-        Input input = new StubInput(new String[]{"1", "y"});
+        Input input = new StubInput(new String[]{"1", "6"});
         new StartUI(input, tracker).init();
         assertThat((tracker.findAll()), is(new Item[]{item, item1, item2}));
     }
@@ -98,6 +98,8 @@ public class StartUITest {
                 .append("4. Find Item by Id .")
                 .append(System.lineSeparator())
                 .append("5. Find Item by name.")
+                .append(System.lineSeparator())
+                .append("6. Exit program.")
                 .append(System.lineSeparator())
                 .toString();
     }
@@ -122,7 +124,7 @@ public class StartUITest {
     public void whenUserHasSelectedShowByAllItemThenConsoleShowResult() {
         Item item1 = tracker.add(new Item("test out", "123"));
         Item item2 = tracker.add(new Item("test out2", "123"));
-        Input input = new StubInput(new String[]{"1", "y"});
+        Input input = new StubInput(new String[]{"1", "6"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
                                                     .append("----List of Items----")
@@ -134,14 +136,13 @@ public class StartUITest {
                                                     .append("ID item: " + item2.getId())
                                                     .append(" Name item: " + item2.getName())
                                                     .append(" Description item: " + item2.getDescription())
-                                                    .append(System.lineSeparator())
-                                                )));
+                                                    .append(System.lineSeparator())) + consoleMenu()));
     }
 
     @Test
     public void whenUserFindItemByNameThenConsoleShowResult() {
         Item item = tracker.add(new Item("testID", "descID"));
-        Input input = new StubInput(new String[]{"5", item.getName(), "y"});
+        Input input = new StubInput(new String[]{"5", item.getName(), "6"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
                                                     .append("------------Find item by Name--------------")
@@ -149,20 +150,18 @@ public class StartUITest {
                                                     .append("ID item: " + item.getId())
                                                     .append(" Name item: " + item.getName())
                                                     .append(" Description item: " + item.getDescription())
-                                                    .append(System.lineSeparator())
-        )));
+                                                    .append(System.lineSeparator())) + consoleMenu()));
     }
 
     @Test
     public void whenUserDeleteItemThenConsoleShowResult() {
         Item item = tracker.add(new Item("test1", "desc1"));
-        Input input = new StubInput(new String[]{"3", item.getId(), "y"});
+        Input input = new StubInput(new String[]{"3", item.getId(), "6"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
                                                     .append("------------Delete Item--------------")
                                                     .append(System.lineSeparator())
                                                     .append("Item has deleted")
-                                                    .append(System.lineSeparator())
-        )));
+                                                    .append(System.lineSeparator())) + consoleMenu()));
     }
 }
