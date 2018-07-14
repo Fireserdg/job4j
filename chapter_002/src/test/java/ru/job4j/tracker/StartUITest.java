@@ -127,16 +127,19 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"1", "6"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
-                                                    .append("----List of Items----")
-                                                    .append(System.lineSeparator())
-                                                    .append("ID item: " + item1.getId())
-                                                    .append(" Name item: " + item1.getName())
-                                                    .append(" Description item: " + item1.getDescription())
-                                                    .append(System.lineSeparator())
-                                                    .append("ID item: " + item2.getId())
-                                                    .append(" Name item: " + item2.getName())
-                                                    .append(" Description item: " + item2.getDescription())
-                                                    .append(System.lineSeparator())) + consoleMenu()));
+                                            .append("----List of Items----")
+                                            .append(System.lineSeparator())
+                                            .append("ID item: " + item1.getId())
+                                            .append(" Name item: " + item1.getName())
+                                            .append(" Description item: " + item1.getDescription())
+                                            .append(System.lineSeparator())
+                                            .append("ID item: " + item2.getId())
+                                            .append(" Name item: " + item2.getName())
+                                            .append(" Description item: " + item2.getDescription())
+                                            .append(System.lineSeparator())) + consoleMenu() +
+                                            (new StringBuilder().append
+                                            ("You're out of the program. See you soon.")
+                                            .append(System.lineSeparator()))));
     }
 
     @Test
@@ -145,12 +148,15 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"5", item.getName(), "6"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
-                                                    .append("------------Find item by Name--------------")
-                                                    .append(System.lineSeparator())
-                                                    .append("ID item: " + item.getId())
-                                                    .append(" Name item: " + item.getName())
-                                                    .append(" Description item: " + item.getDescription())
-                                                    .append(System.lineSeparator())) + consoleMenu()));
+                                            .append("------------Find item by Name--------------")
+                                            .append(System.lineSeparator())
+                                            .append("ID item: " + item.getId())
+                                            .append(" Name item: " + item.getName())
+                                            .append(" Description item: " + item.getDescription())
+                                            .append(System.lineSeparator())) + consoleMenu() +
+                                            (new StringBuilder().append
+                                            ("You're out of the program. See you soon.")
+                                            .append(System.lineSeparator()))));
     }
 
     @Test
@@ -159,9 +165,12 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"3", item.getId(), "6"});
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
-                                                    .append("------------Delete Item--------------")
-                                                    .append(System.lineSeparator())
-                                                    .append("Item has deleted")
-                                                    .append(System.lineSeparator())) + consoleMenu()));
+                                            .append("------------Delete Item--------------")
+                                            .append(System.lineSeparator())
+                                            .append("Item has deleted")
+                                            .append(System.lineSeparator())) + consoleMenu() +
+                                            (new StringBuilder().append
+                                            ("You're out of the program. See you soon.")
+                                            .append(System.lineSeparator()))));
     }
 }

@@ -25,7 +25,7 @@ public class MenuTracker {
     private List<UserAction> actions = new ArrayList<>();
 
     /**
-     * Конструктор
+     * Конструктор MenuTracker
      *
      * @param input объект типа Input.
      * @param tracker объект типа Tracker.
@@ -38,14 +38,14 @@ public class MenuTracker {
     /**
      * Метод заполняет массив actions.
      */
-    public void fillActions() {
+    public void fillActions(StartUI startUI) {
         this.actions.add(this.new AddItem());
         this.actions.add(new MenuTracker.ShowItems());
         this.actions.add(new EditItem());
         this.actions.add(new MenuTracker.DeleteItem());
         this.actions.add(this.new FindById());
         this.actions.add(new FindByName());
-        this.actions.add(new ExitProgram());
+        this.actions.add(new ExitProgram(startUI));
     }
 
     /**
@@ -67,6 +67,7 @@ public class MenuTracker {
     public int getActionsLength() {
         return this.actions.size();
     }
+
     /**
      * Метод в зависимости от указанного ключа, выполняет соотвествующие действие.
      *
@@ -75,6 +76,7 @@ public class MenuTracker {
     public void select(int key) {
         this.actions.get(key).execute(this.input, this.tracker);
     }
+
     /**
      * Метод задающий диапозон пунктов меню.
      *
@@ -249,6 +251,15 @@ class FindByName implements UserAction {
  * Внутренний "внешний класс", реализующий пункт меню Exit Program.
  */
 class ExitProgram implements UserAction {
+    /**
+     * Поле, где объявляется переменная класса StartUI.
+     */
+    private final StartUI startUI;
+
+    public ExitProgram(StartUI startUI) {
+        this.startUI = startUI;
+    }
+
     @Override
     public int key() {
         return 6;
@@ -256,7 +267,8 @@ class ExitProgram implements UserAction {
 
     @Override
     public void execute(Input input, Tracker tracker) {
-
+        System.out.println("You're out of the program. See you soon.");
+        startUI.stop();
     }
 
     @Override
