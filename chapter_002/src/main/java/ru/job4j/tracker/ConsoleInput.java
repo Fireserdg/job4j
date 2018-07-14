@@ -3,6 +3,13 @@ package ru.job4j.tracker;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Класс для реализации ввода данных в Tracker.
+ *
+ * @author Sergey Filippov (serdg1984@yandex.ru).
+ * @version $Id$.
+ * @since 08.05.2018.
+ */
 public class ConsoleInput implements Input {
     private Scanner scanner = new Scanner(System.in);
     @Override

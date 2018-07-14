@@ -136,9 +136,9 @@ public class StartUITest {
                                             .append("ID item: " + item2.getId())
                                             .append(" Name item: " + item2.getName())
                                             .append(" Description item: " + item2.getDescription())
-                                            .append(System.lineSeparator())) + consoleMenu() +
-                                            (new StringBuilder().append
-                                            ("You're out of the program. See you soon.")
+                                            .append(System.lineSeparator())) + consoleMenu()
+                                            + (new StringBuilder().append(
+                                            "You're out of the program. See you soon.")
                                             .append(System.lineSeparator()))));
     }
 
@@ -153,9 +153,9 @@ public class StartUITest {
                                             .append("ID item: " + item.getId())
                                             .append(" Name item: " + item.getName())
                                             .append(" Description item: " + item.getDescription())
-                                            .append(System.lineSeparator())) + consoleMenu() +
-                                            (new StringBuilder().append
-                                            ("You're out of the program. See you soon.")
+                                            .append(System.lineSeparator())) + consoleMenu()
+                                            + (new StringBuilder().append(
+                                            "You're out of the program. See you soon.")
                                             .append(System.lineSeparator()))));
     }
 
@@ -168,9 +168,9 @@ public class StartUITest {
                                             .append("------------Delete Item--------------")
                                             .append(System.lineSeparator())
                                             .append("Item has deleted")
-                                            .append(System.lineSeparator())) + consoleMenu() +
-                                            (new StringBuilder().append
-                                            ("You're out of the program. See you soon.")
+                                            .append(System.lineSeparator())) + consoleMenu()
+                                            + (new StringBuilder().append(
+                                            "You're out of the program. See you soon.")
                                             .append(System.lineSeparator()))));
     }
 }
