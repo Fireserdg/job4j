@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 /**
- * Тестовый класс проверяющий поведение пользователя.
+ * Тестовый класс проверяющий поведение пользователя и вывод на консоль.
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version $Id$.

@@ -20,11 +20,24 @@ public class ValidateInput implements Input {
         this.input = input;
     }
 
+    /**
+     * Метод для получения информации от пользователя.
+     *
+     * @param question Вопрос к пользователю.
+     * @return Сроковое значение ответа.
+     */
     @Override
     public String ask(String question) {
         return this.input.ask(question);
     }
 
+    /**
+     * Метод реализующий проверку корректного ввода от пользователя.
+     *
+     * @param question
+     * @param range Диапозон пунктов меню.
+     * @return Пункт меню.
+     */
     @Override
     public int ask(String question, List<Integer> range) {
         boolean invalid = true;

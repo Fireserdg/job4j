@@ -39,13 +39,13 @@ public class MenuTracker {
      * Метод заполняет массив actions.
      */
     public void fillActions(StartUI startUI) {
-        this.actions.add(this.new AddItem());
-        this.actions.add(new MenuTracker.ShowItems());
-        this.actions.add(new EditItem());
-        this.actions.add(new MenuTracker.DeleteItem());
-        this.actions.add(this.new FindById());
-        this.actions.add(new FindByName());
-        this.actions.add(new ExitProgram(startUI));
+        this.actions.add(this.new AddItem(0, "Add the new Item."));
+        this.actions.add(new MenuTracker.ShowItems(1, "Show all items."));
+        this.actions.add(new EditItem(2, "Edit the new Item."));
+        this.actions.add(new MenuTracker.DeleteItem(3, "Delete the new Item."));
+        this.actions.add(this.new FindById(4, "Find Item by Id ."));
+        this.actions.add(new FindByName(5, "Find Item by name."));
+        this.actions.add(new ExitProgram(6, "Exit program.", startUI));
     }
 
     /**
@@ -92,12 +92,24 @@ public class MenuTracker {
     /**
      * Реализация внутреннего класса по добавлению пользователем новой заявки.
      */
-    private class AddItem implements UserAction {
-        @Override
-        public int key() {
-            return 0;
+    private class AddItem extends BaseAction {
+
+        /**
+         * Конструктор класса AddItem.
+         *
+         * @param key Пункт меню.
+         * @param name Наименование пункта меню.
+         */
+        public AddItem(int key, String name) {
+            super(key, name);
         }
 
+        /**
+         * Метод для обмена информации с пользователем.
+         *
+         * @param input объект типа Input
+         * @param tracker объект типа Tracker
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Adding new Item --------------");
@@ -109,22 +121,29 @@ public class MenuTracker {
             System.out.println("------------ New Item with Name : " + item.getName());
             System.out.println("------------ New Item with Description : " + item.getDescription());
         }
-
-        @Override
-        public String info() {
-            return String.format("%s. Add the new Item.", this.key());
-        }
     }
 
     /**
      * Статический внутренний класс реализует просмотр списка всех заявок.
      */
-    private static class ShowItems implements UserAction {
-        @Override
-        public int key() {
-            return 1;
+    private static class ShowItems extends BaseAction {
+
+        /**
+         * Конструктор класса ShowItem.
+         *
+         * @param key Пункт меню.
+         * @param name Наименование пункта меню.
+         */
+        public ShowItems(int key, String name) {
+            super(key, name);
         }
 
+        /**
+         * Метод для обмена информации с пользователем.
+         *
+         * @param input объект типа Input
+         * @param tracker объект типа Tracker
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("----List of Items----");
@@ -132,21 +151,28 @@ public class MenuTracker {
                 System.out.println(item);
             }
         }
-
-        @Override
-        public String info() {
-            return String.format("%s. %s", this.key(), "Show all items.");
-        }
     }
     /**
      * Статический внутренний класс реализует удаление заявки.
      */
-    private static class DeleteItem implements UserAction {
-        @Override
-        public int key() {
-            return 3;
+    private static class DeleteItem extends BaseAction {
+
+        /**
+         * Конструктор класса DeleteItem.
+         *
+         * @param key Пункт меню.
+         * @param name Наименование пункта меню.
+         */
+        public DeleteItem(int key, String name) {
+            super(key, name);
         }
 
+        /**
+         * Метод для обмена информации с пользователем.
+         *
+         * @param input объект типа Input
+         * @param tracker объект типа Tracker
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------Delete Item--------------");
@@ -157,21 +183,28 @@ public class MenuTracker {
                 System.out.println("Item not found");
             }
         }
-
-        @Override
-        public String info() {
-            return String.format("%s. %s", this.key(), "Delete the new Item.");
-        }
     }
     /**
      * Внутренний класс, реализующий поиск по ID.
      */
-    public class FindById implements UserAction {
-        @Override
-        public int key() {
-            return 4;
+    public class FindById extends BaseAction {
+
+        /**
+         * Конструктор класса FindById.
+         *
+         * @param key Пункт меню.
+         * @param name Наименование пункта меню.
+         */
+        public FindById(int key, String name) {
+            super(key, name);
         }
 
+        /**
+         * Метод для обмена информации с пользователем.
+         *
+         * @param input объект типа Input
+         * @param tracker объект типа Tracker
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------Find item by ID--------------");
@@ -183,22 +216,29 @@ public class MenuTracker {
                 System.out.println("Item not found.");
             }
         }
-
-        @Override
-        public String info() {
-            return String.format("%s. %s", this.key(), "Find Item by Id .");
-        }
     }
 }
 /**
  * Внутренний "внешний класс", реализующий редактирование заявок.
  */
-class EditItem implements UserAction {
-    @Override
-    public int key() {
-        return 2;
+class EditItem extends BaseAction {
+
+    /**
+     * Конструктор класса EditItem.
+     *
+     * @param key Пункт меню.
+     * @param name Наименование пункта меню.
+     */
+    public EditItem(int key, String name) {
+        super(key, name);
     }
 
+    /**
+     * Метод для обмена информации с пользователем.
+     *
+     * @param input объект типа Input
+     * @param tracker объект типа Tracker
+     */
     @Override
     public void execute(Input input, Tracker tracker) {
         System.out.println("------------ Edit Item --------------");
@@ -212,21 +252,28 @@ class EditItem implements UserAction {
             System.out.println("Item not found");
         }
     }
-
-    @Override
-    public String info() {
-        return String.format("%s. %s", this.key(), "Edit the new Item.");
-    }
 }
 /**
  * Внутренний "внешний класс", реализующий поиск по Name.
  */
-class FindByName implements UserAction {
-    @Override
-    public int key() {
-        return 5;
+class FindByName extends BaseAction {
+
+    /**
+     * Конструктор класса FindByName.
+     *
+     * @param key Пункт меню.
+     * @param name Наименование пункта меню.
+     */
+    public FindByName(int key, String name) {
+        super(key, name);
     }
 
+    /**
+     * Метод для обмена информации с пользователем.
+     *
+     * @param input объект типа Input
+     * @param tracker объект типа Tracker
+     */
     @Override
     public void execute(Input input, Tracker tracker) {
         System.out.println("------------Find item by Name--------------");
@@ -241,38 +288,37 @@ class FindByName implements UserAction {
             }
         }
     }
-
-    @Override
-    public String info() {
-        return String.format("%s. %s", this.key(), "Find Item by name.");
-    }
 }
 /**
  * Внутренний "внешний класс", реализующий пункт меню Exit Program.
  */
-class ExitProgram implements UserAction {
+class ExitProgram extends BaseAction {
     /**
      * Поле, где объявляется переменная класса StartUI.
      */
     private final StartUI startUI;
 
-    public ExitProgram(StartUI startUI) {
+    /**
+     * Конструктор класса DeleteItem.
+     *
+     * @param key Пункт меню.
+     * @param name Наименование пункта меню.
+     * @param startUI объект класса StartUI.
+     */
+    public ExitProgram(int key, String name, StartUI startUI) {
+        super(key, name, startUI);
         this.startUI = startUI;
     }
 
-    @Override
-    public int key() {
-        return 6;
-    }
-
+    /**
+     * Метод для выхода из программы.
+     *
+     * @param input объект типа Input
+     * @param tracker объект типа Tracker
+     */
     @Override
     public void execute(Input input, Tracker tracker) {
         System.out.println("You're out of the program. See you soon.");
         startUI.stop();
-    }
-
-    @Override
-    public String info() {
-        return String.format("%s. %s", this.key(), "Exit program.");
     }
 }
