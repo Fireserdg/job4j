@@ -25,7 +25,7 @@ public class BishopWhite extends Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) {
-        return new Cell[] { dest};
+        return new Cell[] {dest};
     }
 
     @Override

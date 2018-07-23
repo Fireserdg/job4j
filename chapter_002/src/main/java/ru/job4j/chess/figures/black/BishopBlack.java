@@ -42,36 +42,20 @@ public class BishopBlack extends Figure {
      */
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-
         if (!isDiagonal(source, dest)) {
             throw new ImpossibleMoveException("Cлон, не может так ходить");
         }
-        int sizeSteps = Math.abs(source.x - dest.x);
-        Cell[] steps = new Cell[sizeSteps];
-        int deltaX = source.x - dest.x;
-        int deltaY = source.y - dest.y;
-        if (deltaX > 0 && deltaY > 0) {
-            deltaX = 1;
-            deltaY = 1;
-        } else if (deltaX < 0 && deltaY < 0) {
-            deltaX = - 1;
-            deltaY = - 1;
-        } else if (deltaX < 0 && deltaY > 0) {
-            deltaX = - 1;
-            deltaY = 1;
-        } else {
-            deltaX = 1;
-            deltaY = - 1;
-        }
-
-        for (int index = 0; index < steps.length ; index++) {
+        Cell[] steps = new Cell[Math.abs(source.x - dest.x)];
+        int deltaX = Integer.compare(source.x, dest.x);
+        int deltaY = Integer.compare(source.y, dest.y);
+        for (int index = 0; index < steps.length; index++) {
             steps[index] = Cell.values()[(8 * (source.x - deltaX)) + (source.y - deltaY)];
-            if(deltaX < 0){
+            if (deltaX < 0) {
                 deltaX--;
             } else {
                 deltaX++;
             }
-            if(deltaY < 0) {
+            if (deltaY < 0) {
                 deltaY--;
             } else {
                 deltaY++;

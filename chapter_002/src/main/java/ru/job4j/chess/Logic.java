@@ -33,7 +33,7 @@ public class Logic {
             try {
                 int index = this.findBy(source);
                 Cell[] steps = this.figures[index].way(source, dest);
-                checkOccepidedWay(steps,this.figures);
+                checkOccepidedWay(steps, this.figures);
                 if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                     rst = true;
                     this.figures[index] = this.figures[index].copy(dest);
@@ -73,7 +73,7 @@ public class Logic {
                 break;
             }
         }
-        if (rst == -1){
+        if (rst == -1) {
             throw new FigureNotFoundException("Фигура на данной клетке не найдена.");
         }
 
@@ -89,9 +89,9 @@ public class Logic {
      */
     private void checkOccepidedWay(Cell[] steps, Figure[] figures) throws OccupiedWayException {
         boolean result = true;
-        for (int i = 0; i < steps.length ; i++) {
-            for (int j = 0; j < figures.length ; j++) {
-                if(figures[j]!=null && steps[i].equals(figures[j].position)){
+        for (int i = 0; i < steps.length; i++) {
+            for (int j = 0; j < figures.length; j++) {
+                if (figures[j] != null && steps[i].equals(figures[j].position)) {
                     result = false;
                     break;
                 }

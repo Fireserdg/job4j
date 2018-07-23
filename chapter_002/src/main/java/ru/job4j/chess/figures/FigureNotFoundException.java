@@ -14,7 +14,7 @@ public class FigureNotFoundException extends Exception {
      *
      * @param msg Сообщение об ошибке.
      */
-    public FigureNotFoundException (String msg) {
+    public FigureNotFoundException(String msg) {
         super(msg);
     }
 }
