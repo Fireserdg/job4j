@@ -50,16 +50,8 @@ public class BishopBlack extends Figure {
         int deltaY = Integer.compare(source.y, dest.y);
         for (int index = 0; index < steps.length; index++) {
             steps[index] = Cell.values()[(8 * (source.x - deltaX)) + (source.y - deltaY)];
-            if (deltaX < 0) {
-                deltaX--;
-            } else {
-                deltaX++;
-            }
-            if (deltaY < 0) {
-                deltaY--;
-            } else {
-                deltaY++;
-            }
+            deltaX = deltaX < 0 ? deltaX - 1 : deltaX + 1;
+            deltaY = deltaY < 0 ? deltaY - 1 : deltaY + 1;
         }
         return steps;
     }
