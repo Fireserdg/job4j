@@ -1,6 +1,5 @@
 package ru.job4j.priority;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 
 /**
@@ -22,33 +21,21 @@ public class PriorityQueue {
      * @param task received task.
      */
     public void put(Task task) {
-        tasks.add(0, task);
-        tasks.sort(new SortPriority());
+        if (tasks.size() == 0) {
+            tasks.add(0, task);
+        } else if (task.getPriority() < tasks.get(tasks.size() - 1).getPriority()) {
+            tasks.add(tasks.size() - 1, task);
+        } else {
+            tasks.add(tasks.size(), task);
+        }
     }
 
     /**
-     * Get delete element.
+     * Get first element.
      *
-     * @return delete element.
+     * @return get first element.
      */
     public Task take() {
         return this.tasks.poll();
-    }
-
-    /**
-     * Class implementing the comparison object of Task.
-     */
-    private class SortPriority implements Comparator<Task> {
-
-        /**
-         * compare two Tasks.
-         *
-         * @param o1 first Tasks.
-         * @param o2 second Tasks
-         * @return result compare.
-         */
-        public int compare(Task o1, Task o2) {
-            return Integer.compare(o1.getPriority(), o2.getPriority());
-        }
     }
 }
