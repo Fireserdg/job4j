@@ -41,4 +41,11 @@ public class CoffeeMachineTest {
         int price = 113;
         Assert.assertThat(coffeeMachine.changes(value, price), is(new int[]{10, 10, 10, 5, 2}));
     }
+
+    @Test
+    public void whenCoffeeMachineNotGiveChange() {
+        int value = 50;
+        int price = 55;
+        Assert.assertThat(coffeeMachine.changes(value, price), is(new int[]{0}));
+    }
 }
