@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -35,7 +37,7 @@ public class StartUITest {
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
         Input input = new StubInput(new String[]{"0", "test name", "desc", "6"});
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is("test name"));
+        assertThat(tracker.findAll().get(0).getName(), is("test name"));
     }
 
     @Test
@@ -52,7 +54,7 @@ public class StartUITest {
         Item item1 = tracker.add(new Item("test1 name", "desc1"));
         Input input = new StubInput(new String[]{"3", item.getId(), "6"});
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is(item1.getName()));
+        assertThat(tracker.findAll().get(0).getName(), is(item1.getName()));
     }
 
     @Test
@@ -60,7 +62,7 @@ public class StartUITest {
        Item item = tracker.add(new Item("test name", "desc"));
        Input input = new StubInput(new String[]{"4", item.getId(), "6"});
        new StartUI(input, tracker).init();
-       assertThat(tracker.findAll()[0].getId(), is(item.getId()));
+       assertThat(tracker.findAll().get(0).getId(), is(item.getId()));
     }
 
     @Test
@@ -69,7 +71,7 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"5", item.getName(), "6"});
         String name = item.getName();
         new StartUI(input, tracker).init();
-        assertThat(tracker.findByName(name)[0].getName(), is("test name"));
+        assertThat(tracker.findByName(name).get(0).getName(), is("test name"));
     }
 
     @Test
@@ -79,7 +81,8 @@ public class StartUITest {
         Item item2 = tracker.add(new Item("test2 name", "test2 name"));
         Input input = new StubInput(new String[]{"1", "6"});
         new StartUI(input, tracker).init();
-        assertThat((tracker.findAll()), is(new Item[]{item, item1, item2}));
+        List<Item> list = Arrays.asList(item, item1, item2);
+        assertThat((tracker.findAll()), is(list));
     }
 
     /**

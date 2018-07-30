@@ -278,8 +278,8 @@ class FindByName extends BaseAction {
     public void execute(Input input, Tracker tracker) {
         System.out.println("------------Find item by Name--------------");
         String  name = input.ask("Please, provide item name:");
-        Item[] result = tracker.findByName(name);
-        if (result.length == 0) {
+        List<Item> result = tracker.findByName(name);
+        if (result.size() == 0) {
             System.out.println("Item not found");
         }
         for (Item item : result) {
