@@ -1,5 +1,6 @@
 package ru.job4j.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,5 +41,20 @@ public class ConvertList2Array {
             count = 0;
         }
         return array;
+    }
+
+    /**
+     * Getting a list of numbers from list of arrays.
+     *
+     * @param list arrays of numbers.
+     */
+    public List<Integer> convert(List<int[]> list) {
+        List<Integer> arrayList = new ArrayList<>();
+        for (int[] array:list) {
+            for (int input: array) {
+                arrayList.add(input);
+            }
+        }
+        return arrayList;
     }
 }
