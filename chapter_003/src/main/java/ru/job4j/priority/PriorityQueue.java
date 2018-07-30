@@ -21,12 +21,18 @@ public class PriorityQueue {
      * @param task received task.
      */
     public void put(Task task) {
-        if (tasks.size() == 0) {
-            tasks.add(0, task);
-        } else if (task.getPriority() < tasks.get(tasks.size() - 1).getPriority()) {
-            tasks.add(tasks.size() - 1, task);
+        int index = tasks.size();
+        if (!(index == 0)) {
+            for (int i = 0; i < index; i++) {
+                if (task.getPriority() < tasks.get(i).getPriority()) {
+                    tasks.add(i, task);
+                    break;
+                } else if (index == 1) {
+                    tasks.add(task);
+                }
+            }
         } else {
-            tasks.add(tasks.size(), task);
+            tasks.add(0, task);
         }
     }
 

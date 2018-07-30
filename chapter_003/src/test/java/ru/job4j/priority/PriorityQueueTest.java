@@ -38,10 +38,22 @@ public class PriorityQueueTest {
 
     @Test
     public void whenLowPriority() {
-        queue.put(new Task("low", 1));
-        queue.put(new Task("middle low", 4));
-        queue.put(new Task("very low", 2));
+        queue.put(new Task("high low", 1));
+        queue.put(new Task("very low", 4));
+        queue.put(new Task("middle low", 2));
+        queue.put(new Task("low", 3));
         Task result = queue.take();
-        assertThat(result.getDesc(), is("low"));
+        assertThat(result.getDesc(), is("high low"));
+    }
+
+    @Test
+    public void whenFivePrioritySet() {
+        queue.put(new Task("very low", 7));
+        queue.put(new Task("urgent", 1));
+        queue.put(new Task("middle", 2));
+        queue.put(new Task("middle", 4));
+        queue.put(new Task("low", 5));
+        Task result = queue.take();
+        assertThat(result.getDesc(), is("urgent"));
     }
 }
