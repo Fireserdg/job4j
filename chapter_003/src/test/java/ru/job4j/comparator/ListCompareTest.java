@@ -42,8 +42,8 @@ public class ListCompareTest {
     @Test
     public void whenLeftGreaterThanRightResultShouldBePositive() {
         int rst = compare.compare(
-                "Ivanova",
-                "Petrov"
+                "Petrov",
+                "Ivanova"
         );
         assertThat(rst, greaterThan(0));
     }
@@ -60,8 +60,17 @@ public class ListCompareTest {
     @Test
     public void secondCharOfLeftLessThanRightShouldBeNegative() {
         int rst = compare.compare(
-                "Patrov",
+                "Patrova",
                 "Petrov"
+        );
+        assertThat(rst, lessThan(0));
+    }
+
+    @Test
+    public void firstCharOfLeftLessThanRightShouldBeNegative() {
+        int rst = compare.compare(
+                "Велосипед",
+                "Якорь"
         );
         assertThat(rst, lessThan(0));
     }

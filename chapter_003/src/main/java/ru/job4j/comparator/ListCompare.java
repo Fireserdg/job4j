@@ -1,5 +1,6 @@
 package ru.job4j.comparator;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -21,12 +22,28 @@ public class ListCompare implements Comparator<String> {
     @Override
     public int compare(String left, String right) {
         int result = 0;
-        if (left.length() == right.length()) {
-            for (int i = 0; i < left.length(); i++) {
-                result += Character.compare(left.toCharArray()[i], right.toCharArray()[i]);
+        int size = left.length() - right.length();
+        if (size < 0) {
+            while (size != 0) {
+                left = String.format("%s ", left);
+                size++;
             }
+            size = left.length();
+        } else if (size > 0) {
+            while (size != 0) {
+                right = String.format("%s ", right);
+                size--;
+            }
+            size = right.length();
         } else {
-            result = left.length() > right.length() ? 1 : -1;
+            size = left.length();
+        }
+
+        for (int i = 0; i < size; i++) {
+            result += Character.compare(left.charAt(i), right.charAt(i));
+            if (result != 0) {
+                break;
+            }
         }
         return result;
     }
