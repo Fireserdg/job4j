@@ -12,9 +12,7 @@ public class ImpossibleMoveException extends Exception {
     /**
      * Конструктор.
      *
-     * @param msg Сообщение об ошибке.
      */
-    public ImpossibleMoveException(String msg) {
-        super(msg);
+    public ImpossibleMoveException() {
     }
 }

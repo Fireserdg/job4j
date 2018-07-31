@@ -46,7 +46,7 @@ public class PawnBlack extends Figure {
         if (source.y == dest.y + 1 && source.x == dest.x) {
             steps = new Cell[] {dest};
         } else {
-            throw new ImpossibleMoveException("Пешка не может так ходить.");
+            throw new ImpossibleMoveException();
         }
         return steps;
     }

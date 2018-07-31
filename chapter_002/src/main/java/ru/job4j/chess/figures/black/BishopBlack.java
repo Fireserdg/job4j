@@ -1,8 +1,6 @@
 package ru.job4j.chess.figures.black;
 
-import ru.job4j.chess.figures.Cell;
-import ru.job4j.chess.figures.Figure;
-import ru.job4j.chess.figures.ImpossibleMoveException;
+import ru.job4j.chess.figures.*;
 
 /**
  * Фигура - Слон черный.
@@ -43,7 +41,7 @@ public class BishopBlack extends Figure {
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
         if (!isDiagonal(source, dest)) {
-            throw new ImpossibleMoveException("Cлон, не может так ходить");
+            throw new ImpossibleMoveException();
         }
         Cell[] steps = new Cell[Math.abs(source.x - dest.x)];
         int deltaX = Integer.compare(source.x, dest.x);
@@ -64,11 +62,7 @@ public class BishopBlack extends Figure {
      * @return Возможность перемещения по диагонали.
      */
     public boolean isDiagonal(Cell source, Cell dest) {
-        boolean result = false;
-        if (Math.abs(source.x - dest.x) == Math.abs(source.y - dest.y)) {
-            result = true;
-        }
-        return result;
+        return Math.abs(source.x - dest.x) == Math.abs(source.y - dest.y);
     }
 
     /**

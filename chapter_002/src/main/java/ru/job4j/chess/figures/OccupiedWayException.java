@@ -12,9 +12,7 @@ public class OccupiedWayException extends Exception {
     /**
      * Конструктор.
      *
-     * @param msg Сообщение об ошибке.
      */
-    public OccupiedWayException(String msg) {
-        super(msg);
+    public OccupiedWayException() {
     }
 }

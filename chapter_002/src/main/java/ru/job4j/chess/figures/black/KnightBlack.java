@@ -1,7 +1,6 @@
 package ru.job4j.chess.figures.black;
 
-import ru.job4j.chess.figures.Cell;
-import ru.job4j.chess.figures.Figure;
+import ru.job4j.chess.figures.*;
 
 /**
  * Фигура - Конь черный.
@@ -12,20 +11,61 @@ import ru.job4j.chess.figures.Figure;
  */
 public class KnightBlack extends Figure {
 
+    /**
+     * Конструктор.
+     *
+     * @param position Позиция на шахматной доске.
+     */
     public KnightBlack(final Cell position) {
         super(position);
     }
 
+    /**
+     * Позиция фигуры.
+     *
+     * @return Позиция.
+     */
     @Override
     public Cell position() {
         return this.position;
     }
 
+    /**
+     * Проверка возможности хода.
+     *
+     * @param source Клетка на которой находится фигура.
+     * @param dest Клетка куда должна переместиться фигура.
+     * @return Массив клеток, которые проходит фигура.
+     * @throws ImpossibleMoveException Если фигура не может передвинуться.
+     */
     @Override
-    public Cell[] way(Cell source, Cell dest) {
-        return new Cell[] {dest};
+    public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
+        int deltaX = Integer.compare(source.x, dest.x);
+        int deltaY = Integer.compare(source.y, dest.y);
+        Cell[] steps = new Cell[(Math.abs(source.x - dest.x) + Math.abs(source.y - dest.y))];
+        if (steps.length < 3 || (Math.abs(source.x - dest.x) == 3) || (Math.abs(source.y - dest.y) == 3)) {
+            throw new ImpossibleMoveException();
+        }
+        for (int i = 0; i < steps.length; i++) {
+            if (i < steps.length - 1 && (Math.abs(source.y - dest.y) == 2)) {
+                steps[i] = Cell.values()[(8 * source.x + source.y) - deltaY];
+                deltaY = deltaY > 0 ? deltaY + 1 : deltaY - 1;
+            } else if (i < steps.length - 1 && (Math.abs(source.x - dest.x) == 2)) {
+                steps[i] = Cell.values()[(8 * source.x + source.y) - deltaX * 8];
+                deltaX = deltaX > 0 ? deltaX + 1 : deltaX - 1;
+            } else {
+                steps[i] = dest;
+            }
+        }
+        return steps;
     }
 
+    /**
+     * Перемещение фигуры на заданную позицию.
+     *
+     * @param dest Новая клетка для фигуры.
+     * @return Фигура с новой координатой.
+     */
     @Override
     public Figure copy(Cell dest) {
         return new KnightBlack(dest);

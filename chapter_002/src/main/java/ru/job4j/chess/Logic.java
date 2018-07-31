@@ -33,7 +33,7 @@ public class Logic {
             try {
                 int index = this.findBy(source);
                 Cell[] steps = this.figures[index].way(source, dest);
-                checkOccepidedWay(steps, this.figures);
+                checkOcceppiedWay(steps, this.figures[index]);
                 if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                     rst = true;
                     this.figures[index] = this.figures[index].copy(dest);
@@ -74,9 +74,8 @@ public class Logic {
             }
         }
         if (rst == -1) {
-            throw new FigureNotFoundException("Фигура на данной клетке не найдена.");
+            throw new FigureNotFoundException();
         }
-
         return rst;
     }
 
@@ -84,21 +83,33 @@ public class Logic {
      * Метод для проверки занятых клеток по пути движения фигуры.
      *
      * @param steps Массив шагов.
-     * @param figures Массив фигур.
+     * @param figure Фигура.
      * @throws OccupiedWayException Если на пути движения есть фигура.
      */
-    private void checkOccepidedWay(Cell[] steps, Figure[] figures) throws OccupiedWayException {
+    private void checkOcceppiedWay(Cell[] steps, Figure figure) throws OccupiedWayException {
         boolean result = true;
-        for (int i = 0; i < steps.length; i++) {
-            for (int j = 0; j < figures.length; j++) {
-                if (figures[j] != null && steps[i].equals(figures[j].position)) {
-                    result = false;
-                    break;
+        String nameFigure = figure.getClass().getSimpleName();
+        if (nameFigure.equals(("KnightWhite")) || nameFigure.equals("KnightBlack")) {
+            for (int i = 0; i < steps.length; i++) {
+                for (int j = 0; j < figures.length; j++) {
+                    if (figures[j] != null && steps[steps.length - 1].equals(figures[j].position)) {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < steps.length; i++) {
+                for (int j = 0; j < figures.length; j++) {
+                    if (figures[j] != null && steps[i].equals(figures[j].position)) {
+                        result = false;
+                        break;
+                    }
                 }
             }
         }
         if (!result) {
-            throw new OccupiedWayException("Клетка занята");
+            throw new OccupiedWayException();
         }
     }
 }

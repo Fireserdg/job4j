@@ -1,7 +1,7 @@
 package ru.job4j.chess.figures.white;
 
-import ru.job4j.chess.figures.Cell;
-import ru.job4j.chess.figures.Figure;
+import ru.job4j.chess.figures.*;
+import ru.job4j.chess.figures.black.QeenBlack;
 
 /**
  * Фигура - Ферзь белый.
@@ -12,20 +12,48 @@ import ru.job4j.chess.figures.Figure;
  */
 public class QeenWhite extends Figure {
 
+    /**
+     * Field to call a method of the figure.
+     */
+    private QeenBlack qeen = new QeenBlack(position);
+    /**
+     * Конструктор.
+     *
+     * @param position Позиция на шахматной доске.
+     */
     public QeenWhite(final Cell position) {
         super(position);
     }
 
+    /**
+     * Позиция фигуры.
+     *
+     * @return Позиция.
+     */
     @Override
     public Cell position() {
         return this.position;
     }
 
+    /**
+     * Проверка возможности хода.
+     *
+     * @param source Клетка на которой находится фигура.
+     * @param dest Клетка куда должна переместиться фигура.
+     * @return Массив клеток, которые проходит фигура.
+     * @throws ImpossibleMoveException Если фигура не может передвинуться.
+     */
     @Override
-    public Cell[] way(Cell source, Cell dest) {
-        return new Cell[] {dest};
+    public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
+        return qeen.way(source, dest);
     }
 
+    /**
+     * Перемещение фигуры на заданную позицию.
+     *
+     * @param dest Новая клетка для фигуры.
+     * @return Фигура с новой координатой.
+     */
     @Override
     public Figure copy(Cell dest) {
         return new QeenWhite(dest);
