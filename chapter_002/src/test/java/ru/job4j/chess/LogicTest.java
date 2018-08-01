@@ -61,10 +61,10 @@ public class LogicTest {
     }
 
     @Test
-    public void whenKnightBlackWantToMoveAndFigureNotOnWay() {
+    public void whenKnightBlackWantToMoveAndOccupiedCell() {
         logic.add(new KnightBlack(Cell.B1));
-        logic.add(new PawnBlack(Cell.B2));
-        assertThat(logic.move(Cell.B1, Cell.C3), is(true));
+        logic.add(new PawnBlack(Cell.C3));
+        assertThat(logic.move(Cell.B1, Cell.C3), is(false));
     }
 
     @Test

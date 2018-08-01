@@ -1,6 +1,7 @@
 package ru.job4j.chess.figures.white;
 
 import ru.job4j.chess.figures.*;
+import ru.job4j.chess.figures.black.KingBlack;
 
 /**
  * Фигура - Король белый.
@@ -9,7 +10,7 @@ import ru.job4j.chess.figures.*;
  * @version $Id$.
  * @since 17.07.2018.
  */
-public class KingWhite extends Figure {
+public class KingWhite extends KingBlack {
 
     /**
      * Конструктор.
@@ -18,35 +19,6 @@ public class KingWhite extends Figure {
      */
     public KingWhite(final Cell position) {
         super(position);
-    }
-
-    /**
-     * Позиция фигуры.
-     *
-     * @return Позиция.
-     */
-    @Override
-    public Cell position() {
-        return this.position;
-    }
-
-    /**
-     * Проверка возможности хода.
-     *
-     * @param source Клетка на которой находится фигура.
-     * @param dest Клетка куда должна переместиться фигура.
-     * @return Массив клеток, которые проходит фигура.
-     * @throws ImpossibleMoveException Если фигура не может передвинуться.
-     */
-    @Override
-    public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        int moveX = Math.abs(source.x - dest.x);
-        int moveY = Math.abs(source.y - dest.y);
-        if (moveX > 1 || moveY > 1) {
-            throw new ImpossibleMoveException();
-        } else {
-            return new Cell[] {dest};
-        }
     }
 
     /**

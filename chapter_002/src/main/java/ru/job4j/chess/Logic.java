@@ -33,7 +33,7 @@ public class Logic {
             try {
                 int index = this.findBy(source);
                 Cell[] steps = this.figures[index].way(source, dest);
-                checkOcceppiedWay(steps, this.figures[index]);
+                checkOccupiedWay(steps);
                 if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                     rst = true;
                     this.figures[index] = this.figures[index].copy(dest);
@@ -83,22 +83,10 @@ public class Logic {
      * Метод для проверки занятых клеток по пути движения фигуры.
      *
      * @param steps Массив шагов.
-     * @param figure Фигура.
      * @throws OccupiedWayException Если на пути движения есть фигура.
      */
-    private void checkOcceppiedWay(Cell[] steps, Figure figure) throws OccupiedWayException {
+    private void checkOccupiedWay(Cell[] steps) throws OccupiedWayException {
         boolean result = true;
-        String nameFigure = figure.getClass().getSimpleName();
-        if (nameFigure.equals(("KnightWhite")) || nameFigure.equals("KnightBlack")) {
-            for (int i = 0; i < steps.length; i++) {
-                for (int j = 0; j < figures.length; j++) {
-                    if (figures[j] != null && steps[steps.length - 1].equals(figures[j].position)) {
-                        result = false;
-                        break;
-                    }
-                }
-            }
-        } else {
             for (int i = 0; i < steps.length; i++) {
                 for (int j = 0; j < figures.length; j++) {
                     if (figures[j] != null && steps[i].equals(figures[j].position)) {
@@ -107,7 +95,6 @@ public class Logic {
                     }
                 }
             }
-        }
         if (!result) {
             throw new OccupiedWayException();
         }

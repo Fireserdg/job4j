@@ -10,12 +10,7 @@ import ru.job4j.chess.figures.black.RookBlack;
  * @version $Id$.
  * @since 17.07.2018.
  */
-public class RookWhite extends Figure {
-
-    /**
-     * Field to call a method of the figure.
-     */
-    private RookBlack rook = new RookBlack(position);
+public class RookWhite extends RookBlack {
 
     /**
      * Конструктор.
@@ -24,29 +19,6 @@ public class RookWhite extends Figure {
      */
     public RookWhite(final Cell position) {
         super(position);
-    }
-
-    /**
-     * Позиция фигуры.
-     *
-     * @return Позиция.
-     */
-    @Override
-    public Cell position() {
-        return this.position;
-    }
-
-    /**
-     * Проверка возможности хода.
-     *
-     * @param source Клетка на которой находится фигура.
-     * @param dest Клетка куда должна переместиться фигура.
-     * @return Массив клеток, которые проходит фигура.
-     * @throws ImpossibleMoveException Если фигура не может передвинуться.
-     */
-    @Override
-    public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
-        return rook.way(source, dest);
     }
 
     /**

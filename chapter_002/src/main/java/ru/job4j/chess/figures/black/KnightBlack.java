@@ -42,22 +42,12 @@ public class KnightBlack extends Figure {
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
         int deltaX = Integer.compare(source.x, dest.x);
         int deltaY = Integer.compare(source.y, dest.y);
-        Cell[] steps = new Cell[(Math.abs(source.x - dest.x) + Math.abs(source.y - dest.y))];
-        if (steps.length < 3 || (Math.abs(source.x - dest.x) == 3) || (Math.abs(source.y - dest.y) == 3)) {
+        int canMove = deltaX * (source.x - dest.x) + deltaY * (source.y - dest.y);
+        if (!(canMove == 3) || deltaX == 0 || deltaY == 0) {
             throw new ImpossibleMoveException();
+        } else {
+            return new Cell[] {dest};
         }
-        for (int i = 0; i < steps.length; i++) {
-            if (i < steps.length - 1 && (Math.abs(source.y - dest.y) == 2)) {
-                steps[i] = Cell.values()[(8 * source.x + source.y) - deltaY];
-                deltaY = deltaY > 0 ? deltaY + 1 : deltaY - 1;
-            } else if (i < steps.length - 1 && (Math.abs(source.x - dest.x) == 2)) {
-                steps[i] = Cell.values()[(8 * source.x + source.y) - deltaX * 8];
-                deltaX = deltaX > 0 ? deltaX + 1 : deltaX - 1;
-            } else {
-                steps[i] = dest;
-            }
-        }
-        return steps;
     }
 
     /**
