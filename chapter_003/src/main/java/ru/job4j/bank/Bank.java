@@ -66,7 +66,7 @@ public class Bank {
     }
 
     /**
-     * Get account for User.
+     * Get list accounts for User.
      *
      * @param passport number passport user.
      * @return list of account.
@@ -79,6 +79,24 @@ public class Bank {
             }
         }
         return accounts;
+    }
+
+    /**
+     * Get one account for User.
+     *
+     * @param passport number passport user.
+     * @param requisite number requisite user.
+     * @return result if account has user.
+     */
+    public boolean getAccountUser(String passport, String requisite) {
+        boolean result = false;
+        for (Account userAccount: getUserAccounts(passport)) {
+            if (userAccount.getRequisites().equals(requisite)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     /**
@@ -111,27 +129,14 @@ public class Bank {
     public boolean transferMoney(String srcPassport, String srcRequisite,
                                  String destPassport, String dstRequisite, double amount) {
        boolean result = false;
-        for (Map.Entry<User, List<Account>> user : this.bankAccount.entrySet()) {
-            if (user.getKey().getPassport().equals(srcPassport)) {
-                for (Account userAccount: user.getValue()) {
-                    if (userAccount.getRequisites().equals(srcRequisite)
-                            && userAccount.getValues() > amount) {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-            if (result && user.getKey().getPassport().equals(destPassport)) {
-                for (Account userAccount: user.getValue()) {
-                    if (!(userAccount.getRequisites().equals(dstRequisite))) {
-                        result = false;
-                    } else {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-        }
+       if (getAccountUser(srcPassport, srcRequisite) && getAccountUser(destPassport, dstRequisite)) {
+           for (Account user:  getUserAccounts(srcPassport)) {
+               if (user.getRequisites().equals(srcRequisite) && user.getValues() > amount) {
+                   result = true;
+                   break;
+               }
+           }
+       }
         return result;
     }
 }

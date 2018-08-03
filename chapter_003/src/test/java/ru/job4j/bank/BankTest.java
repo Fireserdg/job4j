@@ -62,6 +62,16 @@ public class BankTest {
     }
 
     @Test
+    public void whenCheckAccountUser() {
+        User user = new User("Alex", "333333");
+        bank.addUser(user);
+        Account accountOne = new Account(300, "987023");
+        bank.addAccountToUser(user.getPassport(), accountOne);
+        boolean result = bank.getAccountUser(user.getPassport(), accountOne.getRequisites());
+        assertThat(result, is(true));
+    }
+
+    @Test
     public void whenUserWantTransferMoneyOtherYourAccountAndSuccessful() {
         User user = new User("Sergey", "123456");
         bank.addUser(user);
