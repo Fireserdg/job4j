@@ -14,7 +14,7 @@ public class Account {
     /**
      * Contains value.
      */
-    private int value;
+    private double value;
 
     /**
      * Contains requisites.
@@ -27,13 +27,17 @@ public class Account {
      * @param value new value.
      * @param requisites new requisites.
      */
-    public Account(int value, String requisites) {
+    public Account(double value, String requisites) {
         this.value = value;
         this.requisites = requisites;
     }
 
-    public int getValues() {
+    public double getValues() {
         return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public String getRequisites() {

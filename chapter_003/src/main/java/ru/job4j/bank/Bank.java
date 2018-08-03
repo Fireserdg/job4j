@@ -57,11 +57,16 @@ public class Bank {
      * @param passport number passport user.
      * @param account account User.
      */
-    public void deleteAccountFromUser(String passport, Account account) {
+    public void deleteAccountFromUser(String passport, Account account) throws UserHasNotBankAccountException {
+        boolean result = false;
         for (Map.Entry<User, List<Account>> user : this.bankAccount.entrySet()) {
             if (user.getKey().getPassport().equals(passport)) {
                 user.getValue().remove(account);
+                result = true;
             }
+        }
+        if (!result) {
+            throw new UserHasNotBankAccountException();
         }
     }
 
@@ -71,12 +76,15 @@ public class Bank {
      * @param passport number passport user.
      * @return list of account.
      */
-    public List<Account> getUserAccounts(String passport) {
+    public List<Account> getUserAccounts(String passport) throws UserHasNotBankAccountException {
         List<Account> accounts = new ArrayList<>();
         for (Map.Entry<User, List<Account>> user : this.bankAccount.entrySet()) {
             if (user.getKey().getPassport().equals(passport)) {
                 accounts.addAll(user.getValue());
             }
+        }
+        if (accounts.isEmpty()) {
+            throw new UserHasNotBankAccountException();
         }
         return accounts;
     }
@@ -88,15 +96,13 @@ public class Bank {
      * @param requisite number requisite user.
      * @return result if account has user.
      */
-    public boolean getAccountUser(String passport, String requisite) {
-        boolean result = false;
-        for (Account userAccount: getUserAccounts(passport)) {
-            if (userAccount.getRequisites().equals(requisite)) {
-                result = true;
-                break;
-            }
+    public Account getAccountUser(String passport, String requisite) throws UserHasNotBankAccountException {
+        int result = getUserAccounts(passport).indexOf(new Account(0.0, requisite));
+        if (result == -1) {
+            throw new UserHasNotBankAccountException();
+        } else {
+            return getUserAccounts(passport).get(result);
         }
-        return result;
     }
 
     /**
@@ -128,15 +134,21 @@ public class Bank {
 
     public boolean transferMoney(String srcPassport, String srcRequisite,
                                  String destPassport, String dstRequisite, double amount) {
-       boolean result = false;
-       if (getAccountUser(srcPassport, srcRequisite) && getAccountUser(destPassport, dstRequisite)) {
-           for (Account user:  getUserAccounts(srcPassport)) {
-               if (user.getRequisites().equals(srcRequisite) && user.getValues() > amount) {
-                   result = true;
-                   break;
-               }
-           }
-       }
+       boolean result;
+        try {
+            Account one = getAccountUser(srcPassport,srcRequisite);
+            Account two = getAccountUser(destPassport, dstRequisite);
+            if (!(one.getValues() > amount)) {
+                result = false;
+            } else {
+                one.setValue(one.getValues() - amount);
+                two.setValue(two.getValues() + amount);
+                result = true;
+            }
+        } catch (UserHasNotBankAccountException e) {
+            System.out.println("Операцию совершить невозможно");
+            result = false;
+        }
         return result;
     }
 }
