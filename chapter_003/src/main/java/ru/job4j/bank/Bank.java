@@ -136,7 +136,7 @@ public class Bank {
                                  String destPassport, String dstRequisite, double amount) {
        boolean result;
         try {
-            Account one = getAccountUser(srcPassport,srcRequisite);
+            Account one = getAccountUser(srcPassport, srcRequisite);
             Account two = getAccountUser(destPassport, dstRequisite);
             if (!(one.getValues() > amount)) {
                 result = false;
