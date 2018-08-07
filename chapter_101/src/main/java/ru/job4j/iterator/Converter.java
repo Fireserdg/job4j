@@ -28,7 +28,12 @@ public class Converter {
              */
             @Override
             public boolean hasNext() {
-                return this.iterator.hasNext();
+                boolean result = this.iterator.hasNext();
+                while (!this.iterator.hasNext() && it.hasNext()) {
+                    this.iterator = it.next();
+                    result = this.iterator.hasNext();
+                }
+                return result;
             }
 
             /**
@@ -39,7 +44,7 @@ public class Converter {
             @Override
             public Integer next() {
                 int result;
-                if (this.iterator.hasNext()) {
+                if (this.hasNext()) {
                     result = this.iterator.next();
                 } else {
                     throw new NoSuchElementException();
