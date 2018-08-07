@@ -29,9 +29,12 @@ public class Converter {
             @Override
             public boolean hasNext() {
                 boolean result = this.iterator.hasNext();
-                while (!this.iterator.hasNext() && it.hasNext()) {
+                while (!result && it.hasNext()) {
                     this.iterator = it.next();
                     result = this.iterator.hasNext();
+                    if(result) {
+                        break;
+                    }
                 }
                 return result;
             }

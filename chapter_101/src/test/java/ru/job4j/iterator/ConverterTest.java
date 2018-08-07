@@ -120,4 +120,15 @@ public class ConverterTest {
         Iterator<Integer> it = converter.convert(its);
         assertThat(it.hasNext(), is(true));
     }
+
+    @Test
+    public void hasNextShouldReturnTrueInCaseOfOneFillIterators() {
+        Iterator<Integer> it1 = (new ArrayList<Integer>()).iterator();
+        Iterator<Integer> it2 = (Arrays.asList(1, 2, 3)).iterator();
+        Iterator<Integer> it3 = (new ArrayList<Integer>()).iterator();
+        Iterator<Iterator<Integer>> its = Arrays.asList(it1, it2, it3).iterator();
+        Converter converter = new Converter();
+        Iterator<Integer> it = converter.convert(its);
+        assertThat(it.hasNext(), is(true));
+    }
 }
