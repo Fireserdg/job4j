@@ -32,7 +32,7 @@ public class Converter {
                 while (!result && it.hasNext()) {
                     this.iterator = it.next();
                     result = this.iterator.hasNext();
-                    if(result) {
+                    if (result) {
                         break;
                     }
                 }
