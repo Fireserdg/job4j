@@ -41,6 +41,17 @@ public class Logic3TTest {
     }
 
     @Test
+    public void whenHasOWinnerSecond() {
+        Figure3T[][] table = {
+                {new Figure3T(false), new Figure3T(false), new Figure3T(false)},
+                {new Figure3T(), new Figure3T(true), new Figure3T()},
+                {new Figure3T(false), new Figure3T(), new Figure3T(true)},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.isWinnerO(), is(true));
+    }
+
+    @Test
     public void whenHasOWinnerSecondTime() {
         Figure3T[][] table = {
                 {new Figure3T(false), new Figure3T(), new Figure3T()},
@@ -63,11 +74,33 @@ public class Logic3TTest {
     }
 
     @Test
+    public void whenHasGasSecond() {
+        Figure3T[][] table = {
+                {new Figure3T(), new Figure3T(false), new Figure3T(true)},
+                {new Figure3T(true), new Figure3T(false), new Figure3T(false)},
+                {new Figure3T(false), new Figure3T(true), new Figure3T(false)},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.hasGap(), is(true));
+    }
+
+    @Test
     public void whenNotHasGas() {
         Figure3T[][] table = {
                 {new Figure3T(false), new Figure3T(true), new Figure3T(true)},
                 {new Figure3T(true), new Figure3T(false), new Figure3T(false)},
                 {new Figure3T(false), new Figure3T(true), new Figure3T(true)},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.hasGap(), is(false));
+    }
+
+    @Test
+    public void whenNotHasGasSecondTime() {
+        Figure3T[][] table = {
+                {new Figure3T(true), new Figure3T(true), new Figure3T(false)},
+                {new Figure3T(false), new Figure3T(true), new Figure3T(true)},
+                {new Figure3T(false), new Figure3T(false), new Figure3T(false)},
         };
         Logic3T login = new Logic3T(table);
         assertThat(login.hasGap(), is(false));
