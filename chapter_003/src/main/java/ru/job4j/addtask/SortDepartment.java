@@ -12,15 +12,20 @@ import java.util.*;
 public class SortDepartment {
 
     /**
+     * Contains listDept for array Departments;
+     *
+     */
+    private List<String> listDept;
+    /**
      * Sort Departments by increase.
      *
      * @param list list position Departments.
      * @return sort list Departments by Decrease.
      */
     public String[] sortIncrease(String[] list) {
-        List<String> listDept = addElement(new ArrayList<>(Arrays.asList(list)), list);
-        Collections.sort(listDept);
-        return listDept.toArray(new String[0]);
+        this.listDept = addElement(new ArrayList<>(Arrays.asList(list)), list);
+        Collections.sort(this.listDept);
+        return this.listDept.toArray(new String[this.listDept.size()]);
     }
 
     /**
@@ -30,8 +35,8 @@ public class SortDepartment {
      * @return sort list Departments by Decrease.
      */
     public String[] sortDecrease(String[] list) {
-        List<String> listDept = addElement(new ArrayList<>(Arrays.asList(list)), list);
-        listDept.sort(new Comparator<String>() {
+        this.listDept = addElement(new ArrayList<>(Arrays.asList(list)), list);
+        this.listDept.sort(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
                 int result = -1;
@@ -45,7 +50,7 @@ public class SortDepartment {
                 return result == 0 ? o1.length() - o2.length() : result * (-1);
             }
         });
-        return listDept.toArray(new String[0]);
+        return this.listDept.toArray(new String[this.listDept.size()]);
     }
 
     /**
@@ -59,12 +64,13 @@ public class SortDepartment {
         for (int i = 0; i < array.length; i++) {
             String[] arrays = array[i].split("\\\\");
             for (int j = 0; j < arrays.length - 1; j++) {
+                String result = String.format("%s\\%s", arrays[j], arrays[j + 1]);
                 if (!(list.contains(arrays[j]))) {
                     list.add(arrays[j]);
-                } else if (!(list.contains(arrays[j] + "\\" + arrays[j + 1]))) {
-                    list.add(arrays[j] + "\\" + arrays[j + 1]);
+                } else if (!(list.contains(result))) {
+                    list.add(result);
                 }
-                arrays[j + 1] = String.format("%s\\%s", arrays[j], arrays[j + 1]);
+                arrays[j + 1] = result;
             }
         }
         return list;
