@@ -19,12 +19,12 @@ public class Matrix implements Iterator<Integer> {
     /**
      * Contains index for element.
      */
-    private int index = 0;
+    private int index;
 
     /**
      * Contains internal index.
      */
-    private int indexIn = 0;
+    private int indexIn;
 
     /**
      * Constructor object Matrix.
@@ -42,7 +42,7 @@ public class Matrix implements Iterator<Integer> {
      */
     @Override
     public boolean hasNext() {
-        return index < value[indexIn].length;
+        return value.length > 0 && value[indexIn].length > index;
     }
 
     /**
@@ -52,15 +52,13 @@ public class Matrix implements Iterator<Integer> {
      */
     @Override
     public Integer next() {
-        int result;
-        try {
-            result = value[indexIn][index++];
-            if (!(hasNext()) && indexIn < value.length - 1) {
-                indexIn++;
-                index = 0;
-            }
-        } catch (ArrayIndexOutOfBoundsException aob) {
+        if (!(hasNext())) {
             throw new NoSuchElementException();
+        }
+        int result = value[indexIn][index++];
+        if (!(hasNext()) && indexIn < value.length - 1) {
+            indexIn++;
+            index = 0;
         }
         return result;
     }
