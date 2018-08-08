@@ -46,16 +46,10 @@ public class Converter {
              */
             @Override
             public Integer next() {
-                int result;
-                if (this.hasNext()) {
-                    result = this.iterator.next();
-                } else {
+                if (!this.hasNext()) {
                     throw new NoSuchElementException();
                 }
-                if (!(this.iterator.hasNext()) && it.hasNext()) {
-                    this.iterator = it.next();
-                }
-                return result;
+                return this.iterator.next();
             }
         };
     }
