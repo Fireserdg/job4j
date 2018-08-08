@@ -41,6 +41,7 @@ public class EventIt implements Iterator<Integer> {
         for (int i = index; i < value.length; i++) {
             if (value[i] % 2 == 0) {
                 result = true;
+                index = i;
                 break;
             }
         }
@@ -54,18 +55,9 @@ public class EventIt implements Iterator<Integer> {
      */
     @Override
     public Integer next() {
-        int result = 0;
-        for (int i = index; i < value.length; i++) {
-            if (value[i] % 2 == 0) {
-                result = value[i];
-                index = ++i;
-                break;
-            }
-        }
-        if (result == 0) {
+        if (!hasNext()) {
             throw new NoSuchElementException();
-        } else {
-            return result;
         }
+        return value[index++];
     }
 }
