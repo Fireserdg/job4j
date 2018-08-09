@@ -1,7 +1,6 @@
 package ru.job4j.generic;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * Simple Array for data storage.
@@ -16,7 +15,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * Contains object Array.
      *
      */
-    private final Object[] array;
+    private final T[] array;
 
     /**
      * Contains value size.
@@ -26,12 +25,7 @@ public class SimpleArray<T> implements Iterable<T> {
     /**
      * Contains value count.
      */
-    private int count;
-
-    /**
-     * Contains value for Iterator.
-     */
-    private int iterValue = 0;
+    private int count = 0;
 
     /**
      * Constructor object SimpleArray.
@@ -40,7 +34,7 @@ public class SimpleArray<T> implements Iterable<T> {
      */
     public SimpleArray(int size) {
         this.size = size;
-        this.array = new Object[this.size];
+        this.array = (T[]) new Object[this.size];
     }
 
     /**
@@ -95,7 +89,7 @@ public class SimpleArray<T> implements Iterable<T> {
      */
     public T get(int index) {
         checkIndexInArray(index);
-        return (T) array[index];
+        return array[index];
     }
 
     /**
@@ -116,24 +110,7 @@ public class SimpleArray<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            /**
-             * Contains index element.
-             *
-             */
-            @Override
-            public boolean hasNext() {
-                return iterValue < size;
-            }
-
-            @Override
-            public T next() {
-                if (!(hasNext())) {
-                    throw new NoSuchElementException();
-                }
-                return (T) array[iterValue++];
-            }
-        };
+        return new IteratorSimpleArray<>(array);
     }
 
     @Override
@@ -141,13 +118,14 @@ public class SimpleArray<T> implements Iterable<T> {
         StringBuilder sb = new StringBuilder();
         int value = 0;
         sb.append("[");
-        while (iterator().hasNext()) {
-            T t = iterator().next();
+        Iterator<T> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            T t = iterator.next();
             value++;
-            if (t != null && iterator().hasNext()) {
+            if (t != null && iterator.hasNext()) {
                 sb.append(t);
             }
-            if (iterator().hasNext() && array[value] != null) {
+            if (iterator.hasNext() && array[value] != null) {
                 sb.append(", ");
             }
         }
