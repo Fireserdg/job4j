@@ -18,12 +18,18 @@ public abstract class AbstractStore<E extends Base> implements Store<E> {
     private SimpleArray<E> list;
 
     /**
+     * Contains size list.
+     *
+     */
+    private int size;
+    /**
      * Constructor AbstractStore.
      *
      * @param size size new list.
      */
     public AbstractStore(int size) {
-        this.list = new SimpleArray<>(size);
+        this.size = size;
+        this.list = new SimpleArray<>(this.size);
     }
 
     /**
@@ -44,14 +50,12 @@ public abstract class AbstractStore<E extends Base> implements Store<E> {
      */
     public boolean replace(String id, E model) {
         boolean result = false;
-        int index = 0;
-        for (E base:list) {
-            if (base.getId().equals(id)) {
+        for (int i = 0; i < this.size; i++) {
+            if (this.list.get(i).getId().equals(id)) {
+                this.list.set(i, model);
                 result = true;
-                list.set(index, model);
                 break;
             }
-            index++;
         }
         return result;
     }
@@ -64,14 +68,12 @@ public abstract class AbstractStore<E extends Base> implements Store<E> {
      */
     public boolean delete(String id) {
         boolean result = false;
-        int index = 0;
-        for (E base:list) {
-            if (base != null && base.getId().equals(id)) {
-                list.delete(index);
+        for (int i = 0; i < this.size; i++) {
+            if (this.list.get(i).getId().equals(id)) {
+                this.list.delete(i);
                 result = true;
                 break;
             }
-            index++;
         }
         return result;
     }
@@ -85,14 +87,11 @@ public abstract class AbstractStore<E extends Base> implements Store<E> {
      */
     public E findById(String id) {
         E item = null;
-        for (E base: list) {
+        for (E base: this.list) {
             if (base != null && base.getId().equals(id)) {
                 item = base;
                 break;
             }
-        }
-        if (item == null) {
-            throw new NoSuchElementException();
         }
         return item;
     }

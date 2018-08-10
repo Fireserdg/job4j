@@ -1,10 +1,8 @@
 package ru.job4j.generic;
 
-import org.junit.Before;
-import org.junit.Test;
-import java.util.NoSuchElementException;
+import org.junit.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Test class for User Store.
@@ -61,8 +59,8 @@ public class UserStoreTest {
         assertThat(users.findById("33").getName(), is("Pavel"));
     }
 
-    @Test (expected = NoSuchElementException.class)
+    @Test
     public void whenFindUserByIdAndGetException() {
-        users.findById("10");
+        assertNull(users.findById("10"));
     }
 }

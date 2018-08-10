@@ -1,8 +1,6 @@
 package ru.job4j.generic;
 
-import org.junit.Before;
-import org.junit.Test;
-import java.util.NoSuchElementException;
+import org.junit.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -62,8 +60,8 @@ public class RoleStoreTest {
         assertThat(result, is(true));
     }
 
-    @Test (expected = NoSuchElementException.class)
-    public void whenFindByIdAndStoreHasNotIdShouldException() {
-        roles.findById("13");
+    @Test
+    public void whenFindByIdAndStoreHasNotId() {
+        assertNull(roles.findById("13"));
     }
 }
