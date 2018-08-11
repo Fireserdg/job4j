@@ -2,6 +2,7 @@ package ru.job4j.list;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Class Simple Array List.
@@ -25,12 +26,6 @@ public class SimpleArrayList<E> implements Iterable<E> {
     private static final int DEFAULT_SIZE_CONTAINER = 10;
 
     /**
-     * Contains size new container.
-     *
-     */
-    private int size;
-
-    /**
      * Contains the counter.
      *
      */
@@ -49,7 +44,6 @@ public class SimpleArrayList<E> implements Iterable<E> {
      */
     public SimpleArrayList() {
         this.container = new Object[DEFAULT_SIZE_CONTAINER];
-        this.size = DEFAULT_SIZE_CONTAINER;
     }
 
     /**
@@ -58,8 +52,7 @@ public class SimpleArrayList<E> implements Iterable<E> {
      * @param size size new container.
      */
     public SimpleArrayList(int size) {
-        this.size = size;
-        this.container = new Object[this.size];
+        this.container = new Object[size];
     }
 
     /**
@@ -68,12 +61,7 @@ public class SimpleArrayList<E> implements Iterable<E> {
      * @param value new value.
      */
     public void add(E value) {
-        if (count == size) {
-            Object[] listNew = new Object[this.size * 2];
-            System.arraycopy(container, 0, listNew, 0, size);
-            this.container = listNew;
-            this.size = this.container.length;
-        }
+        checkLengthContainer();
         this.container[count++] = value;
         this.modCount++;
     }
@@ -96,7 +84,7 @@ public class SimpleArrayList<E> implements Iterable<E> {
      * @param index index cell in the container.
      */
     private void checkIndex(int index) {
-        if (index < 0 || index > this.size - 1) {
+        if (index < 0 || index > this.container.length - 1) {
             throw new IndexOutOfBoundsException();
         }
     }
@@ -107,7 +95,20 @@ public class SimpleArrayList<E> implements Iterable<E> {
      * @return size.
      */
     public int getSize() {
-        return this.size;
+        return this.container.length;
+    }
+
+    /**
+     * Check the container length. If the container length is equal to the count,
+     * then increase the size of the container.
+     *
+     */
+    private void checkLengthContainer() {
+        if (this.count == this.container.length) {
+            Object[] listNew = new Object[this.container.length * 2];
+            System.arraycopy(this.container, 0, listNew, 0, this.container.length);
+            this.container = listNew;
+        }
     }
 
     /**
@@ -157,13 +158,16 @@ public class SimpleArrayList<E> implements Iterable<E> {
 
         @Override
         public boolean hasNext() {
+            if (this.expectedModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
             return this.index < this.list.length;
         }
 
         @Override
         public E next() {
-            if (this.expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
+            if (!(hasNext())) {
+                throw new NoSuchElementException();
             }
             return this.list[index++];
         }

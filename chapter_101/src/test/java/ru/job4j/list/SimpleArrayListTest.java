@@ -74,15 +74,32 @@ public class SimpleArrayListTest {
     }
     @Test (expected = ConcurrentModificationException.class)
     public void whenAddValueToListAfterGetIteratorAndShouldException() {
-        SimpleArrayList<String> listTwo = new SimpleArrayList<>(4);
-        listTwo.add("Cat");
-        listTwo.add("Dog");
-        listTwo.add("Bird");
-        Iterator<String> iterator = listTwo.iterator();
+        SimpleArrayList<String> listString = new SimpleArrayList<>(4);
+        listString.add("Cat");
+        listString.add("Dog");
+        listString.add("Bird");
+        Iterator<String> iterator = listString.iterator();
         iterator.next();
         iterator.next();
         iterator.next();
-        listTwo.add("Monkey");
+        listString.add("Monkey");
+        iterator.next();
+    }
+
+    @Test (expected = NoSuchElementException.class)
+    public void whenCallIteratorNextAndShouldException() {
+        SimpleArrayList<Double> listDouble = new SimpleArrayList<>(3);
+        listDouble.add(1.0);
+        listDouble.add(2.0);
+        listDouble.add(3.0);
+        Iterator<Double> iterator = listDouble.iterator();
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next(), is(1.0));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next(), is(2.0));
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next(), is(3.0));
+        assertThat(iterator.hasNext(), is(false));
         iterator.next();
     }
 }
