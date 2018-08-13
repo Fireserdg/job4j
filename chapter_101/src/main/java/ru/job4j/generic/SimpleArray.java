@@ -38,10 +38,10 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     /**
-     * Add new object type <T> in array.
+     * Add new object type T in array.
      *
-     * @param model object type <T>.
-     * @throws ArrayIndexOutOfBoundsException(), If there is no space in the array
+     * @param model object type T.
+     * @throws ArrayIndexOutOfBoundsException If there is no space in the array
      */
     public void add(T model) {
         if (this.count == size) {
@@ -54,8 +54,8 @@ public class SimpleArray<T> implements Iterable<T> {
      * Set new value for array cell.
      *
      * @param index index item in array.
-     * @param model new object type <T>.
-     * @throws IndexOutOfBoundsException, if the array hasn't this index.
+     * @param model new object type T.
+     * @throws IndexOutOfBoundsException if the array hasn't this index.
      */
     public void set(int index, T model) {
         checkIndexInArray(index);
@@ -66,7 +66,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * Delete item by index.
      *
      * @param index index cell in array.
-     * @throws IndexOutOfBoundsException, if the array hasn't this index.
+     * @throws IndexOutOfBoundsException if the array hasn't this index.
      */
     public void delete(int index) {
         checkIndexInArray(index);
@@ -84,8 +84,8 @@ public class SimpleArray<T> implements Iterable<T> {
      * Delete item by index.
      *
      * @param index index cell in array.
-     * @return object type <T>.
-     * @throws IndexOutOfBoundsException, if the array hasn't this index.
+     * @return object type T.
+     * @throws IndexOutOfBoundsException if the array hasn't this index.
      */
     public T get(int index) {
         checkIndexInArray(index);

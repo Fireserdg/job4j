@@ -71,7 +71,7 @@ public class SimpleArrayList<E> implements Iterable<E> {
      *
      * @param index index of value.
      * @return value.
-     * @throws IndexOutOfBoundsException, if the container hasn't this index.
+     * @throws IndexOutOfBoundsException if the container hasn't this index.
      */
     public E get(int index) {
         checkIndex(index);
@@ -114,7 +114,7 @@ public class SimpleArrayList<E> implements Iterable<E> {
     /**
      * Iterator for the container.
      *
-     * @return iterator type<E>.
+     * @return iterator type E.
      */
     @Override
     public Iterator<E> iterator() {

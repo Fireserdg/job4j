@@ -56,7 +56,7 @@ public class SimpleSet<E> implements Iterable<E> {
     /**
      * Iterator for the Set.
      *
-     * @return iterator type<E>.
+     * @return iterator type E.
      */
     @Override
     public Iterator<E> iterator() {

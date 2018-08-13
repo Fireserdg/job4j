@@ -35,7 +35,7 @@ public abstract class AbstractStore<E extends Base> implements Store<E> {
     /**
      * Add new item.
      *
-     * @param model new item type <E>.
+     * @param model new item type E.
      */
     public void add(E model) {
         this.list.add(model);
@@ -45,7 +45,7 @@ public abstract class AbstractStore<E extends Base> implements Store<E> {
      * Replace item.
      *
      * @param id id old item.
-     * @param model new item type <E>.
+     * @param model new item type E.
      * @return result operations (true or false).
      */
     public boolean replace(String id, E model) {
