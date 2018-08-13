@@ -70,6 +70,39 @@ public class SimpleLinkedList<E> implements Iterable<E> {
     }
 
     /**
+     * Delete value in Linked list.
+     *
+     * @param index index value.
+     * @return value that is deleted.
+     */
+    public E delete(int index) {
+        checkIndex(index);
+        Node<E> result = this.first;
+        for (int i = 0; i < index; i++) {
+            result = result.next;
+        }
+        E item = result.date;
+        if (result == this.first && result.next != null) {
+            this.first = result.next;
+            this.first.previous = null;
+        } else if (result != this.first && result != this.last) {
+            Node<E> nextItem = result.next;
+            Node<E> prevItem = result.previous;
+            prevItem.next = nextItem;
+            nextItem.previous = prevItem;
+        } else if (result == this.last && result.previous != null) {
+            this.last = result.previous;
+            result.previous.next = null;
+        } else {
+            this.first = null;
+            this.last = null;
+        }
+        this.size--;
+        this.modCount++;
+        return item;
+    }
+
+    /**
      * Get size the Linked list.
      *
      * @return size.

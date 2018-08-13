@@ -49,6 +49,19 @@ public class SimpleLinkedListTest {
         assertThat(list.get(3), is(3));
     }
 
+    @Test
+    public void whenDeleteValueByIndex() {
+        assertThat(list.delete(1), is(1));
+        assertThat(list.get(1), is(2));
+        assertThat(list.get(2), is(3));
+        assertThat(list.delete(2), is(3));
+        assertThat(list.get(1), is(2));
+        assertThat(list.delete(1), is(2));
+        assertThat(list.get(0), is(0));
+        assertThat(list.delete(0), is(0));
+        assertThat(list.size(), is(0));
+    }
+
     @Test(expected = IndexOutOfBoundsException.class)
     public void whenGetValueInListByIndexThenException() {
         list.get(7);
