@@ -49,7 +49,7 @@ public class SimpleSet<E> implements Iterable<E> {
      *
      * @return size.
      */
-    public int getSize() {
+    public int size() {
         return this.container.getSize();
     }
 

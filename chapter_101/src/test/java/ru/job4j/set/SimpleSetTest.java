@@ -35,11 +35,11 @@ public class SimpleSetTest {
         set.add(20);
         set.add(5);
         set.add(15);
-        assertThat(set.getSize(), is(4));
+        assertThat(set.size(), is(4));
         set.add(5);
         set.add(15);
         set.add(10);
-        assertThat(set.getSize(), is(4));
+        assertThat(set.size(), is(4));
         Iterator<Integer> iterator = set.iterator();
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.next(), is(10));
