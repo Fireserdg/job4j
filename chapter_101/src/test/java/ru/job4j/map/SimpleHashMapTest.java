@@ -42,10 +42,10 @@ public class SimpleHashMapTest {
         map.insert(6, "Six");
         map.insert(7, "Seven");
         map.insert(8, "Eight");
-        assertThat(map.getSize(), is(8));
+        assertThat(map.size(), is(8));
         map.insert(9, "Nine");
         map.insert(10, "Ten");
-        assertThat(map.getSize(), is(16));
+        assertThat(map.size(), is(16));
         assertThat(map.delete(6), is(true));
         assertThat(map.delete(4), is(true));
         assertThat(map.delete(11), is(false));
@@ -105,5 +105,26 @@ public class SimpleHashMapTest {
         assertThat(iterator.next().getValue(), is('C'));
         assertThat(map.insert("Alex", 'D'), is(true));
         iterator.next();
+    }
+
+    @Test
+    public void whenIncreasingSizeThenGetElementAndResultTheSame() {
+        SimpleHashMap<String, String> map = new SimpleHashMap<>(8);
+        map.insert("Victor", "One");
+        map.insert("Sergey", "Two");
+        map.insert("Alexey", "Three");
+        map.insert("Fedor", "Four");
+        map.insert("Max", "Five");
+        map.insert("Vodka", "Six");
+        map.insert("6", "Seven");
+        map.insert("5", "Eight");
+        assertThat(map.size(), is(8));
+        map.insert("Zzzzzzz", "Nine");
+        assertThat(map.size(), is(16));
+        assertThat(map.get("Victor"), is("One"));
+        assertThat(map.get("Sergey"), is("Two"));
+        assertThat(map.get("Zzzzzzz"), is("Nine"));
+        assertThat(map.get("Max"), is("Five"));
+        assertThat(map.get("6"), is("Seven"));
     }
 }

@@ -61,11 +61,11 @@ public class SimpleHashMap<K, V> implements Iterable {
      */
     public boolean insert(K key, V value) {
         boolean result;
-        checkSize(this.table.length);
-        if (this.table[position(key)] != null) {
+        checkSize(size());
+        if (this.table[position(key, size())] != null) {
             result = false;
         } else {
-            this.table[position(key)] = new Entry<>(key, value);
+            this.table[position(key, size())] = new Entry<>(key, value);
             result = true;
             count++;
             modCount++;
@@ -81,8 +81,8 @@ public class SimpleHashMap<K, V> implements Iterable {
      */
     public V get(K key) {
         V value = null;
-        if (this.table[position(key)].getKey().equals(key)) {
-            value = (V) this.table[position(key)].getValue();
+        if (this.table[position(key, size())].getKey().equals(key)) {
+            value = (V) this.table[position(key, size())].getValue();
         }
         return value;
     }
@@ -95,8 +95,8 @@ public class SimpleHashMap<K, V> implements Iterable {
      */
     public boolean delete(K key) {
         boolean result = false;
-        if (this.table[position(key)] != null) {
-            this.table[position(key)] = null;
+        if (this.table[position(key, size())] != null) {
+            this.table[position(key, size())] = null;
             result = true;
             count--;
             modCount++;
@@ -109,7 +109,7 @@ public class SimpleHashMap<K, V> implements Iterable {
      *
      * @return size.
      */
-    public int getSize() {
+    public int size() {
         return this.table.length;
     }
 
@@ -119,8 +119,8 @@ public class SimpleHashMap<K, V> implements Iterable {
      * @param key item's key
      * @return position in table.
      */
-    private int position(K key) {
-        return  (key.hashCode()) & (table.length - 1);
+    private int position(K key, int size) {
+        return  (key.hashCode()) & (size - 1);
     }
 
     /**
@@ -129,9 +129,14 @@ public class SimpleHashMap<K, V> implements Iterable {
      * @param size table length.
      */
     private void checkSize(int size) {
-        if (size == count) {
+        if (size == this.count) {
             Entry[] newTable = new Entry[size * 2];
-            System.arraycopy(this.table, 0, newTable, 0, size);
+            for (int i = 0; i < this.table.length; i++) {
+                if (this.table[i] != null) {
+                    K keyTable = (K) this.table[i].getKey();
+                    newTable[position(keyTable, newTable.length)] = this.table[i];
+                }
+            }
             this.table = newTable;
             modCount++;
         }
