@@ -100,4 +100,21 @@ public class TreeTest {
         tree.add("One", "Two");
         assertThat(iterator.hasNext(), is(true));
     }
+
+    @Test
+    public void whenTreeIsBinary() {
+        Tree<Integer> tree = new Tree<>();
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(2, 5);
+        tree.add(2, 8);
+        tree.add(3, 4);
+        tree.add(3, 9);
+        assertThat(tree.isBinary(), is(true));
+    }
+
+    @Test
+    public void whenTreeIsNotBinary() {
+        assertThat(this.tree.isBinary(), is(false));
+    }
 }
