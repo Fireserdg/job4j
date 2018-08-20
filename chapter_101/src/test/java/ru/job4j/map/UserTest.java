@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.*;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 /**
@@ -25,5 +26,11 @@ public class UserTest {
         Map<User, Object> map = new HashMap<>();
         map.put(first, 1);
         map.put(second, 2);
+        User third = null;
+        int hash = first.hashCode();
+        int hash2 = second.hashCode();
+        assertThat(hash2 == hash, is(true));
+        assertThat(first.equals(second), is(true));
+        assertThat(second.equals(third), is(false));
     }
 }
