@@ -21,15 +21,17 @@ public class Store {
     public Info diff(List<User> previous, List<User> current) {
         int count = 0;
         int change = 0;
+        Map<Integer, String> crtUsers = new HashMap<>();
+        for (User crt: current) {
+            crtUsers.put(crt.getId(), crt.getName());
+        }
         for (User prv: previous) {
-            for (User crt: current) {
-                if (prv.getId() == crt.getId()) {
-                    count++;
-                }
-                if (prv.getId() == crt.getId()
-                        && !(prv.getName().equals(crt.getName()))) {
-                    change++;
-                }
+            if (crtUsers.containsKey(prv.getId())) {
+                count++;
+            }
+            if (crtUsers.containsKey(prv.getId())
+                    && !(crtUsers.get(prv.getId()).equals(prv.getName()))) {
+                change++;
             }
         }
         int addNew = current.size() - count;
@@ -72,11 +74,6 @@ public class Store {
 
         public String getName() {
             return name;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("User: id=%s, name=%s.", this.id, this.name);
         }
 
         @Override
