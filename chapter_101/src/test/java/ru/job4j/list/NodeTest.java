@@ -13,44 +13,12 @@ import static org.junit.Assert.*;
  */
 public class NodeTest {
 
-    /**
-     * Contains first Node.
-     *
-     */
-    private Node<Integer> first;
-
-    /**
-     * Contains second Node.
-     *
-     */
-    private Node<Integer> second;
-
-    /**
-     * Contains third Node.
-     *
-     */
-    private Node<Integer> third;
-
-    /**
-     * Contains four Node.
-     *
-     */
-    private Node<Integer> four;
-
-    /**
-     * Create Node linked list.
-     *
-     */
-    @Before
-    public void createNode() {
-        first = new Node<>(1);
-        second = new Node<>(2);
-        third = new Node<>(3);
-        four = new Node<>(4);
-    }
-
     @Test
     public void whenNodeHasCycleAtTheEnd() {
+        Node<Integer> first = new Node<>(1);
+        Node<Integer> second = new Node<>(2);
+        Node<Integer> third = new Node<>(3);
+        Node<Integer> four = new Node<>(4);
         first.next = second;
         second.next = third;
         third.next = four;
@@ -61,6 +29,10 @@ public class NodeTest {
 
     @Test
     public void whenNodeHasCycleInTheMiddle() {
+        Node<Integer> first = new Node<>(1);
+        Node<Integer> second = new Node<>(2);
+        Node<Integer> third = new Node<>(3);
+        Node<Integer> four = new Node<>(4);
         first.next = second;
         second.next = third;
         third.next = second;
@@ -70,6 +42,10 @@ public class NodeTest {
 
     @Test
     public void whenNodeHasNotCycle() {
+        Node<Integer> first = new Node<>(1);
+        Node<Integer> second = new Node<>(2);
+        Node<Integer> third = new Node<>(3);
+        Node<Integer> four = new Node<>(4);
         first.next = second;
         second.next = third;
         third.next = four;
