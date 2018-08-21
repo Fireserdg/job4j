@@ -35,12 +35,12 @@ public class RectangleMove implements Runnable {
     @Override
     public void run() {
         while (true) {
-            if(this.rect.getX() == 0) {
+            if (this.rect.getX() == 0) {
                 this.markX = false;
-            } else if(this.rect.getX() == 290) {
+            } else if (this.rect.getX() == 290) {
                 this.markX = true;
             }
-            if(!markX) {
+            if (!markX) {
                 this.rect.setX(this.rect.getX() + 1);
             } else {
                 this.rect.setX(this.rect.getX() - 1);
