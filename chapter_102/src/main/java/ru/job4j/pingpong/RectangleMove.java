@@ -29,15 +29,14 @@ public class RectangleMove implements Runnable {
     @Override
     public void run() {
         int delta = 1;
-        while (true) {
+        while (!Thread.interrupted()) {
             double getX = this.rect.getX();
             delta = getX == 0 ? 1 : getX == 290 ? -1 : delta;
             this.rect.setX(getX + delta);
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                System.out.println("Программа завершена");
-                break;
+                Thread.currentThread().interrupt();
             }
         }
     }
