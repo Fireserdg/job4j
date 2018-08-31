@@ -4,6 +4,7 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * UserStorage.
@@ -29,14 +30,7 @@ public class UserStorage {
      * @return true if user add in storage else false.
      */
     public synchronized boolean add(User user) {
-        boolean result;
-        if (!this.storage.containsKey(user.getId())) {
-            this.storage.put(user.getId(), user);
-            result = true;
-        } else {
-            result = false;
-        }
-        return result;
+        return this.storage.putIfAbsent(user.getId(), user) == null;
     }
 
     /**
@@ -46,14 +40,7 @@ public class UserStorage {
      * @return true if user update in storage else false.
      */
     public synchronized boolean update(User user) {
-        boolean result;
-        if (this.storage.containsKey(user.getId())) {
-            this.storage.put(user.getId(), user);
-            result = true;
-        } else {
-            result = false;
-        }
-        return result;
+        return this.storage.computeIfPresent(user.getId(), (k, v) -> user) != null;
     }
 
     /**
@@ -63,14 +50,7 @@ public class UserStorage {
      * @return true if user delete from storage else false.
      */
     public synchronized boolean delete(User user) {
-        boolean result;
-        if (this.storage.containsKey(user.getId())) {
-            this.storage.remove(user.getId());
-            result = true;
-        } else {
-            result = false;
-        }
-        return result;
+        return this.storage.remove(user.getId()) != null;
     }
 
     /**
@@ -82,16 +62,13 @@ public class UserStorage {
      * @return true if operation is successful else false.
      */
     public synchronized boolean transfer(int fromId, int toId, int amount) {
-        boolean result;
         int balanceFrom = this.storage.get(fromId).getAmount();
         int balanceTo = this.storage.get(toId).getAmount();
-        if (this.storage.containsKey(fromId) && this.storage.containsKey(toId)
-                && balanceFrom >= amount) {
+        boolean result = this.storage.containsKey(fromId)
+                && this.storage.containsKey(toId) && (balanceFrom >= amount);
+        if (result) {
             this.storage.get(fromId).setAmount(balanceFrom - amount);
             this.storage.get(toId).setAmount(balanceTo + amount);
-            result = true;
-        } else {
-            result = false;
         }
         return result;
     }
