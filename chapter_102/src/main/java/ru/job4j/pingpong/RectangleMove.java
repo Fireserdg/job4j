@@ -18,12 +18,6 @@ public class RectangleMove implements Runnable {
     private final Rectangle rect;
 
     /**
-     * Contains marker for tasks switching.
-     *
-     */
-    private boolean markX;
-
-    /**
      * Constructor Rectangle Move.
      *
      * @param rect new Rectangle.
@@ -34,17 +28,11 @@ public class RectangleMove implements Runnable {
 
     @Override
     public void run() {
+        int delta = 1;
         while (true) {
-            if (this.rect.getX() == 0) {
-                this.markX = false;
-            } else if (this.rect.getX() == 290) {
-                this.markX = true;
-            }
-            if (!markX) {
-                this.rect.setX(this.rect.getX() + 1);
-            } else {
-                this.rect.setX(this.rect.getX() - 1);
-            }
+            double getX = this.rect.getX();
+            delta = getX == 0 ? 1 : getX == 290 ? -1 : delta;
+            this.rect.setX(getX + delta);
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
