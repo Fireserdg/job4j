@@ -11,32 +11,15 @@ import net.jcip.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ParallelSearch {
-
-    /**
-     * Contains marker for stop thread.
-     *
-     */
-    private static boolean running = false;
-
-    /**
-     * Stop thread.
-     *
-     */
-    private static void stop() {
-        running = true;
-    }
-
+    
     public static void main(String[] args) {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(3);
         final Thread consumer = new Thread(() -> {
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 try {
                     System.out.println(queue.pool());
-                    if (running) {
-                        Thread.currentThread().interrupt();
-                    }
                 } catch (InterruptedException e) {
-                   return;
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -46,7 +29,7 @@ public class ParallelSearch {
                 try {
                     queue.offer(index);
                     if (index == 2) {
-                        stop();
+                        consumer.interrupt();
                     }
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
