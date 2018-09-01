@@ -82,19 +82,18 @@ public class SafeArrayListTest {
         Thread second = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                for (int i = 0; i < 100; i++) {
+                list.add(97);
+                list.add(98);
+                for (int i = 0; i < 99; i++) {
                     iterator.next();
                 }
+                list.add(99);
             }
         });
         second.start();
         first.join();
         second.join();
+        assertNull(iterator.next());
         assertThat(iterator.hasNext(), is(false));
     }
 }

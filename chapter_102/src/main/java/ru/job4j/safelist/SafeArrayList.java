@@ -75,6 +75,10 @@ public class SafeArrayList<E> implements Iterable<E> {
      */
     @Override
     public synchronized Iterator<E> iterator() {
-        return this.list.iterator();
+        SimpleArrayList<E> clone = new SimpleArrayList<>(size());
+        for (E value: this.list) {
+            clone.add(value);
+        }
+        return clone.iterator();
     }
 }
