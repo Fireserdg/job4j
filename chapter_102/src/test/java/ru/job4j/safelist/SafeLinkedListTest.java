@@ -95,11 +95,8 @@ public class SafeLinkedListTest {
         Thread second = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                list.add("Five");
+                list.add("Six");
                 for (int i = 0; i < 4; i++) {
                     iterator.next();
                 }

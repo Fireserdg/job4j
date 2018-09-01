@@ -76,6 +76,10 @@ public class SafeLinkedList<E> implements Iterable<E> {
      */
     @Override
     public synchronized Iterator<E> iterator() {
-        return this.list.iterator();
+        SimpleLinkedList<E> clone = new SimpleLinkedList<>();
+        for (E value: this.list) {
+            clone.add(value);
+        }
+        return clone.iterator();
     }
 }
