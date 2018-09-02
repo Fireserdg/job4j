@@ -12,10 +12,10 @@ import java.util.*;
 public class WordIndex {
 
     /**
-     * Contains container for word and positions.
+     * Contains prefix trie for contains words.
      *
      */
-    private Map<String, Set<Integer>> container;
+    private final Trie trie = new Trie();
 
     /**
      * Loading data from the file and building an index.
@@ -24,7 +24,6 @@ public class WordIndex {
      */
     public void loadFile(String filename) {
         int index;
-        this.container = new HashMap<>();
         char[] symbol = filename.toCharArray();
         for (int i = 0; i < symbol.length; i++) {
             StringBuilder result = new StringBuilder();
@@ -37,12 +36,7 @@ public class WordIndex {
                     }
                     i++;
                 }
-                if (!this.container.containsKey(result.toString())) {
-                    this.container.put(result.toString(), new TreeSet<>());
-                    this.container.get(result.toString()).add(index);
-                } else {
-                    this.container.get(result.toString()).add(index);
-                }
+                trie.insert(result.toString(), index);
             }
         }
     }
@@ -54,10 +48,6 @@ public class WordIndex {
      * @return list position searchWord or null if word hasn't in list.
      */
     public Set<Integer> getIndexes4Word(String searchWord) {
-        Set<Integer> tree = null;
-        if (this.container.containsKey(searchWord)) {
-            tree = this.container.get(searchWord);
-        }
-        return tree;
+        return trie.find(searchWord);
     }
 }

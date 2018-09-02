@@ -1,7 +1,7 @@
 package ru.job4j.addtask;
 
 import org.junit.*;
-import java.util.Set;
+import java.util.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -21,6 +21,12 @@ public class WordIndexTest {
     private StringBuilder textFile;
 
     /**
+     * Contains index.
+     *
+     */
+    private WordIndex index;
+
+    /**
      * Create method for test.
      *
      */
@@ -38,37 +44,40 @@ public class WordIndexTest {
                 .append(System.lineSeparator())
                 .append("Alaska borders on northwestern Canada. ")
                 .append("Hawaii lies in the central Pacific.");
+        this.index = new WordIndex();
+        index.loadFile(textFile.toString());
     }
     @Test
     public void whenFindWordAndGetList2Index() {
-        WordIndex index = new WordIndex();
-        index.loadFile(textFile.toString());
         Set<Integer> result = index.getIndexes4Word("Alaska");
         assertThat(result.contains(259), is(true));
         assertThat(result.contains(362), is(true));
         assertThat(textFile.indexOf("Alaska"), is(259));
-        assertThat(textFile.indexOf("Alaska", 260), is(362));
+        assertThat(textFile.lastIndexOf("Alaska"), is(362));
     }
 
     @Test
     public void whenFindWordAndGetList3Index() {
-        WordIndex index = new WordIndex();
-        index.loadFile(textFile.toString());
         Set<Integer> result = index.getIndexes4Word("The");
         assertThat(result.contains(0), is(true));
         assertThat(result.contains(139), is(true));
         assertThat(result.contains(236), is(true));
         assertThat(textFile.indexOf("The"), is(0));
         assertThat(textFile.indexOf("The", 1), is(139));
-        assertThat(textFile.indexOf("The", 140), is(236));
+        assertThat(textFile.lastIndexOf("The"), is(236));
     }
 
     @Test
     public void whenFindWordButIsNotInText() {
-        WordIndex index = new WordIndex();
-        index.loadFile(this.textFile.toString());
         Set<Integer> result = index.getIndexes4Word("Apple");
         assertNull(result);
     }
 
+    @Test
+    public void whenUseIteratorForGetResult() {
+        Iterator iterator = index.getIndexes4Word("Canada").iterator();
+        assertThat(textFile.indexOf("Canada"), is(iterator.next()));
+        assertThat(textFile.lastIndexOf("Canada"), is(iterator.next()));
+        assertThat(iterator.hasNext(), is(false));
+    }
 }
