@@ -46,7 +46,7 @@ public class SimpleBlockingQueue<T> {
     public void offer(T value) throws InterruptedException {
         synchronized (this) {
             while (queue.size() == limit) {
-                this.wait();
+                    this.wait();
             }
             queue.offer(value);
             this.notify();
@@ -77,5 +77,14 @@ public class SimpleBlockingQueue<T> {
      */
     public synchronized int size() {
         return this.queue.size();
+    }
+
+    /**
+     * Check queue for empty.
+     *
+     * @return result.
+     */
+    public synchronized boolean isEmpty() {
+        return this.queue.isEmpty();
     }
 }
