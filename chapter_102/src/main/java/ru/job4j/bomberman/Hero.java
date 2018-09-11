@@ -1,6 +1,7 @@
 package ru.job4j.bomberman;
 
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Hero.
@@ -36,19 +37,26 @@ public class Hero implements Runnable {
     private Cell source;
 
     /**
-     * Contains count.
+     * Contains destination Cell.
      *
      */
-    private int count = 0;
+    private Cell dest;
+
+    /**
+     * Contains steps for BomberMan.
+     *
+     */
+    private final BlockingQueue<Cell> steps;
 
     /**
      * Constructor.
      *
      * @param board new board.
      */
-    public Hero(Board board) {
+    public Hero(final Board board, final BlockingQueue<Cell> steps) {
         this.board = board;
-        this.limit = board.size() - 1;
+        this.limit = board.size() / 2;
+        this.steps = steps;
     }
 
     /**
@@ -58,50 +66,14 @@ public class Hero implements Runnable {
      */
     private void start() throws InterruptedException {
         boolean result;
-        this.source = new Cell(random.nextInt(limit),
-                random.nextInt(limit));
         do {
-            result = this.board.startPosition(source);
+            this.source = new Cell(limit + random.nextInt(1),
+                    limit + random.nextInt((1)));
+            result = this.board.startPosition(this.source);
         } while (!result);
-    }
-
-    /**
-     * Check way for Hero.
-     *
-     * @throws InterruptedException if thread is interrupted.
-     */
-    private void way() throws InterruptedException {
-        Cell dest;
-        do {
-            int deltaX = random.nextInt(2) == 0 ? -1 : 1;
-            int deltaY = random.nextInt(2) == 0 ? 1 : -1;
-            dest = new Cell(moveX(deltaX), moveY(deltaY));
-        } while (!board.move(source, dest));
-        this.source = dest;
-    }
-
-    /**
-     * Check move Hero for X.
-     *
-     * @param deltaX deltaX.
-     * @return value.
-     */
-    private int moveX(int deltaX) {
-        deltaX = source.getX() == 0 ? 1 : deltaX;
-        deltaX = source.getX() == limit ? -1 : deltaX;
-        return source.getX() + deltaX;
-    }
-
-    /**
-     * Check move Hero for X.
-     *
-     * @param deltaY deltaY.
-     * @return value.
-     */
-    private int moveY(int deltaY) {
-        deltaY = source.getY() == 0 ? -1 : deltaY;
-        deltaY = source.getY() == limit ? 1 : deltaY;
-        return source.getY() - deltaY;
+        Cell first = steps.take();
+        this.dest = new Cell(source.getX() + first.getX(),
+                source.getY() + first.getY());
     }
 
     @Override
@@ -113,31 +85,22 @@ public class Hero implements Runnable {
         }
         while (!Thread.interrupted()) {
             try {
-                System.out.println(String.format("Source:%s - Thread:%s ", source,
-                        Thread.currentThread().getName()));
-                way();
-                System.out.println(String.format("Dest:%s - Thread:%s ", source,
-                        Thread.currentThread().getName()));
-                this.count++;
-                if (count == (board.size() * board.size())) {
+                if (board.move(source, dest)) {
+                    Cell insert = this.steps.take();
+                    this.source = this.dest;
+                    this.dest = new Cell(source.getX() + insert.getX(),
+                            source.getY() + insert.getY());
+                    Thread.sleep(1000);
+                }
+                if (this.steps.isEmpty()) {
                     Thread.currentThread().interrupt();
+                    System.out.println(String.format("Hero Thread: %s is stop",
+                            Thread.currentThread().getName()));
                     this.board.giveAwayLock(source);
                 }
-                Thread.sleep(1000);
             } catch (InterruptedException e) {
-                System.out.println(String.format("Thread: %s is stop, count:%s",
-                        Thread.currentThread().getName(), count));
                 Thread.currentThread().interrupt();
             }
         }
-    }
-
-    /**
-     * Steps hero.
-     *
-     * @return steps.
-     */
-    public int steps() {
-        return this.count;
     }
 }

@@ -1,5 +1,6 @@
 package ru.job4j.bomberman;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -23,9 +24,10 @@ public class Board {
      *
      * @param size size board.
      */
-    public Board(final int size) {
+    public Board(final int size, final int value) {
         this.board = new ReentrantLock[size][size];
         start();
+        lockingCell(value, size);
     }
 
     /**
@@ -40,6 +42,7 @@ public class Board {
         }
     }
     /**
+     * Move for board.
      *
      * @param source position character.
      * @param dest Position to which character wants to pass.
@@ -48,10 +51,12 @@ public class Board {
      */
     public boolean move(Cell source, Cell dest) throws InterruptedException {
         boolean result = false;
-        if (board[dest.getX()][dest.getY()].
-                tryLock(500, TimeUnit.MILLISECONDS)) {
+        if (board[dest.getX()][dest.getY()].tryLock(5, TimeUnit.SECONDS)) {
             board[source.getX()][source.getY()].unlock();
             result = true;
+        }
+        if (!result) {
+            System.out.println(Thread.currentThread().getName() + " is waiting");
         }
         return result;
     }
@@ -84,5 +89,19 @@ public class Board {
      */
     public int size() {
         return this.board.length;
+    }
+
+    /**
+     * Get locking Cell.
+     *
+     * @param value count of locking Cell.
+     * @param size size of board.
+     */
+    private void lockingCell(int value, int size) {
+        Random block = new Random();
+        for (int i = 0; i < value; i++) {
+            this.board[block.nextInt((size - 1) / 2)]
+                    [block.nextInt((size - 1) / 2)].lock();
+        }
     }
 }
