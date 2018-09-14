@@ -177,7 +177,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------Delete Item--------------");
             String answer = input.ask("Please, provide item ID:");
-            if (tracker.delete(answer)) {
+            if (tracker.delete(id -> id.equals(answer))) {
                 System.out.println("Item has deleted");
             } else {
                 System.out.println("Item not found");
@@ -209,7 +209,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------Find item by ID--------------");
             String answer = input.ask("Please, provide item ID:");
-            Item item = tracker.findById(answer);
+            Item item = tracker.findById(id -> id.equals(answer));
             if (item != null) {
                 System.out.println(item);
             } else {
@@ -246,7 +246,7 @@ class EditItem extends BaseAction {
         String name = input.ask("Please, provide item name:");
         String desc = input.ask("Please, provide item description:");
         Item item = new Item(name, desc);
-        if (tracker.replace(answer, item)) {
+        if (tracker.replace(o -> o.equals(answer), item)) {
             System.out.println("Item update");
         } else {
             System.out.println("Item not found");
@@ -278,7 +278,7 @@ class FindByName extends BaseAction {
     public void execute(Input input, Tracker tracker) {
         System.out.println("------------Find item by Name--------------");
         String  name = input.ask("Please, provide item name:");
-        List<Item> result = tracker.findByName(name);
+        List<Item> result = tracker.findByName(key -> key.equals(name));
         if (result.size() == 0) {
             System.out.println("Item not found");
         }

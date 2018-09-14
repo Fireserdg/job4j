@@ -45,7 +45,7 @@ public class StartUITest {
         Item item = tracker.add(new Item("test name", "desc"));
         Input input = new StubInput(new String[]{"2", item.getId(), "test names", "desc", "6"});
         new StartUI(input, tracker).init();
-        assertThat(tracker.findById(item.getId()).getName(), is("test names"));
+        assertThat(tracker.findById(id -> id.equals(item.getId())).getName(), is("test names"));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class StartUITest {
         Input input = new StubInput(new String[]{"5", item.getName(), "6"});
         String name = item.getName();
         new StartUI(input, tracker).init();
-        assertThat(tracker.findByName(name).get(0).getName(), is("test name"));
+        assertThat(tracker.findByName(key -> key.equals(name)).get(0).getName(), is("test name"));
     }
 
     @Test

@@ -3,6 +3,7 @@ package ru.job4j.tracker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * Реализация класса Tracker.
@@ -26,7 +27,7 @@ public class Tracker {
     /**
      * Метод добавления заявок.
      *
-     * @param item
+     * @param item item
      * @return возвращает новую добавленую заявку.
      */
     public Item add(Item item) {
@@ -45,13 +46,13 @@ public class Tracker {
 
     /**
      * Метод редактирования заявок.
-     * @param id Идентификатор заявки.
+//     * @param id Идентификатор заявки.
      * @param item Заявка.
      */
-    public boolean replace(String id, Item item) {
+    public boolean replace(Predicate<String> id, Item item) {
         boolean result = false;
         for (int index = 0; index != this.items.size(); index++) {
-            if (this.items.get(index).getId().equals(id)) {
+            if (id.test(this.items.get(index).getId())) {
                 item.setId(this.items.get(index).getId());
                 this.items.set(index, item);
                 result = true;
@@ -65,10 +66,10 @@ public class Tracker {
      * Метод удаления заявок.
      * @param id Идентификатор заявки.
      */
-    public boolean delete(String id) {
+    public boolean delete(Predicate<String> id) {
         boolean result = false;
         for (int index = 0; index < this.items.size(); index++) {
-            if (this.items.get(index).getId().equals(id)) {
+            if (id.test(this.items.get(index).getId())) {
                 this.items.remove(index);
                 result = true;
                 break;
@@ -90,10 +91,10 @@ public class Tracker {
      * @param key имя для поиска в заявке.
      * @return массив заявок.
      */
-    public List<Item> findByName(String key) {
+    public List<Item> findByName(Predicate<String> key) {
         List<Item> result = new ArrayList<>();
         for (Item item: this.items) {
-            if (item.getName().equals(key)) {
+            if (key.test(item.getName())) {
                 result.add(item);
             }
         }
@@ -105,10 +106,10 @@ public class Tracker {
      * @param id уникальное Id заявки.
      * @return Заявка по Id.
      */
-    public Item findById(String id) {
+    public Item findById(Predicate<String> id) {
         Item result = null;
         for (Item item : items) {
-            if (item.getId().equals(id)) {
+            if (id.test(item.getId())) {
                 result = item;
                 break;
             }

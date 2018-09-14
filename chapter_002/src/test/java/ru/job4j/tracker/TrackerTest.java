@@ -45,31 +45,31 @@ public class TrackerTest {
 
     @Test
     public void whenReplaceNameThenReturnNewName() {
-        tracker.replace(item.getId(), next);
-        assertThat(tracker.findById(item.getId()).getName(), is("test2"));
+        tracker.replace(id -> id.equals(this.item.getId()), next);
+        assertThat(tracker.findById(id -> id.equals(item.getId())).getName(), is("test2"));
     }
 
     @Test
     public void whenDeleteItemThenTrackerHasOneItems() {
-        tracker.delete(item.getId());
+        tracker.delete(id -> id.equals(item.getId()));
         assertThat(tracker.findAll().get(0).getName(), is("test2"));
     }
 
     @Test
     public void whenNeedAllFindItemsThenAllItems() {
-        Item result = tracker.findById(item.getId());
+        Item result = tracker.findById(id -> id.equals(item.getId()));
         assertThat(result, is(item));
-        result = tracker.findById(next.getId());
+        result = tracker.findById(id -> id.equals(next.getId()));
         assertThat(result, is(next));
     }
 
     @Test
     public void whenFindByNameItemThenTrackerCanFindByNameItems() {
-        assertThat(tracker.findByName("test2").get(0), is(next));
+        assertThat(tracker.findByName(key -> key.equals("test2")).get(0), is(next));
     }
 
     @Test
     public void whenFindByIdItemThenTrackerCanFindById() {
-        assertThat(tracker.findById(next.getId()), is(next));
+        assertThat(tracker.findById(id -> id.equals(next.getId())), is(next));
     }
 }
