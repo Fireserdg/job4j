@@ -15,7 +15,7 @@ public class WordIndex {
      * Contains prefix trie for contains words.
      *
      */
-    private final Trie trie = new Trie();
+    private final Trie<Integer> trie = new Trie<>();
 
     /**
      * Loading data from the file and building an index.

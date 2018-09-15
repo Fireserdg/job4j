@@ -9,20 +9,20 @@ import java.util.*;
  * @version $Id$.
  * @since 22.08.2018.
  */
-public class Trie {
+public class Trie<E> {
 
     /**
      * Contains root in trie.
      *
      */
-    private final TrieNode root;
+    private final TrieNode<E> root;
 
     /**
      * Constructor.
      *
      */
     public Trie() {
-        this.root = new TrieNode();
+        this.root = new TrieNode<>();
     }
 
     /**
@@ -31,13 +31,13 @@ public class Trie {
      * @param word new word.
      * @param index index first letter.
      */
-   public void insert(String word, int index) {
-       TrieNode current = this.root;
+   public void insert(String word, E index) {
+       TrieNode<E> current = this.root;
        for (int i = 0; i < word.length(); i++) {
            char ch = word.charAt(i);
-           TrieNode node = current.children.get(ch);
+           TrieNode<E> node = current.children.get(ch);
            if (node == null) {
-               node = new TrieNode();
+               node = new TrieNode<>();
                current.children.put(ch, node);
            }
            current = node;
@@ -52,11 +52,11 @@ public class Trie {
      * @param word word
      * @return index of set.
      */
-    public Set<Integer> find(String word) {
-        TrieNode current = this.root;
+    public Set<E> find(String word) {
+        TrieNode<E> current = this.root;
         for (int i = 0; i < word.length(); i++) {
             char ch = word.charAt(i);
-            TrieNode node = current.children.get(ch);
+            TrieNode<E> node = current.children.get(ch);
             if (node == null) {
                 break;
             }
@@ -69,13 +69,13 @@ public class Trie {
      * Trie node.
      *
      */
-    private class TrieNode {
+    private class TrieNode<T> {
 
         /**
          * Contains children's node.
          *
          */
-        Map<Character, TrieNode> children;
+        Map<Character, TrieNode<T>> children;
 
         /**
          * If word is end.
@@ -87,7 +87,7 @@ public class Trie {
          * Contains index first letter word.
          *
          */
-        Set<Integer> index;
+        Set<T> index;
 
         /**
          * Constructor.
@@ -104,7 +104,7 @@ public class Trie {
          *
          * @return index set.
          */
-        public Set<Integer> getIndex() {
+        public Set<T> getIndex() {
             return this.index;
         }
     }
