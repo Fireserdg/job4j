@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -45,7 +46,8 @@ public class MenuTracker {
         this.actions.add(new MenuTracker.DeleteItem(3, "Delete the new Item."));
         this.actions.add(this.new FindById(4, "Find Item by Id ."));
         this.actions.add(new FindByName(5, "Find Item by name."));
-        this.actions.add(new ExitProgram(6, "Exit program.", startUI));
+        this.actions.add(new AddComment(6, "Add comment."));
+        this.actions.add(new ExitProgram(7, "Exit program.", startUI));
     }
 
     /**
@@ -115,11 +117,11 @@ public class MenuTracker {
             System.out.println("------------ Adding new Item --------------");
             String name = input.ask("Please, provide item name:");
             String desc = input.ask("Please, provide item description:");
-            Item item = new Item(name, desc);
-            tracker.add(item);
-            System.out.println("------------ New Item with getId : " + item.getId());
-            System.out.println("------------ New Item with Name : " + item.getName());
-            System.out.println("------------ New Item with Description : " + item.getDescription());
+            Item item = tracker.add(new Item(name, desc, System.currentTimeMillis()));
+            System.out.println(String.format("---- New Item with getId: %s ----", item.getId()));
+            System.out.println(String.format("---- New Item with Name: %s ----", item.getName()));
+            System.out.println(String.format("---- New Item with Description: %s ----", item.getDescription()));
+            System.out.println(String.format("---- New Item with Date And Time: %s ----", new Timestamp(item.getCreate())));
         }
     }
 
@@ -289,6 +291,42 @@ class FindByName extends BaseAction {
         }
     }
 }
+
+/**
+ * Внутренний класс, реализующий пункт меню Add comments.
+ */
+class AddComment extends BaseAction {
+
+    /**
+     * Конструктор класса AddComment.
+     *
+     * @param key Пункт меню.
+     * @param name Наименование пункта меню.
+     */
+    public AddComment(int key, String name) {
+        super(key, name);
+    }
+
+    /**
+     * Метод для обмена информации с пользователем.
+     *
+     * @param input объект типа Input
+     * @param tracker объект типа Tracker
+     */
+    @Override
+    public void execute(Input input, Tracker tracker) {
+        System.out.println("------------Add comments in Item--------------");
+        String answer = input.ask("Please, provide item ID:");
+        String comment = input.ask("Please, provide comments:");
+        boolean result = tracker.addComment(id -> id.equals(answer), comment);
+        if (result) {
+            System.out.println("Add comment");
+        } else {
+            System.out.println("Item not found");
+        }
+    }
+}
+
 /**
  * Внутренний "внешний класс", реализующий пункт меню Exit Program.
  */

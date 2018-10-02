@@ -15,3 +15,10 @@ notifications:
       - serdg1984@yandex.ru
     on_success: never # default: change
     on_failure: always # default: always
+# Разворачиваем базу данных
+services:
+  - postgresql
+addons:
+  postgresql: "10.5"
+before_script:
+  - psql -c 'create database tracker;' -U postgres

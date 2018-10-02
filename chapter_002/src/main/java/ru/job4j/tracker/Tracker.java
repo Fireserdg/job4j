@@ -1,119 +1,62 @@
 package ru.job4j.tracker;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Predicate;
 
 /**
- * Реализация класса Tracker.
+ * Interface by Tracker.
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
- * @version $Id$.
- * @since 08.05.2018.
+ * @version $1.0$.
+ * @since 30.09.2018.
  */
-public class Tracker {
+public interface Tracker {
 
     /**
-     * Массив для хранения заявок.
-     */
-    private final List<Item> items = new ArrayList<>();
-
-    /**
-     * Определение случайного числа.
-     */
-    private static final Random RN = new Random();
-
-    /**
-     * Метод добавления заявок.
+     * Add items in storage.
      *
-     * @param item item
-     * @return возвращает новую добавленую заявку.
+     * @param item new item.
+     * @return new Item add storage.
      */
-    public Item add(Item item) {
-        item.setId(this.generateId());
-        this.items.add(item);
-        return item;
-    }
+    Item add(Item item);
 
     /**
-     * Метод для получения уникального идентификатора заявки.
-     * @return Возвращает уникальный ключ.
+     * Replace item.
+     * @param id functional for find item by id.
+     * @param item the item.
      */
-    private String generateId() {
-        return String.valueOf(System.currentTimeMillis() + RN.nextInt());
-    }
+    boolean replace(Predicate<String> id, Item item);
 
     /**
-     * Метод редактирования заявок.
-//     * @param id Идентификатор заявки.
-     * @param item Заявка.
+     * Delete item by Id.
+     * @param id functional for find item by id.
      */
-    public boolean replace(Predicate<String> id, Item item) {
-        boolean result = false;
-        for (int index = 0; index != this.items.size(); index++) {
-            if (id.test(this.items.get(index).getId())) {
-                item.setId(this.items.get(index).getId());
-                this.items.set(index, item);
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
+    boolean delete(Predicate<String> id);
 
     /**
-     * Метод удаления заявок.
-     * @param id Идентификатор заявки.
+     * Get list all items.
+     * @return list all items.
      */
-    public boolean delete(Predicate<String> id) {
-        boolean result = false;
-        for (int index = 0; index < this.items.size(); index++) {
-            if (id.test(this.items.get(index).getId())) {
-                this.items.remove(index);
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
+    List<Item> findAll();
 
     /**
-     * Метод получения списка всех заявок.
-     * @return Возвращает массив заявок.
+     * Find item by name.
+     * @param key functional for find item by id.
+     * @return list of items.
      */
-    public List<Item> findAll() {
-        return this.items;
-    }
+    List<Item> findByName(Predicate<String> key);
 
     /**
-     * Метод получения списка по имени.
-     * @param key имя для поиска в заявке.
-     * @return массив заявок.
+     * Get item by id.
+     * @param id functional for find item by id.
+     * @return item.
      */
-    public List<Item> findByName(Predicate<String> key) {
-        List<Item> result = new ArrayList<>();
-        for (Item item: this.items) {
-            if (key.test(item.getName())) {
-                result.add(item);
-            }
-        }
-        return result;
-    }
+    Item findById(Predicate<String> id);
 
     /**
-     * Метод получения заявок по Id.
-     * @param id уникальное Id заявки.
-     * @return Заявка по Id.
+     * Add comment for item.
+     * @param id functional for find item by id.
+     * @return result add comment.
      */
-    public Item findById(Predicate<String> id) {
-        Item result = null;
-        for (Item item : items) {
-            if (id.test(item.getId())) {
-                result = item;
-                break;
-            }
-        }
-        return result;
-    }
+    boolean addComment(Predicate<String> id, String comment);
 }

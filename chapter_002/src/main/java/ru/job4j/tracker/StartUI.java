@@ -64,6 +64,8 @@ public class StartUI {
      * @param args args
      */
     public static void main(String[] args) {
-        new StartUI(new ValidateInput(new ConsoleInput()), new Tracker()).init();
+        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+            new StartUI(new ValidateInput(new ConsoleInput()), tracker).init();
+        }
     }
 }
