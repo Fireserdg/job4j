@@ -18,7 +18,14 @@ notifications:
 # Разворачиваем базу данных
 services:
   - postgresql
-addons:
-  postgresql: "10.5"
 before_script:
   - psql -c 'create database tracker;' -U postgres
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+    - postgresql-10
+    - postgresql-client-10
+env:
+  global:
+  - PGPORT=5432
