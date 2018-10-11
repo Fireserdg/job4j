@@ -90,15 +90,14 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
     @Override
     public Item add(Item item)  {
         try (final PreparedStatement ps = conn.prepareStatement(
-                prop.getProperty("db.add"), Statement.RETURN_GENERATED_KEYS)) {
+                prop.getProperty("db.add"), Statement.RETURN_GENERATED_KEYS);
+             final ResultSet rs = ps.getGeneratedKeys()) {
             ps.setString(1, item.getName());
             ps.setString(2, item.getDescription());
             ps.setTimestamp(3, new Timestamp(item.getCreate()));
             ps.executeUpdate();
-            try (final ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    item.setId(rs.getString(1));
-                }
+            if (rs.next()) {
+                item.setId(rs.getString(1));
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -114,18 +113,17 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
     @Override
     public boolean replace(Predicate<String> id, Item item) {
         boolean result = false;
-        try (final Statement st = this.conn.createStatement()) {
-            try (final ResultSet rs = st.executeQuery(prop.getProperty("db.findAll"))) {
-                while (rs.next()) {
-                    if (id.test(rs.getString("id"))) {
-                        try (final PreparedStatement pst = this.conn.prepareStatement(prop.getProperty("db.replace"))) {
-                            pst.setString(1, item.getName());
-                            pst.setString(2, item.getDescription());
-                            pst.setInt(3, rs.getInt("id"));
-                            pst.executeUpdate();
-                                result = true;
-                                break;
-                        }
+        try (final Statement st = this.conn.createStatement();
+             final ResultSet rs = st.executeQuery(prop.getProperty("db.findAll"))) {
+            while (rs.next()) {
+                if (id.test(rs.getString("id"))) {
+                    try (final PreparedStatement pst = this.conn.prepareStatement(prop.getProperty("db.replace"))) {
+                        pst.setString(1, item.getName());
+                        pst.setString(2, item.getDescription());
+                        pst.setInt(3, rs.getInt("id"));
+                        pst.executeUpdate();
+                        result = true;
+                        break;
                     }
                 }
             }
@@ -142,21 +140,20 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
     @Override
     public boolean delete(Predicate<String> id) {
         boolean result = false;
-        try (final Statement st = conn.createStatement()) {
-            try (final ResultSet rs = st.executeQuery(prop.getProperty("db.findAll"))) {
-                while (rs.next()) {
-                   if (id.test(rs.getString("id"))) {
-                       try (final PreparedStatement prep = conn.prepareStatement(prop.getProperty("db.delComment"))) {
-                           prep.setInt(1, rs.getInt("id"));
-                           prep.executeUpdate();
-                       }
-                       try (final PreparedStatement ps = conn.prepareStatement(prop.getProperty("db.delete"))) {
-                           ps.setInt(1, rs.getInt("id"));
-                           ps.executeUpdate();
-                           result = true;
-                           break;
-                       }
-                   }
+        try (final Statement st = conn.createStatement();
+             final ResultSet rs = st.executeQuery(prop.getProperty("db.findAll"))) {
+            while (rs.next()) {
+                if (id.test(rs.getString("id"))) {
+                    try (final PreparedStatement prep = conn.prepareStatement(prop.getProperty("db.delComment"))) {
+                        prep.setInt(1, rs.getInt("id"));
+                        prep.executeUpdate();
+                    }
+                    try (final PreparedStatement ps = conn.prepareStatement(prop.getProperty("db.delete"))) {
+                        ps.setInt(1, rs.getInt("id"));
+                        ps.executeUpdate();
+                        result = true;
+                        break;
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -284,11 +281,11 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
         item.setId(id);
         try (final PreparedStatement ps = this.conn.prepareStatement(prop.getProperty("db.getComment"))) {
             ps.setInt(1, Integer.parseInt(id));
-                try (final ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        item.setComments(rs.getString("comment"));
-                    }
+            try (final ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    item.setComments(rs.getString("comment"));
                 }
+            }
         }
         return item;
     }

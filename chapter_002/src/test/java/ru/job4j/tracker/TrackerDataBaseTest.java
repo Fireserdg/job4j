@@ -39,10 +39,9 @@ public class TrackerDataBaseTest {
         }
 
         try (final Connection connection = DriverManager.getConnection(prop.getProperty("db.url"),
-                prop.getProperty("db.name"), prop.getProperty("db.password"))) {
-            try (final Statement statement = connection.createStatement()) {
-                statement.execute(prop.getProperty("db.dropDB"));
-            }
+                prop.getProperty("db.name"), prop.getProperty("db.password"));
+             final Statement statement = connection.createStatement()) {
+            statement.execute(prop.getProperty("db.dropDB"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
