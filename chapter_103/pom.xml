@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>chapter_103</artifactId>
+    <!-- build project -->
     <build>
         <plugins>
             <plugin>
