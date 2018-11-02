@@ -29,7 +29,6 @@
                                     <mainClass>ru.job4j.vacancy.SqlRuParser</mainClass>
                                 </transformer>
                             </transformers>
-                            <exclude>ru.job4j.storage</exclude>
                         </configuration>
                     </execution>
                 </executions>

@@ -34,7 +34,7 @@ public class CountFunctionTest {
     @Test
     public void whenDiapasonFrom1To3ThenResultLineFunction() {
         List<Double> result = count.diapason(1, 3,
-                (start, end)-> (start * 2) + 1);
+                (start, end) -> (start * 2) + 1);
         List<Double> expected = Arrays.asList(3D, 5D, 7D);
         assertThat(result, is(expected));
     }
@@ -42,7 +42,7 @@ public class CountFunctionTest {
     @Test
     public void whenDiapasonFrom2To4ThenResultQuadraticFunction() {
         List<Double> result = count.diapason(2, 4,
-                (start, end)-> (Math.pow(start, 2)));
+                (start, end) -> (Math.pow(start, 2)));
         List<Double> expected = Arrays.asList(4D, 9D, 16D);
         assertThat(result, is(expected));
     }
@@ -50,7 +50,7 @@ public class CountFunctionTest {
     @Test
     public void whenDiapasonFrom1To3ThenResultLogarithmicFunction() {
         List<Double> result = count.diapason(1, 3,
-                (start, end)-> (Math.log(start)));
+                (start, end) -> (Math.log(start)));
         List<Double> expected = Arrays.asList(0D, 0.69D, 1.09D);
         assertThat(result.get(0), is(expected.get(0)));
         assertThat(result.get(1), closeTo(expected.get(1), 0.01));
