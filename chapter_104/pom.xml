@@ -11,6 +11,9 @@
     <artifactId>chapter_104</artifactId>
     <packaging>war</packaging>
 
+    <!--<build>-->
+        <!--<defaultGoal>package</defaultGoal>-->
+    <!--</build>-->
     <dependencies>
         <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
