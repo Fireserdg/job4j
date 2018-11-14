@@ -68,12 +68,12 @@ public class SqlStorageTest {
             }
         }
         String firstName = "Java/BackEnd/Middle Мск/Офис/FullTime (150) [new]";
-        String firstUrl = "http://www.sql.ru/forum/1281928/java-backend-middle-msk-ofis-fulltime-150";
+        String firstUrl = "https://www.sql.ru/forum/1281928/java-backend-middle-msk-ofis-fulltime-150";
         Timestamp firstCreate = Timestamp.valueOf(LocalDateTime.parse("2018-01-08T14:43"));
         Item first = new Item(firstName, firstUrl, firstCreate);
         first.setId(1);
         String secondName = "Java Developer, СПб/Мск/Долгопрудный, ЗП до 200k net [new]";
-        String secondUrl = "http://www.sql.ru/forum/1282020/java-developer-spb-msk-dolgoprudnyy-zp-do-200k-net";
+        String secondUrl = "https://www.sql.ru/forum/1282020/java-developer-spb-msk-dolgoprudnyy-zp-do-200k-net";
         Timestamp secondCreate = Timestamp.valueOf(LocalDateTime.parse("2018-01-09T15:41"));
         Item second = new Item(secondName, secondUrl, secondCreate);
         second.setId(2);
