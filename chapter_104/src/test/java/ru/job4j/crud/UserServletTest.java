@@ -15,26 +15,30 @@ import java.util.Arrays;
  */
 public class UserServletTest {
 
-    @Test
+    @Test (expected = UserNotFoundException.class)
     public void whenOperationByUsersThenGetResult() throws InterruptedException {
         ValidateService val = ValidateService.getInstance();
-        for (int i = 1; i < 200; i++) {
+        for (int i = 1; i < 300; i++) {
             int count = i;
             new Thread(() -> new DispatchPattern(val).
-                        init().sent(() -> Arrays.asList(
-                                "add", String.format("User%s", count)))
+                        init().sent(() -> Arrays.asList("add",
+                    String.format("User%s", count),
+                    String.format("login.%s", count),
+                    String.format("email%s@.gmail.com", count)))
             ).start();
         }
         Thread.sleep(500);
         int resultSize = val.findAll().size();
-        int expectedSize = 199;
-        for (int i = 5; i < 15; i++) {
+        int expectedSize = 299;
+        for (int i = 5; i < 30; i++) {
             int countUp = i;
-            int countDel = i + 10;
+            int countDel = i + 25;
             new Thread(() -> new DispatchPattern(val).
-                    init().sent(() -> Arrays.asList(
-                    "update", String.valueOf(countUp), String.format(
-                            "UpdateUser%s", countUp)))
+                    init().sent(() -> Arrays.asList("update",
+                    String.valueOf(countUp),
+                    String.format("UpdateUser%s", countUp),
+                    String.format("Updatelogin%s", countUp),
+                    String.format("UpdateEmail%s", countUp)))
             ).start();
             new Thread(() -> new DispatchPattern(val).
                     init().sent(() -> Arrays.asList(
@@ -43,28 +47,24 @@ public class UserServletTest {
 
         }
         Thread.sleep(500);
-        System.out.println(val.findAll());
+        val.findAll().forEach(System.out::println);
         assertThat(resultSize, is(expectedSize));
         assertThat(val.findById("99").getName(), is("User99"));
         assertThat(val.findById("5").getName(), is("UpdateUser5"));
         assertThat(val.findById("14").getName(), is("UpdateUser14"));
-        assertNull(val.findById("15"));
-        assertNull(val.findById("24"));
-        assertThat(val.findAll().size(), is(189));
+        assertNull(val.findById("30"));
+        assertNull(val.findById("49"));
+        assertThat(val.findAll().size(), is(274));
         assertThat(new DispatchPattern(val)
-                        .init().sent(() -> Arrays.asList("add", "Jon")),
+                        .init().sent(() -> Arrays.asList("add", "Jon", "login", "email")),
                 is(String.format(Message.MSG_ADD, "Jon")));
         assertThat(new DispatchPattern(val)
-                        .init().sent(() -> Arrays.asList("update", "1", "Bill")),
-                is(Message.MSG_UPDATE));
-        assertThat(new DispatchPattern(val)
-                        .init().sent(() -> Arrays.asList("update", "15", "Bill")),
-                is(String.format(Message.MSG_NOT_EXIST, "15")));
+                        .init().sent(() -> Arrays.asList("update", "1", "Bill", "", "login")),
+                is(String.format(Message.MSG_UPDATE, "1")));
         assertThat(new DispatchPattern(val)
                         .init().sent(() -> Arrays.asList("delete", "2")),
-                is(Message.MSG_DELETE));
-        assertThat(new DispatchPattern(val)
-                        .init().sent(() -> Arrays.asList("delete", "20")),
-                is(String.format(Message.MSG_NOT_EXIST, "20")));
+                is(String.format(Message.MSG_DELETE, "2")));
+        new DispatchPattern(val)
+                        .init().sent(() -> Arrays.asList("delete", "37"));
     }
 }

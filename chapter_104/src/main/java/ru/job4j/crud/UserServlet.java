@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * UserServlet
@@ -29,20 +29,32 @@ public class UserServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("text/html");
-        PrintWriter writer = resp.getWriter();
-        resp.getWriter().append("<!DOCTYPE html>")
-                .append("<html lang=\"en\">")
-                .append("<body>")
-                .append("<p><center>List of users</center></p>");
-        if (validate.findAll().isEmpty()) {
-            writer.append("<p><center>No Users</center></p>");
-        } else {
-            validate.findAll().forEach((value) -> writer.append("<p><center>")
-                    .append(value.toString()).append("</center></p>"));
-        }
-        writer.append("</body>")
-                .append("</html>").flush();
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
+        PrintWriter writer = new PrintWriter(resp.getOutputStream());
+        writer.append("<!DOCTYPE html>"
+                + "<html lang='en'>"
+                + "<head>"
+                + "<meta charset='UTF-8'>"
+                + "<title>Main page</title>"
+                + "</head>"
+                + "<body>"
+                + "<h2><center>Hello! Selected action.</center></h2>"
+                + "<center><form action='")
+                .append(req.getContextPath())
+                .append("/create' method='GET'>"
+                        + "Go to page for create new user "
+                        + "<input type='submit' value='Go to page'/>"
+                        + "</form></center></p>"
+                        + "<p><center><form action='")
+                .append(req.getContextPath())
+                .append("/list' method='GET'>"
+                        + "Go to the page with the list of users "
+                        + "<input type='submit' value='Go to page'/>"
+                        + "</form></center>"
+                        + "</body>"
+                        + "</html>");
+        writer.flush();
     }
 
     /**
@@ -53,21 +65,32 @@ public class UserServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<String> params = new ArrayList<>();
-        Enumeration<String> en = req.getParameterNames();
-        while (en.hasMoreElements()) {
-            params.add(req.getParameter(en.nextElement()));
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
+        PrintWriter writer = new PrintWriter(resp.getOutputStream());
+        writer.append("<!DOCTYPE html>"
+                + "<html lang='en'>"
+                + "<head>"
+                + "<meta charset='UTF-8'>"
+                + "<title>Main page</title>"
+                + "</head>"
+                + "<body><p><center>");
+        try {
+            String msg = new DispatchPattern(this.validate).init().sent(
+                    () -> req.getParameterMap().values().stream()
+                    .map(n -> n[0] == null ? "" : n[0].replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("&", "&amp;")).collect(Collectors.toList()));
+            writer.append(msg);
+        } catch (IllegalArgumentException exc) {
+            writer.append(exc.getMessage());
         }
-        String answer = new DispatchPattern(
-                this.validate).init().sent(() -> params);
-        resp.setContentType("text/html");
-        resp.getWriter().append("<!DOCTYPE html>")
-                .append("<html lang=\"en\">")
-                .append("<body>")
-                .append("<p><center>")
-                .append(answer)
-                .append("</center></p>")
-                .append("</body>")
-                .append("</html>").flush();
+        writer.append("</center></p><form action='")
+                .append(req.getContextPath())
+                .append("/' method='GET'>"
+                        + "<input type='submit' value='Back to main page'/>"
+                        + "</form>"
+                        + "</body>"
+                        + "</html>").flush();
     }
 }

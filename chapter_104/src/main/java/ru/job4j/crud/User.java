@@ -4,7 +4,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
+import java.util.function.Supplier;
 
 /**
  * User model
@@ -19,7 +21,7 @@ public class User {
      * User id.
      *
      */
-    private String id;
+    private final String id;
     /**
      * User name.
      */
@@ -57,12 +59,19 @@ public class User {
         this.createDate = createDate;
     }
 
+    public User(final String id, final Supplier<String> name,
+                final Supplier<String> login,
+                final Supplier<String> email,
+                final long createDate) {
+        this(id, name.get(), login.get(), email.get(), createDate);
+    }
+
     /**
      * Get user name.
      * @return user name.
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -70,7 +79,7 @@ public class User {
      * @return user login.
      */
     public String getLogin() {
-        return login;
+        return this.login;
     }
 
     /**
@@ -78,7 +87,7 @@ public class User {
      * @return user email.
      */
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     /**
@@ -86,7 +95,7 @@ public class User {
      * @return create date.
      */
     public long getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     /**
@@ -100,11 +109,30 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User[id=%s, name=%s, create=%s]",
-                this.id, this.name, LocalDateTime.ofInstant(
+        return String.format("User[id=%s, name=%s, login=%s, email=%s, create=%s]",
+                this.id, this.name, this.login, this.email,
+                        LocalDateTime.ofInstant(
                         Instant.ofEpochMilli(createDate),
                         TimeZone.getDefault().toZoneId()).format(
                         DateTimeFormatter.ofPattern("yyyy-MMM-dd, HH:mm").withLocale(new Locale("en"))
                 ));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return createDate == user.createDate
+                && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createDate);
     }
 }

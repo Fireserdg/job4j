@@ -1,8 +1,6 @@
 package ru.job4j.crud;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -37,9 +35,8 @@ public class DispatchPattern {
      * @return The message of the add operation.
      */
     private Function<List<String>, String> add() {
-        return msg -> this.validate.add(msg.get(1)) == null
-                ? String.format(Message.MSG_ADD, msg.get(1))
-                : String.format(Message.MSG_EXIST, msg.get(1));
+        return msg -> this.validate.add(msg.stream().filter(n -> !n.equals("add"))
+                .toArray(String[]::new));
     }
 
     /**
@@ -47,9 +44,8 @@ public class DispatchPattern {
      * @return The message of the update operation.
      */
     private Function<List<String>, String> update() {
-        return msg -> this.validate.update(msg.get(1),
-                msg.get(2)) != null ? Message.MSG_UPDATE : String.format(
-                        Message.MSG_NOT_EXIST, msg.get(1));
+        return msg -> this.validate.update(msg.stream().
+                filter(n -> !n.equals("update")).toArray(String[]::new));
     }
 
     /**
@@ -57,9 +53,7 @@ public class DispatchPattern {
      * @return The message of the delete operation.
      */
     private Function<List<String>, String> delete() {
-
-        return msg -> this.validate.delete(msg.get(1)) != null
-                ? Message.MSG_DELETE : String.format(Message.MSG_NOT_EXIST, msg.get(1));
+        return msg -> this.validate.delete(msg.get(1));
     }
 
     /**

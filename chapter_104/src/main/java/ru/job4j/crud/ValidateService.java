@@ -3,8 +3,6 @@ package ru.job4j.crud;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -52,54 +50,54 @@ public class ValidateService {
 
     /**
      * Add user.
-     * @param name user name.
-     * @return true if user was added.
+     * @param params values of user.
+     * @return msg about add user.
      */
-    public User add(final String name) {
-        User result = this.store.add(
-                new User(String.valueOf(this.counts.getAndIncrement()),
-                        name, String.format("login.%s", name),
-                String.format("%s@gmail.com", name), System.currentTimeMillis()));
-        if (result != null) {
-            LOG.error("User already exist");
-        } else {
-            LOG.info(String.format("User with name=%s was successfully added",
-                    name));
+    public String add(final String[] params) {
+        User result = this.store.add(new User(String.valueOf(
+                this.counts.getAndIncrement()), params[0],
+                params[1], params[1], System.currentTimeMillis()));
+        if (result == null) {
+            LOG.info(String.format(Message.MSG_ADD, params[0]));
+            return String.format(Message.MSG_ADD, params[0]);
         }
-        return result;
+        LOG.error(String.format(Message.MSG_EXIST, params[0]));
+        throw new UserNotFoundException(String.format(Message.MSG_EXIST, params[0]));
+
     }
 
     /**
      * Update user by id.
-     * @param id user id.
-     * @param name new name of user.
+     * @param params parameters for update.
+     * @return msg about update user.
      */
-    public User update(final String id, final String name) {
-        User oldUser = this.store.findById(id);
+    public String update(String[] params) {
+        User oldUser = this.store.findById(params[0]);
         if (oldUser != null) {
             this.store.update(new User(oldUser.getId(),
-                    name, oldUser.getLogin(),
-                    oldUser.getEmail(), oldUser.getCreateDate()));
-            LOG.info(String.format("User with id=%s was successfully updated", id));
-        } else {
-            LOG.error(String.format("User with id=%s does not exist", id));
+                    () -> params[1].equals("") ? oldUser.getName() : params[1],
+                    () -> params[2].equals("") ? oldUser.getLogin() : params[2],
+                    () -> params[3].equals("") ? oldUser.getEmail() : params[3],
+                    oldUser.getCreateDate()));
+            LOG.info(String.format(Message.MSG_UPDATE, params[0]));
+            return String.format(Message.MSG_UPDATE, params[0]);
         }
-        return oldUser;
+        LOG.error(String.format(Message.MSG_NOT_EXIST, params[0]));
+        throw new UserNotFoundException(String.format(Message.MSG_NOT_EXIST, params[0]));
     }
 
     /**
      * Delete user by id.
      * @param id user id
      */
-    public User delete(final String id) {
-        User user = this.store.findById(id);
-        if (user != null) {
+    public String delete(final String id) {
+        if (this.store.findById(id) != null) {
             this.store.delete(id);
-            LOG.info(String.format("User with id=%s was successfully delete", id));
-        } else {
-            LOG.info(String.format("User with id=%s does not exist", id));
+            LOG.info(String.format(Message.MSG_DELETE, id));
+            return String.format(Message.MSG_DELETE, id);
         }
-        return user;
+        LOG.info(String.format(Message.MSG_NOT_EXIST, id));
+        throw new UserNotFoundException(String.format(Message.MSG_NOT_EXIST, id));
     }
 
     /**

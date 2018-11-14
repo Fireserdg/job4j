@@ -10,7 +10,7 @@
             <param-name>debug</param-name>
             <param-value>true</param-value>
         </init-param>
-        <load-on-startup>2</load-on-startup>
+        <load-on-startup>8</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>EchoServlet</servlet-name>
@@ -28,6 +28,48 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user</url-pattern>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>UsersServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.UsersServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UsersServlet</servlet-name>
+        <url-pattern>/list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserCreateServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.UserCreateServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserCreateServlet</servlet-name>
+        <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.UserUpdateServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <url-pattern>/edit</url-pattern>
     </servlet-mapping>
 </web-app>

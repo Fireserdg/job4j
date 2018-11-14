@@ -9,7 +9,7 @@ import java.util.List;
  * @version 1.0.
  * @since 08.11.18
  */
-@FunctionalInterface
+
 public interface Message {
 
     /**
@@ -45,12 +45,12 @@ public interface Message {
     /**
      * Message about successfully update.
      */
-    String MSG_UPDATE = "User data was successfully updated";
+    String MSG_UPDATE = "User with id=%s was successfully updated";
 
     /**
      * Message about successfully deleted.
      */
-    String MSG_DELETE = "The user is successfully deleted";
+    String MSG_DELETE = "User with id=%s was successfully delete";
 
     /**
      * Message about add user.
