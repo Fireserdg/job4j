@@ -21,14 +21,11 @@ public class PriorityQueue {
      * @param task received task.
      */
     public void put(Task task) {
-        int index = tasks.size();
-        for (int i = 0; i < index; i++) {
-            if (task.getPriority() < tasks.get(i).getPriority()) {
-                index = i;
-                break;
-            }
-        }
-        tasks.add(index, task);
+        Task result = this.tasks.stream().filter(
+                value -> task.getPriority() < value.getPriority())
+                .findFirst().orElse(null);
+        tasks.add(tasks.indexOf(result) == -1
+                ? tasks.size() : tasks.indexOf(result), task);
     }
 
     /**

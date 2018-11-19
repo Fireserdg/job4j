@@ -2,6 +2,9 @@ package ru.job4j.bank;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -33,23 +36,22 @@ public class BankTest {
     public void whenAddNewUser() {
         User user = new User("Ivan", "444444");
         bank.addUser(user);
-        boolean result = bank.searchUser("Ivan");
-        assertThat(result, is(true));
+        User result = bank.searchUser("444444");
+        assertThat(result.getName(), is("Ivan"));
     }
 
-    @Test
+    @Test (expected = UserDoesNotExistException.class)
     public void whenDeleteUser() {
         User userOne = new User("Ivan", "444444");
         User userTwo = new User("Fedor", "444999");
         bank.addUser(userOne);
         bank.addUser(userTwo);
         bank.deleteUser(userOne);
-        boolean result = bank.searchUser("Ivan");
-        assertThat(result, is(false));
+        bank.searchUser("Ivan");
     }
 
     @Test
-    public void whenDeleteAccountFromUser() throws UserHasNotBankAccountException {
+    public void whenDeleteAccountFromUser() {
         User user = new User("Fedor", "675432");
         bank.addUser(user);
         Account accountOne = new Account(300.0, "987023");
@@ -115,5 +117,61 @@ public class BankTest {
         boolean result = bank.transferMoney(userOne.getPassport(), accOne.getRequisites(),
                 userTwo.getPassport(), accTwo.getRequisites(), 499.0);
         assertThat(accTwo.getValues(), is(1999.0));
+        assertThat(result, is(true));
+    }
+
+    @Test (expected = UserHasNotBankAccountException.class)
+    public void whenDeleteAccountToUserThenGetException() {
+        User userOne = new User("Andrey", "abc1234");
+        Account accOne = new Account(1000.0, "567432");
+        Account result = new Account(100.0, "789990");
+        bank.addUser(userOne);
+        bank.addAccountToUser(userOne.getPassport(), accOne);
+        bank.deleteAccountFromUser("abc1234", result);
+    }
+
+    @Test (expected = UserHasNotBankAccountException.class)
+    public void whenGetListOfAccountButUserHasNotAccountThenException() {
+        User userOne = new User("Andrey", "abc1234");
+        bank.getUserAccounts(userOne.getPassport());
+    }
+
+    @Test
+    public void whenUserWantTransferMoneyOtherYourAccountAndThenGetMessage() {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        User userOne = new User("Andrey", "abc1234");
+        User userTwo = new User("Petr", "abc789");
+        bank.addUser(userOne);
+        bank.addUser(userTwo);
+        bank.addAccountToUser(userOne.getPassport(), new Account(700.0, "567432"));
+        bank.addAccountToUser(userTwo.getPassport(), new Account(1500.0, "987543"));
+        boolean result = bank.transferMoney(userOne.getPassport(), "567433",
+                userTwo.getPassport(), "987543", 500.0);
+        assertThat(result, is(false));
+        assertThat(out.toString(), is("This account does not exist"));
+        System.setOut(System.out);
+    }
+
+    @Test
+    public void checkEqualsAndHashCodeForClasses() {
+        User userOne = new User("Andrey", "abc1234");
+        User userTwo = new User("Andrey", "abc1234");
+        User userThree = new User("Andrey", "abc1235");
+        Account accOne = new Account(1000.0, "567432");
+        Account accTwo = new Account(1001.0, "567432");
+        Account accThree = new Account(0.0, "567433");
+        boolean result = userOne.equals(userTwo);
+        assertThat(result, is(true));
+        result = accOne.equals(accTwo);
+        assertThat(result, is(true));
+        result = userOne.equals(userThree);
+        assertThat(result, is(false));
+        result = accOne.equals(accThree);
+        assertThat(result, is(false));
+        assertThat(userOne.hashCode(), is(userTwo.hashCode()));
+        assertNotSame(userOne.hashCode(), userThree.hashCode());
+        assertThat(accOne.hashCode(), is(accTwo.hashCode()));
+        assertNotSame(accOne.hashCode(), accThree.hashCode());
     }
 }

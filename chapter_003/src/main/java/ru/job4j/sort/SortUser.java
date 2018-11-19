@@ -1,6 +1,7 @@
 package ru.job4j.sort;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Sort User.
@@ -28,14 +29,8 @@ public class SortUser {
      * @return list of sort Users.
      */
     public List<User> sortNameLength(List<User> list) {
-        List<User> users = new ArrayList<>(list);
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User o1, User o2) {
-                return Integer.compare(o1.getName().length(), o2.getName().length());
-            }
-        });
-        return users;
+        return list.stream().sorted(Comparator.comparingInt(
+                u -> u.getName().length())).collect(Collectors.toList());
     }
 
     /**
@@ -45,17 +40,8 @@ public class SortUser {
      * @return list of sort Users.
      */
     public List<User> sortByAllFields(List<User> list) {
-        List<User> users = new ArrayList<>(list);
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User o1, User o2) {
-                int result = o1.getName().compareTo(o2.getName());
-                if (result == 0) {
-                    result = Integer.compare(o1.getAge(), o2.getAge());
-                }
-                return result;
-            }
-        });
-        return users;
+        return list.stream().sorted((u1, u2) -> u1.getName().compareTo(u2.getName()) == 0
+                ? Integer.compare(u1.getAge(), u2.getAge())
+                : u1.getName().compareTo(u2.getName())).collect(Collectors.toList());
     }
 }

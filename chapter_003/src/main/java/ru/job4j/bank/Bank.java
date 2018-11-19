@@ -1,9 +1,6 @@
 package ru.job4j.bank;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Bank operations.
@@ -17,7 +14,11 @@ public class Bank {
     /**
      * Contains object HashMap.
      */
-    private Map<User, List<Account>> bankAccount = new HashMap<>();
+    private final Map<User, List<Account>> bankAccount = new HashMap<>();
+
+    private final String msgUser = "User does not exist, please enter a valid passport number";
+
+    private final String msgAcc = "This account does not exist";
 
     /**
      * Add User.
@@ -34,7 +35,7 @@ public class Bank {
      * @param user User.
      */
     public void deleteUser(User user) {
-        this.bankAccount.remove(user);
+        this.bankAccount.remove(searchUser(user.getPassport()));
     }
 
     /**
@@ -44,11 +45,7 @@ public class Bank {
      * @param account account User.
      */
     public void addAccountToUser(String passport, Account account) {
-        for (Map.Entry<User, List<Account>> user : this.bankAccount.entrySet()) {
-            if (user.getKey().getPassport().equals(passport)) {
-                user.getValue().add(account);
-            }
-        }
+        this.bankAccount.get(searchUser(passport)).add(account);
     }
 
     /**
@@ -57,16 +54,9 @@ public class Bank {
      * @param passport number passport user.
      * @param account account User.
      */
-    public void deleteAccountFromUser(String passport, Account account) throws UserHasNotBankAccountException {
-        boolean result = false;
-        for (Map.Entry<User, List<Account>> user : this.bankAccount.entrySet()) {
-            if (user.getKey().getPassport().equals(passport)) {
-                user.getValue().remove(account);
-                result = true;
-            }
-        }
-        if (!result) {
-            throw new UserHasNotBankAccountException();
+    public void deleteAccountFromUser(String passport, Account account) {
+        if (!(getUserAccounts(passport).remove(account))) {
+            throw new UserHasNotBankAccountException(this.msgAcc);
         }
     }
 
@@ -76,17 +66,13 @@ public class Bank {
      * @param passport number passport user.
      * @return list of account.
      */
-    public List<Account> getUserAccounts(String passport) throws UserHasNotBankAccountException {
-        List<Account> accounts = new ArrayList<>();
-        for (Map.Entry<User, List<Account>> user : this.bankAccount.entrySet()) {
-            if (user.getKey().getPassport().equals(passport)) {
-                accounts.addAll(user.getValue());
-            }
+    public List<Account> getUserAccounts(String passport) {
+        Optional<List<Account>> value = this.bankAccount.entrySet().stream().filter(entry -> entry.getKey()
+                .equals(searchUser(passport))).map(Map.Entry::getValue).findFirst();
+        if (!value.isPresent()) {
+            throw new UserHasNotBankAccountException(this.msgAcc);
         }
-        if (accounts.isEmpty()) {
-            throw new UserHasNotBankAccountException();
-        }
-        return accounts;
+        return value.get();
     }
 
     /**
@@ -96,29 +82,20 @@ public class Bank {
      * @param requisite number requisite user.
      * @return result if account has user.
      */
-    public Account getAccountUser(String passport, String requisite) throws UserHasNotBankAccountException {
-        int result = getUserAccounts(passport).indexOf(new Account(0.0, requisite));
-        if (result == -1) {
-            throw new UserHasNotBankAccountException();
-        } else {
-            return getUserAccounts(passport).get(result);
-        }
+    public Account getAccountUser(String passport, String requisite) {
+        return getUserAccounts(passport).stream().filter(account -> account.getRequisites()
+                .equals(requisite)).findFirst().orElseThrow(() -> new UserHasNotBankAccountException(this.msgAcc));
     }
 
     /**
      * Search User by name.
      *
-     * @param name name of User.
-     * @return result.
+     * @param passport passport of User.
      */
-    public boolean searchUser(String name) {
-        boolean result = false;
-        for (Map.Entry<User, List<Account>> user : this.bankAccount.entrySet()) {
-            if (user.getKey().getName().equals(name)) {
-                result = true;
-            }
-        }
-        return result;
+    public User searchUser(String passport) {
+        return this.bankAccount.keySet().stream().filter(user -> user.getPassport()
+                .equals(passport)).findFirst().orElseThrow(() -> new UserDoesNotExistException(
+                this.msgUser));
     }
 
     /**
@@ -134,20 +111,17 @@ public class Bank {
 
     public boolean transferMoney(String srcPassport, String srcRequisite,
                                  String destPassport, String dstRequisite, double amount) {
-       boolean result;
+        boolean result = false;
         try {
             Account one = getAccountUser(srcPassport, srcRequisite);
             Account two = getAccountUser(destPassport, dstRequisite);
-            if (!(one.getValues() > amount)) {
-                result = false;
-            } else {
+            if (one.getValues() > amount) {
                 one.setValue(one.getValues() - amount);
                 two.setValue(two.getValues() + amount);
                 result = true;
             }
-        } catch (UserHasNotBankAccountException e) {
-            System.out.println("Операцию совершить невозможно");
-            result = false;
+        } catch (UserHasNotBankAccountException | UserDoesNotExistException ex) {
+            System.out.print(ex.getMessage());
         }
         return result;
     }

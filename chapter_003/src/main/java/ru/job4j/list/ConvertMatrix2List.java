@@ -1,7 +1,9 @@
 package ru.job4j.list;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Convert Matrix array in list.
@@ -18,12 +20,7 @@ public class ConvertMatrix2List {
      * @param array arrays of numbers.
      */
     public List<Integer> toList(int[][] array) {
-        List<Integer> list = new ArrayList<>();
-        for (int[] arrayArrays: array) {
-            for (int input: arrayArrays) {
-                list.add(input);
-            }
-        }
-        return list;
+        return Arrays.stream(array).flatMapToInt(IntStream::of).boxed()
+                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package ru.job4j.addtask;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * Sort Department.
@@ -12,20 +13,13 @@ import java.util.*;
 public class SortDepartment {
 
     /**
-     * Contains listDept for array Departments;
-     *
-     */
-    private List<String> listDept;
-    /**
      * Sort Departments by increase.
      *
      * @param list list position Departments.
      * @return sort list Departments by Decrease.
      */
     public String[] sortIncrease(String[] list) {
-        this.listDept = addElement(new ArrayList<>(Arrays.asList(list)), list);
-        Collections.sort(this.listDept);
-        return this.listDept.toArray(new String[this.listDept.size()]);
+        return addElement(list).stream().sorted().toArray(String[]::new);
     }
 
     /**
@@ -35,44 +29,32 @@ public class SortDepartment {
      * @return sort list Departments by Decrease.
      */
     public String[] sortDecrease(String[] list) {
-        this.listDept = addElement(new ArrayList<>(Arrays.asList(list)), list);
-        this.listDept.sort(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                int result = -1;
-                int size = o1.length() >= o2.length() ? o2.length() : o1.length();
-                for (int index = 0; index < size; index++) {
-                    result = Character.compare(o1.charAt(index), o2.charAt(index));
-                    if (result != 0) {
-                        break;
-                    }
-                }
-                return result == 0 ? o1.length() - o2.length() : result * (-1);
-            }
-        });
-        return this.listDept.toArray(new String[this.listDept.size()]);
+        return addElement(list)
+                .stream().sorted(((o1, o2) -> IntStream.range(0, Math.min(o1.length(),
+                        o2.length())).filter(index -> o1.charAt(index) != o2.charAt(index))
+                        .map(result -> o2.charAt(result) - o1.charAt(result))
+                        .findFirst().orElse(o1.length() - o2.length())))
+                .toArray(String[]::new);
     }
 
     /**
      * Add missing divisions.
      *
-     * @param list List of departments as a collection of strings
      * @param array List of departments as an array of strings.
      * @return full List of departments
      */
-    private List<String> addElement(List<String> list, String[] array) {
-        for (int i = 0; i < array.length; i++) {
-            String[] arrays = array[i].split("\\\\");
-            for (int j = 0; j < arrays.length - 1; j++) {
-                String result = String.format("%s\\%s", arrays[j], arrays[j + 1]);
-                if (!(list.contains(arrays[j]))) {
-                    list.add(arrays[j]);
-                } else if (!(list.contains(result))) {
-                    list.add(result);
-                }
-                arrays[j + 1] = result;
-            }
-        }
-        return list;
+    private Set<String> addElement(String[] array) {
+        Set<String> result = new HashSet<>();
+        Arrays.stream(array).forEach(element -> {
+            String[] arrays = element.split("\\\\");
+            System.out.println(Arrays.toString(arrays));
+            IntStream.range(0, arrays.length - 1).forEach(x -> {
+                String value = String.format("%s\\%s", arrays[x], arrays[x + 1]);
+                result.add(arrays[x]);
+                result.add(value);
+                arrays[x + 1] = value;
+            });
+        });
+        return result;
     }
 }

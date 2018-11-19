@@ -48,7 +48,6 @@ public class SortUserTest {
         List<User> users = Arrays.asList(new User("Alexandr", 25),
                 new User("Roma", 13), new User("Stepan", 20));
         List<User> result = sort.sortNameLength(users);
-        System.out.println(result);
         assertThat(result.get(0).getName(), is("Roma"));
     }
 

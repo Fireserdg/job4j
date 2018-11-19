@@ -1,21 +1,21 @@
 package ru.job4j.bank;
 
+
 /**
- * Bank operations.
+ * Exception if user does not exist
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
- * @version $Id$.
- * @since 02.08.2018.
+ * @version 1.0.
+ * @since 19.11.18
  */
-public class UserHasNotBankAccountException extends RuntimeException {
+public class UserDoesNotExistException extends RuntimeException {
 
     /**
      * Constructor
      *
      * @param msg message about exception.
      */
-    public UserHasNotBankAccountException(String msg) {
+    public UserDoesNotExistException(String msg) {
         super(msg);
     }
-
 }

@@ -2,6 +2,7 @@ package ru.job4j.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Phone book.
@@ -33,12 +34,7 @@ public class PhoneDictionary {
      * @return List appropriate persons.
      */
     public List<Person> find(String key) {
-        List<Person> result = new ArrayList<>();
-        for (Person person : persons) {
-            if (person.toString().contains(key)) {
-                result.add(person);
-            }
-        }
-        return result;
+        return this.persons.stream().filter(
+                n -> n.toString().contains(key)).collect(Collectors.toList());
     }
 }
