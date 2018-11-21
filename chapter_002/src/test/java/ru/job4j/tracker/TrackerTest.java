@@ -91,4 +91,9 @@ public class TrackerTest {
         assertThat(resultItem, is(expectedItem));
         assertThat(resultNext, is(expectedNext));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenUserEnteredTheWrongIdThenGetMessage() {
+        tracker.findById(id -> id.equals("a1234567"));
+    }
 }

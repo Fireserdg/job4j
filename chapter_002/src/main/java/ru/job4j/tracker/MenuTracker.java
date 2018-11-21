@@ -211,11 +211,11 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------Find item by ID--------------");
             String answer = input.ask("Please, provide item ID:");
-            Item item = tracker.findById(id -> id.equals(answer));
-            if (item != null) {
+            try {
+                Item item = tracker.findById(id -> id.equals(answer));
                 System.out.println(item);
-            } else {
-                System.out.println("Item not found.");
+            } catch (IllegalArgumentException iae) {
+                System.out.println(iae.getMessage());
             }
         }
     }

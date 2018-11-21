@@ -204,4 +204,19 @@ public class StartUITest {
                                             "You're out of the program. See you soon.")
                                             .append(System.lineSeparator()))));
     }
+
+    @Test
+    public void whenUserFindItemByIdThenGetMessageAboutIncorrectlyId() {
+        tracker.add(new Item("test name", "desc"));
+        Input input = new StubInput(new String[]{"4", "incorrectly", "7"});
+        new StartUI(input, tracker).init();
+        assertThat(new String(out.toByteArray()), is(consoleMenu() + (new StringBuilder()
+                .append("------------Find item by ID--------------")
+                .append(System.lineSeparator())
+                .append("The user with this id does not exist")
+                .append(System.lineSeparator())) + consoleMenu()
+                + (new StringBuilder().append(
+                "You're out of the program. See you soon.")
+                .append(System.lineSeparator()))));
+    }
 }
