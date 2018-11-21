@@ -41,7 +41,7 @@ public class BishopBlack extends Figure {
     @Override
     public Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
         if (!isDiagonal(source, dest)) {
-            throw new ImpossibleMoveException();
+            throw new ImpossibleMoveException("Фигура так пойти не может");
         }
         Cell[] steps = new Cell[Math.abs(source.x - dest.x)];
         int deltaX = Integer.compare(source.x, dest.x);

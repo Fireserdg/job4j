@@ -44,7 +44,7 @@ public class RookBlack extends Figure {
         int moveX = Integer.compare(source.x, dest.x);
         int moveY = Integer.compare(source.y, dest.y);
         if (!(moveX == 0 || moveY == 0)) {
-            throw new ImpossibleMoveException();
+            throw new ImpossibleMoveException("Фигура так пойти не может");
         } else {
             steps = moveX == 0 ? new Cell[Math.abs(source.y - dest.y)] : new Cell[Math.abs(source.x - dest.x)];
         }

@@ -7,12 +7,13 @@ package ru.job4j.chess.figures;
  * @version $Id$.
  * @since 17.07.2018.
  */
-public class OccupiedWayException extends Exception {
+public class OccupiedWayException extends RuntimeException {
 
     /**
      * Конструктор.
-     *
+     * @param msg message about exception.
      */
-    public OccupiedWayException() {
+    public OccupiedWayException(String msg) {
+        super(msg);
     }
 }

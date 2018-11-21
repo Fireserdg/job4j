@@ -2,6 +2,10 @@ package ru.job4j.chess;
 
 import ru.job4j.chess.figures.*;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.IntStream;
+
 /**
  * Класс отвечающий за логику игры.
  *
@@ -38,12 +42,9 @@ public class Logic {
                     rst = true;
                     this.figures[index] = this.figures[index].copy(dest);
                 }
-            } catch (ImpossibleMoveException ime) {
-                System.out.println("Фигура так пойти не может");
-            } catch (FigureNotFoundException fnf) {
-                System.out.println("Фигура не найдена");
-            } catch (OccupiedWayException owe) {
-                System.out.println("Клетка по пути движения фигуры занята");
+            } catch (ImpossibleMoveException | FigureNotFoundException
+                    | OccupiedWayException ex) {
+                System.out.println(ex.getMessage());
             }
         return rst;
     }
@@ -52,9 +53,8 @@ public class Logic {
      * Очищение шахматной доски.
      */
     public void clean() {
-        for (int position = 0; position != this.figures.length; position++) {
-            this.figures[position] = null;
-        }
+        IntStream.range(0, this.figures.length)
+                .forEachOrdered(index -> this.figures[index] = null);
         this.index = 0;
     }
 
@@ -65,18 +65,11 @@ public class Logic {
      * @return Позиция фигуры в массиве.
      * @throws FigureNotFoundException Исключение если нет фигуры на заданной позиции.
      */
-    private int findBy(Cell cell) throws FigureNotFoundException {
-        int rst = -1;
-        for (int index = 0; index != this.figures.length; index++) {
-            if (this.figures[index] != null && this.figures[index].position().equals(cell)) {
-                rst = index;
-                break;
-            }
-        }
-        if (rst == -1) {
-            throw new FigureNotFoundException();
-        }
-        return rst;
+    private int findBy(Cell cell)  {
+        return IntStream.range(0, this.figures.length).
+                filter(index -> this.figures[index] != null
+                        && this.figures[index].position().equals(cell)).findFirst()
+                .orElseThrow(() -> new FigureNotFoundException("Фигура не найдена"));
     }
 
     /**
@@ -85,18 +78,11 @@ public class Logic {
      * @param steps Массив шагов.
      * @throws OccupiedWayException Если на пути движения есть фигура.
      */
-    private void checkOccupiedWay(Cell[] steps) throws OccupiedWayException {
-        boolean result = true;
-            for (int i = 0; i < steps.length; i++) {
-                for (int j = 0; j < figures.length; j++) {
-                    if (figures[j] != null && steps[i].equals(figures[j].position)) {
-                        result = false;
-                        break;
-                    }
-                }
-            }
+    private void checkOccupiedWay(Cell[] steps) {
+        boolean result = Arrays.stream(steps).allMatch(step -> Arrays.stream(figures).
+                filter(Objects::nonNull).noneMatch((figure -> figure.position.equals(step))));
         if (!result) {
-            throw new OccupiedWayException();
+            throw new OccupiedWayException("Клетка по пути движения фигуры занята");
         }
     }
 }

@@ -60,7 +60,7 @@ public class QeenBlack extends Figure {
         } else if (bishop.isDiagonal(source, dest)) {
             steps = bishop.way(source, dest);
         } else {
-            throw new ImpossibleMoveException();
+            throw new ImpossibleMoveException("Фигура так пойти не может");
         }
         return steps;
     }

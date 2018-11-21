@@ -44,7 +44,7 @@ public class PawnWhite extends Figure {
         if (source.y == dest.y - 1 && source.x == dest.x) {
             steps = new Cell[] {dest};
         } else {
-            throw new ImpossibleMoveException();
+            throw new ImpossibleMoveException("Фигура так пойти не может");
         }
         return steps;
     }

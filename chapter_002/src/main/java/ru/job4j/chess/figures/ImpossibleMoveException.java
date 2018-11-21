@@ -7,12 +7,13 @@ package ru.job4j.chess.figures;
  * @version $Id$.
  * @since 17.07.2018.
  */
-public class ImpossibleMoveException extends Exception {
+public class ImpossibleMoveException extends RuntimeException {
 
     /**
      * Конструктор.
-     *
+     * @param msg message about exception.
      */
-    public ImpossibleMoveException() {
+    public ImpossibleMoveException(String msg) {
+        super(msg);
     }
 }

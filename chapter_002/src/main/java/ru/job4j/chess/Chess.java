@@ -17,6 +17,9 @@ import ru.job4j.chess.figures.Figure;
 import ru.job4j.chess.figures.black.*;
 import ru.job4j.chess.figures.white.*;
 
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 public class Chess extends Application {
     private static final String JOB4J = "Шахматы на www.job4j.ru";
     private final int size = 8;
@@ -74,13 +77,11 @@ public class Chess extends Application {
 
     private Group buildGrid() {
         Group panel = new Group();
-        for (int y = 0; y != this.size; y++) {
-            for (int x = 0; x != this.size; x++) {
-                panel.getChildren().add(
-                        this.buildRectangle(x, y, 40, (x + y) % 2 == 0)
-                );
-            }
-        }
+        IntStream.range(0, this.size).forEach(
+                x -> IntStream.range(0, this.size).forEach(
+                        y -> panel.getChildren().add(
+                                this.buildRectangle(x, y, 40, (x + y) % 2 == 0)
+        )));
         return panel;
     }
 
@@ -165,15 +166,9 @@ public class Chess extends Application {
     }
 
     private Cell findBy(double graphX, double graphY) {
-        Cell rst = Cell.A1;
         int x = (int) graphX / 40;
         int y = (int) graphY / 40;
-        for (Cell cell : Cell.values()) {
-            if (cell.x == x && cell.y == y) {
-                rst = cell;
-                break;
-            }
-        }
-        return rst;
+        return Arrays.stream(Cell.values())
+                .filter(cell -> cell.x == x && cell.y == y).findAny().orElse(Cell.A1);
     }
 }

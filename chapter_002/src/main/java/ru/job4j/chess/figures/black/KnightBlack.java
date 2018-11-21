@@ -44,7 +44,7 @@ public class KnightBlack extends Figure {
         int deltaY = Integer.compare(source.y, dest.y);
         int canMove = deltaX * (source.x - dest.x) + deltaY * (source.y - dest.y);
         if (!(canMove == 3) || deltaX == 0 || deltaY == 0) {
-            throw new ImpossibleMoveException();
+            throw new ImpossibleMoveException("Фигура так пойти не может");
         } else {
             return new Cell[] {dest};
         }

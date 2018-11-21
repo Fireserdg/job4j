@@ -43,7 +43,7 @@ public class KingBlack extends Figure {
         int moveX = Math.abs(source.x - dest.x);
         int moveY = Math.abs(source.y - dest.y);
         if (moveX > 1 || moveY > 1) {
-            throw new ImpossibleMoveException();
+            throw new ImpossibleMoveException("Фигура так пойти не может");
         } else {
             return new Cell[] {dest};
         }
