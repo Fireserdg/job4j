@@ -22,34 +22,7 @@ public class UserCreateServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html; charset=UTF-8");
-        PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        writer.append("<!DOCTYPE html>")
-                .append("<html lang='en'>")
-                .append("<head>"
-                        + "<meta charset='UTF-8'>"
-                        + "<title>Create User</title>"
-                        + "</head>"
-                        + "<body>")
-                .append("<h2>Create User</h2>")
-                .append("<form action='")
-                .append(req.getContextPath())
-                .append("/' method='POST'>"
-                        + "<input type='hidden' name='action' value='add'/>"
-                        + "User name: <input type='text' name='name' required/><br>"
-                        + "User login: <input type='text' name='login' required/><br>"
-                        + "User email: <input type='text' name='email' required/><br>"
-                        + "<input type='submit' value='Submit'/>"
-                        + "</form>")
-                .append("<form action='")
-                .append(req.getContextPath())
-                .append("/' method='GET'>")
-                .append("<input type='submit' value='Back to main page'/>"
-                        + "</form>")
-                .append("</body>"
-                        + "</html>");
-        writer.flush();
+        resp.sendRedirect(String.format("%s/pages/create.jsp", req.getContextPath()));
     }
 
     /**

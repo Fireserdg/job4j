@@ -28,7 +28,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/user</url-pattern>
     </servlet-mapping>
     
     <servlet>

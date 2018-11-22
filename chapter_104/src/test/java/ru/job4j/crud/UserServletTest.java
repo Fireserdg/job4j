@@ -3,7 +3,6 @@ package ru.job4j.crud;
 import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-
 import java.util.Arrays;
 
 /**
@@ -49,7 +48,6 @@ public class UserServletTest {
         Thread.sleep(500);
         val.findAll().forEach(System.out::println);
         assertThat(resultSize, is(expectedSize));
-        assertThat(val.findById("99").getName(), is("User99"));
         assertThat(val.findById("5").getName(), is("UpdateUser5"));
         assertThat(val.findById("14").getName(), is("UpdateUser14"));
         assertNull(val.findById("30"));
@@ -66,5 +64,11 @@ public class UserServletTest {
                 is(String.format(Message.MSG_DELETE, "2")));
         new DispatchPattern(val)
                         .init().sent(() -> Arrays.asList("delete", "37"));
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void whenDeleteUserByIdThenGetException() {
+        ValidateService val = ValidateService.getInstance();
+        val.delete("999");
     }
 }
