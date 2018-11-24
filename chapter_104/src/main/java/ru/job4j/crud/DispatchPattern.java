@@ -1,5 +1,7 @@
 package ru.job4j.crud;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
 import java.util.*;
 import java.util.function.Function;
 
@@ -13,9 +15,14 @@ import java.util.function.Function;
 public class DispatchPattern {
 
     /**
+     * Contains class instance.
+     */
+    private static final DispatchPattern INSTANCE = new DispatchPattern();
+
+    /**
      * Contains validate.
      */
-    private final ValidateService validate;
+    private static final ValidateService VALIDATE = ValidateService.getInstance();
 
     /**
      * Contains destinations.
@@ -24,10 +31,16 @@ public class DispatchPattern {
 
     /**
      * Contains constructor.
-     * @param validate ValidateService.
      */
-    public DispatchPattern(final ValidateService validate) {
-        this.validate = validate;
+    private DispatchPattern() {
+    }
+
+    /**
+     * Get instance.
+     * @return instance of DispatchPattern.
+     */
+    public static DispatchPattern getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -35,7 +48,7 @@ public class DispatchPattern {
      * @return The message of the add operation.
      */
     private Function<List<String>, String> add() {
-        return msg -> this.validate.add(msg.stream().filter(n -> !n.equals("add"))
+        return msg -> VALIDATE.add(msg.stream().filter(n -> !n.equals("add"))
                 .toArray(String[]::new));
     }
 
@@ -44,7 +57,7 @@ public class DispatchPattern {
      * @return The message of the update operation.
      */
     private Function<List<String>, String> update() {
-        return msg -> this.validate.update(msg.stream().
+        return msg -> VALIDATE.update(msg.stream().
                 filter(n -> !n.equals("update")).toArray(String[]::new));
     }
 
@@ -53,7 +66,7 @@ public class DispatchPattern {
      * @return The message of the delete operation.
      */
     private Function<List<String>, String> delete() {
-        return msg -> this.validate.delete(msg.get(1));
+        return msg -> VALIDATE.delete(msg.get(1));
     }
 
     /**

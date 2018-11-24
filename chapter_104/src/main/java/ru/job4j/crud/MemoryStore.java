@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Memory Store.
@@ -22,7 +23,12 @@ public class MemoryStore implements Store<User> {
     /**
      * Container for users.
      */
-    private final Map<Integer, User> users = new ConcurrentHashMap<>();
+    private final Map<String, User> users = new ConcurrentHashMap<>();
+
+    /**
+     * Count for get id.
+     */
+    private final AtomicInteger counts = new AtomicInteger(1);
 
     /**
      * Get instance.
@@ -45,7 +51,10 @@ public class MemoryStore implements Store<User> {
      */
     @Override
     public User add(final User user) {
-        return this.users.putIfAbsent(Integer.valueOf(user.getId()), user);
+        return this.users.computeIfAbsent(String.valueOf(this.counts.getAndIncrement()), k -> {
+            user.setId(k);
+            return user;
+        });
     }
 
     /**
@@ -54,7 +63,7 @@ public class MemoryStore implements Store<User> {
      */
     @Override
     public void update(final User user) {
-        this.users.computeIfPresent(Integer.parseInt(user.getId()),
+        this.users.computeIfPresent(user.getId(),
                 (k, v) -> user);
     }
 
@@ -64,7 +73,7 @@ public class MemoryStore implements Store<User> {
      */
     @Override
     public void delete(final String id) {
-        this.users.remove(Integer.parseInt(id));
+        this.users.remove(id);
     }
 
     /**
@@ -83,6 +92,6 @@ public class MemoryStore implements Store<User> {
      */
     @Override
     public User findById(final String id) {
-        return this.users.get(Integer.parseInt(id));
+        return this.users.get(id);
     }
 }

@@ -6,11 +6,6 @@
     <servlet>
         <servlet-name>EchoServlet</servlet-name>
         <servlet-class>ru.job4j.servlets.EchoServlet</servlet-class>
-        <init-param>
-            <param-name>debug</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <load-on-startup>8</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>EchoServlet</servlet-name>
@@ -28,7 +23,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -38,7 +33,7 @@
             <param-name>debug</param-name>
             <param-value>true</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>UsersServlet</servlet-name>
@@ -66,7 +61,7 @@
             <param-name>debug</param-name>
             <param-value>true</param-value>
         </init-param>
-        <load-on-startup>2</load-on-startup>
+        <load-on-startup>3</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserUpdateServlet</servlet-name>

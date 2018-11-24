@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Validate Service
@@ -14,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 03.11.18
  */
 public class ValidateService {
+
     /**
      * Contains logger.
      */
@@ -27,12 +27,7 @@ public class ValidateService {
     /**
      * Contains storage.
      */
-    private final Store<User> store = MemoryStore.getInstance();
-
-    /**
-     * Count for get id.
-     */
-    private final AtomicInteger counts = new AtomicInteger(1);
+    private static final Store<User> STORE = DbStore.getInstance();
 
     /**
      * Constructor.
@@ -54,10 +49,9 @@ public class ValidateService {
      * @return msg about add user.
      */
     public String add(final String[] params) {
-        User result = this.store.add(new User(String.valueOf(
-                this.counts.getAndIncrement()), params[0],
-                params[1], params[1], System.currentTimeMillis()));
-        if (result == null) {
+        User result = STORE.add(new User(params[0],
+                params[1], params[2], System.currentTimeMillis()));
+        if (result != null) {
             LOG.info(String.format(Message.MSG_ADD, params[0]));
             return String.format(Message.MSG_ADD, params[0]);
         }
@@ -71,19 +65,16 @@ public class ValidateService {
      * @param params parameters for update.
      * @return msg about update user.
      */
-    public String update(String[] params) {
-        User oldUser = this.store.findById(params[0]);
-        if (oldUser != null) {
-            this.store.update(new User(oldUser.getId(),
-                    () -> params[1].equals("") ? oldUser.getName() : params[1],
-                    () -> params[2].equals("") ? oldUser.getLogin() : params[2],
-                    () -> params[3].equals("") ? oldUser.getEmail() : params[3],
-                    oldUser.getCreateDate()));
-            LOG.info(String.format(Message.MSG_UPDATE, params[0]));
-            return String.format(Message.MSG_UPDATE, params[0]);
-        }
-        LOG.error(String.format(Message.MSG_NOT_EXIST, params[0]));
-        throw new UserNotFoundException(String.format(Message.MSG_NOT_EXIST, params[0]));
+    public String update(final String[] params) {
+        User oldUser = this.findById(params[0]);
+        STORE.update(new User(oldUser.getId(),
+                () -> params[1].equals("") ? oldUser.getName() : params[1],
+                () -> params[2].equals("") ? oldUser.getLogin() : params[2],
+                () -> params[3].equals("") ? oldUser.getEmail() : params[3],
+                oldUser.getCreate()));
+        LOG.info(String.format(Message.MSG_UPDATE, params[0]));
+        return String.format(Message.MSG_UPDATE, params[0]);
+
     }
 
     /**
@@ -91,13 +82,9 @@ public class ValidateService {
      * @param id user id
      */
     public String delete(final String id) {
-        if (this.store.findById(id) != null) {
-            this.store.delete(id);
-            LOG.info(String.format(Message.MSG_DELETE, id));
-            return String.format(Message.MSG_DELETE, id);
-        }
-        LOG.info(String.format(Message.MSG_NOT_EXIST, id));
-        throw new UserNotFoundException(String.format(Message.MSG_NOT_EXIST, id));
+        STORE.delete(this.findById(id).getId());
+        LOG.info(String.format(Message.MSG_DELETE, id));
+        return String.format(Message.MSG_DELETE, id);
     }
 
     /**
@@ -105,7 +92,7 @@ public class ValidateService {
      * @return container for user.
      */
     public List<User> findAll() {
-        return this.store.findAll();
+        return STORE.findAll();
     }
 
     /**
@@ -114,6 +101,10 @@ public class ValidateService {
      * @return true if user exist.
      */
     public User findById(String id) {
-        return this.store.findById(id);
+        User user = STORE.findById(id);
+        if (user != null) {
+            return user;
+        }
+        throw new UserNotFoundException(String.format(Message.MSG_NOT_EXIST, id));
     }
 }

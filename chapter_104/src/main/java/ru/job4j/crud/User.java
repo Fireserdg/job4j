@@ -21,7 +21,7 @@ public class User {
      * User id.
      *
      */
-    private final String id;
+    private String id;
     /**
      * User name.
      */
@@ -40,31 +40,52 @@ public class User {
     /**
      * Create date.
      */
-    private final long createDate;
+    private final long create;
 
     /**
-     * Constructor with id.
+     * Constructor for create user.
+     * @param name user name.
+     * @param login login.
+     * @param email email.
+     * @param create create.
+     */
+    public User(final String name, final String login,
+                final String email, final long create) {
+        this.name = name;
+        this.login = login;
+        this.email = email;
+        this.create = create;
+    }
+
+    /**
+     * Constructor for create user and id.
      * @param id user id.
      * @param name user name.
      * @param login login.
      * @param email email.
-     * @param createDate create.
+     * @param create create.
      */
     public User(final String id, final String name, final String login,
-                final String email, final long createDate) {
+                final String email, final long create) {
+        this(name, login, email, create);
         this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.createDate = createDate;
     }
 
+    /**
+     * Constructor for create user with Supplier.
+     * @param id user id.
+     * @param name user name.
+     * @param login login.
+     * @param email email.
+     * @param create create.
+     */
     public User(final String id, final Supplier<String> name,
                 final Supplier<String> login,
                 final Supplier<String> email,
-                final long createDate) {
-        this(id, name.get(), login.get(), email.get(), createDate);
+                final long create) {
+        this(id, name.get(), login.get(), email.get(), create);
     }
+
 
     /**
      * Get user name.
@@ -94,8 +115,8 @@ public class User {
      * Get create date.
      * @return create date.
      */
-    public long getCreateDate() {
-        return this.createDate;
+    public long getCreate() {
+        return this.create;
     }
 
     /**
@@ -107,12 +128,21 @@ public class User {
         return this.id;
     }
 
+    /**
+     * Set id for user
+     *
+     * @param id id
+     */
+    public void setId(final String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return String.format("User[id=%s, name=%s, login=%s, email=%s, create=%s]",
                 this.id, this.name, this.login, this.email,
                         LocalDateTime.ofInstant(
-                        Instant.ofEpochMilli(createDate),
+                        Instant.ofEpochMilli(create),
                         TimeZone.getDefault().toZoneId()).format(
                         DateTimeFormatter.ofPattern("yyyy-MMM-dd, HH:mm").withLocale(new Locale("en"))
                 ));
@@ -127,12 +157,12 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return createDate == user.createDate
+        return create == user.create
                 && Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, createDate);
+        return Objects.hash(id, create);
     }
 }

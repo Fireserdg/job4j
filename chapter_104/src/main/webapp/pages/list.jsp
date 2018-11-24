@@ -46,7 +46,7 @@
         <td align="center"><%=user.getId()%></td>
         <td align="center"><%=user.getName()%></td>
         <td align="center"><%=LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(user.getCreateDate()),
+                Instant.ofEpochMilli(user.getCreate()),
                 TimeZone.getDefault().toZoneId()).format(
                 DateTimeFormatter.ofPattern("yyyy-MMM-dd, HH:mm")
                         .withLocale(new Locale("en")))%></td>

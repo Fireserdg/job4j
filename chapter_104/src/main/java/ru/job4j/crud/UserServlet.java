@@ -19,7 +19,7 @@ public class UserServlet extends HttpServlet {
     /**
      * Contains validate.
      */
-    private final ValidateService validate = ValidateService.getInstance();
+    private final DispatchPattern dispatch = DispatchPattern.getInstance();
 
     /**
      * Get Request processing.
@@ -29,7 +29,7 @@ public class UserServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/pages/index.jsp", req.getContextPath()));
     }
 
     /**
@@ -43,13 +43,13 @@ public class UserServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         StringBuilder sb = new StringBuilder();
         try {
-            String msg = new DispatchPattern(this.validate).init().sent(
+            String msg = this.dispatch.init().sent(
                     () -> req.getParameterMap().values().stream()
                     .map(n -> n[0] == null ? "" : n[0].replace("<", "&lt;")
                     .replace(">", "&gt;")
                     .replace("&", "&amp;")).collect(Collectors.toList()));
             sb.append(msg);
-        } catch (IllegalArgumentException exc) {
+        } catch (UserNotFoundException exc) {
             sb.append(exc.getMessage());
         }
         resp.sendRedirect(String.format("%s/pages/answer.jsp?msg=%s", req.getContextPath(),
