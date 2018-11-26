@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%--@elvariable id="msg" type="java.lang.String"--%>
 <%--
   Message.
   User: Sergey Filippov (serdg1984@yandex.ru).
@@ -12,9 +14,10 @@
 <body>
 
 <div style="text-align: center;">
-    <h2><%=request.getParameter("msg")%></h2>
-</div><br>
-<form action="<%=request.getContextPath()%>\" method="GET">
+    <h2><c:out value="${msg}"/></h2>
+</div>
+<br>
+<form action="${pageContext.servletContext.contextPath}\" method="GET">
     <input type="submit" value='Back to main page'/>
 </form>
 

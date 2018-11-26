@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
   Main page
   User: Sergey Filippov (serdg1984@yandex.ru).
@@ -15,14 +16,14 @@
     Hello! Selected action.
 </div></h2>
 <div style="text-align: center;">
-    <form action="<%=request.getContextPath()%>/create" method="GET">
+    <form action="${pageContext.servletContext.contextPath}/create" method="GET">
         Go to page for create new user
         <input type="submit" value="Go to page"/>
     </form>
 </div>
 
 <div style="text-align: center;">
-    <form action="<%=request.getContextPath()%>/list" method="GET">
+    <form action="${pageContext.servletContext.contextPath}/list" method="GET">
         Go to the page with the list of users
         <input type="submit" value="Go to page"/>
     </form>

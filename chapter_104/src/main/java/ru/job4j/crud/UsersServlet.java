@@ -1,5 +1,6 @@
 package ru.job4j.crud;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +22,9 @@ public class UsersServlet extends HttpServlet {
      * @throws IOException IO exception.
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.sendRedirect(String.format("%s/pages/list.jsp", req.getContextPath()));
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.setAttribute("users", ValidateService.getInstance().findAll());
+        req.getRequestDispatcher("/WEB-INF/view/list.jsp").forward(req, resp);
     }
 
     /**
@@ -32,7 +34,7 @@ public class UsersServlet extends HttpServlet {
      * @throws IOException IO exception.
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         doGet(req, resp);
     }
 }

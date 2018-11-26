@@ -18,7 +18,7 @@ import java.util.Arrays;
  * @version 1.0.
  * @since 10.11.18
  */
-public class UserServletTest {
+public class UsersControllerServletTest {
 
     /**
      * Init Config for drop database.
@@ -54,7 +54,7 @@ public class UserServletTest {
                     String.format("email%s@.gmail.com", count)))
             ).start();
         }
-        Thread.sleep(500);
+        Thread.sleep(2000);
         int resultSize = val.findAll().size();
         int expectedSize = 299;
         for (int i = 5; i < 30; i++) {

@@ -1,5 +1,5 @@
 /**
- * UserServlet.
+ * UsersControllerServlet.
  *
  * @author Sergey Filippov (serdg1984@yandex.ru)
  * @version $Id$

@@ -13,8 +13,8 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>UserServlet</servlet-name>
-        <servlet-class>ru.job4j.crud.UserServlet</servlet-class>
+        <servlet-name>UserController</servlet-name>
+        <servlet-class>ru.job4j.crud.UsersControllerServlet</servlet-class>
         <init-param>
             <param-name>debug</param-name>
             <param-value>true</param-value>
@@ -22,7 +22,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
+        <servlet-name>UserController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     

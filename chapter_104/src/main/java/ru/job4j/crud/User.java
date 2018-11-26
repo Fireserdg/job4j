@@ -129,6 +129,18 @@ public class User {
     }
 
     /**
+     * Get date and time where create User.
+     *
+     * @return date and time
+     */
+    public String getDate() {
+        return LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(this.create),
+                TimeZone.getDefault().toZoneId()).format(
+                DateTimeFormatter.ofPattern("yyyy-MMM-dd, HH:mm").withLocale(new Locale("en")));
+    }
+
+    /**
      * Set id for user
      *
      * @param id id
@@ -141,11 +153,7 @@ public class User {
     public String toString() {
         return String.format("User[id=%s, name=%s, login=%s, email=%s, create=%s]",
                 this.id, this.name, this.login, this.email,
-                        LocalDateTime.ofInstant(
-                        Instant.ofEpochMilli(create),
-                        TimeZone.getDefault().toZoneId()).format(
-                        DateTimeFormatter.ofPattern("yyyy-MMM-dd, HH:mm").withLocale(new Locale("en"))
-                ));
+                        this.getDate());
     }
 
     @Override
