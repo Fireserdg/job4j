@@ -35,8 +35,6 @@ public class ThreadPoolTest {
                 for (int j = 0; j < 50; j++) {
                     Math.sqrt(random.nextInt(100));
                 }
-                System.out.println(String.format("%s work",
-                        Thread.currentThread().getName()));
                 setIncrement();
             });
         }
