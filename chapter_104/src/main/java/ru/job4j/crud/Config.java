@@ -2,7 +2,6 @@ package ru.job4j.crud;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -30,10 +29,20 @@ public class Config {
      */
     private static final Logger LOG = LoggerFactory.getLogger(Config.class);
 
+    /**
+     * Constructor
+     *
+     * @param properties name of properties file
+     */
     private Config(String properties) {
         this.loadConfig(properties);
     }
 
+    /**
+     * Instance for config
+     *
+     * @return class instance
+     */
     public static Config getInstance() {
         return INSTANCE;
     }

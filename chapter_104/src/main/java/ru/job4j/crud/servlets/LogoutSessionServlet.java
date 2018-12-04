@@ -1,19 +1,18 @@
-package ru.job4j.crud;
+package ru.job4j.crud.servlets;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * User Update
+ * Servlet for logout session.
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
- * @since 12.11.18
+ * @since 01.12.18
  */
-public class UserUpdateServlet extends HttpServlet {
+public class LogoutSessionServlet extends HttpServlet {
 
     /**
      * Get Request processing.
@@ -22,9 +21,9 @@ public class UserUpdateServlet extends HttpServlet {
      * @throws IOException IO exception.
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.setAttribute("user", ValidateService.getInstance().findById(req.getParameter("id")));
-        req.getRequestDispatcher("/WEB-INF/view/update.jsp").forward(req, resp);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.getSession().invalidate();
+        resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 
     /**
@@ -34,7 +33,7 @@ public class UserUpdateServlet extends HttpServlet {
      * @throws IOException IO exception.
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         doGet(req, resp);
     }
 }

@@ -1,4 +1,7 @@
-package ru.job4j.crud;
+package ru.job4j.crud.store;
+
+import ru.job4j.crud.models.Role;
+import ru.job4j.crud.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +49,13 @@ public class MemoryStore implements Store<User> {
 
     /**
      * Add new user.
-     * @param user new User.
+     * @param user new Role.
      * @return true if user was added.
      */
     @Override
     public User add(final User user) {
-        return this.users.computeIfAbsent(String.valueOf(this.counts.getAndIncrement()), k -> {
+        return this.users.computeIfAbsent(String.valueOf(
+                this.counts.getAndIncrement()), k -> {
             user.setId(k);
             return user;
         });

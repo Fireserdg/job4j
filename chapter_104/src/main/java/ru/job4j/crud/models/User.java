@@ -1,4 +1,4 @@
-package ru.job4j.crud;
+package ru.job4j.crud.models;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import java.util.TimeZone;
 import java.util.function.Supplier;
 
 /**
- * User model
+ *  Model user
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
@@ -38,9 +38,21 @@ public class User {
     private final String email;
 
     /**
-     * Create date.
+     * User date.
      */
     private final long create;
+
+    /**
+     * User password
+     *
+     */
+    private final String password;
+
+    /**
+     * User role
+     *
+     */
+    private Role role;
 
     /**
      * Constructor for create user.
@@ -49,12 +61,14 @@ public class User {
      * @param email email.
      * @param create create.
      */
-    public User(final String name, final String login,
-                final String email, final long create) {
+    public User(final String name, final String login, final String password,
+                final String email, final long create, Role role) {
         this.name = name;
         this.login = login;
+        this.password = password;
         this.email = email;
         this.create = create;
+        this.role = role;
     }
 
     /**
@@ -66,8 +80,8 @@ public class User {
      * @param create create.
      */
     public User(final String id, final String name, final String login,
-                final String email, final long create) {
-        this(name, login, email, create);
+                final String password, final String email, final long create, Role role) {
+        this(name, login, password, email, create, role);
         this.id = id;
     }
 
@@ -80,12 +94,19 @@ public class User {
      * @param create create.
      */
     public User(final String id, final Supplier<String> name,
-                final Supplier<String> login,
-                final Supplier<String> email,
-                final long create) {
-        this(id, name.get(), login.get(), email.get(), create);
+                final Supplier<String> login, final Supplier<String> password,
+                final Supplier<String> email, final long create, final Role role) {
+        this(id, name.get(), login.get(), password.get(), email.get(), create, role);
     }
 
+    /**
+     * Get user password
+     *
+     * @return password
+     */
+    public String getPassword() {
+        return this.password;
+    }
 
     /**
      * Get user name.
@@ -129,7 +150,7 @@ public class User {
     }
 
     /**
-     * Get date and time where create User.
+     * Get date and time where create Role.
      *
      * @return date and time
      */
@@ -137,7 +158,8 @@ public class User {
         return LocalDateTime.ofInstant(
                 Instant.ofEpochMilli(this.create),
                 TimeZone.getDefault().toZoneId()).format(
-                DateTimeFormatter.ofPattern("yyyy-MMM-dd, HH:mm").withLocale(new Locale("en")));
+                DateTimeFormatter.ofPattern("yyyy-MMM-dd, HH:mm")
+                        .withLocale(new Locale("en")));
     }
 
     /**
@@ -147,6 +169,15 @@ public class User {
      */
     public void setId(final String id) {
         this.id = id;
+    }
+
+    /**
+     * Get user role.
+     *
+     * @return role
+     */
+    public Role getRole() {
+        return this.role;
     }
 
     @Override

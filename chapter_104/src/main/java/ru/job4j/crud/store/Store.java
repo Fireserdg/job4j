@@ -1,4 +1,6 @@
-package ru.job4j.crud;
+package ru.job4j.crud.store;
+
+import ru.job4j.crud.models.User;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public interface Store<T> {
 
     /**
      * Add new user.
-     * @param user new User.
+     * @param user new Role.
      * @return true if user was added.
      */
     T add(final User user);

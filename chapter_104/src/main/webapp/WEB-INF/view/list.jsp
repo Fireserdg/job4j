@@ -1,8 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%--@elvariable id="users" type="java.util.List<ru.job4j.crud.User>"--%>
+<%--@elvariable id="users" type="java.util.List<ru.job4j.crud.models.User>"--%>
 <%--
   List of users
-  User: Sergey Filippov (serdg1984@yandex.ru).
+  Role: Sergey Filippov (serdg1984@yandex.ru).
   Version: 1.0
   Since: 21.11.18 
 --%>
@@ -24,12 +24,18 @@
     <tr>
         <th>Id</th>
         <th>User name</th>
+        <th>User login</th>
+        <th>User password</th>
         <th>Create</th>
+        <th>Role</th>
         <th>Actions</th>
     </tr>
 
     <c:if test="${users.size() == 0}">
         <tr style="background: #FFFAFA; color: #C0C0C0; font-style: italic;">
+            <th>Empty</th>
+            <th>Empty</th>
+            <th>Empty</th>
             <th>Empty</th>
             <th>Empty</th>
             <th>Empty</th>
@@ -40,13 +46,16 @@
     <tr>
         <td align="center"><c:out value="${user.id}"/></td>
         <td align="center"><c:out value="${user.name}"/></td>
+        <td align="center"><c:out value="${user.login}"/></td>
+        <td align="center"><c:out value="${user.password}"/></td>
         <td align="center"><c:out value="${user.date}"/></td>
+        <td align="center"><c:out value="${user.role}"/></td>
         <td align="center">
-            <form action="${pageContext.servletContext.contextPath}/edit" method="GET">
+            <form action="${pageContext.servletContext.contextPath}/action/edit" method="GET">
                 <input type="hidden" name="id" value="${user.id}"/>
                 <input type="submit" class="sub" value="Update"/>
             </form>
-            <form action="${pageContext.servletContext.contextPath}/" method="POST">
+            <form action="${pageContext.servletContext.contextPath}/action/main" method="POST">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="id" value="${user.id}"/>
                 <input type="submit" class="sub" value="Delete"/>
@@ -55,8 +64,16 @@
     </tr>
     </c:forEach>
 </table>
-<p><form action="${pageContext.servletContext.contextPath}/" method="GET">
-    <input type="submit" value="Back to main page"/>
+<p><form action="${pageContext.servletContext.contextPath}/create" method="GET">
+    <input type="submit" value="Add user" class="sub"/>
 </form>
+<p><form action="${pageContext.servletContext.contextPath}/action/main" method="GET">
+    <input type="submit" value="Back to main page" class="sub"/>
+</form>
+<div style="text-align: left">
+    <form action="${pageContext.servletContext.contextPath}/action/logout" method="GET">
+        <input type="submit" value="End sessions" class="sub"/>
+    </form>
+</div>
 </body>
 </html>

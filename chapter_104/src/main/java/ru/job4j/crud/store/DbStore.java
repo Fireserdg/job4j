@@ -1,8 +1,12 @@
-package ru.job4j.crud;
+package ru.job4j.crud.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.crud.Config;
+import ru.job4j.crud.models.Role;
+import ru.job4j.crud.models.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +93,10 @@ public class DbStore implements Store<User> {
              final ResultSet rs = statement.getGeneratedKeys()) {
                 statement.setString(1, user.getName());
                 statement.setString(2, user.getLogin());
-                statement.setString(3, user.getEmail());
-                statement.setTimestamp(4, new Timestamp(user.getCreate()));
+                statement.setString(3, user.getPassword());
+                statement.setString(4, user.getEmail());
+                statement.setTimestamp(5, new Timestamp(user.getCreate()));
+                statement.setString(6, user.getRole().name());
                 statement.executeUpdate();
             if (rs.next()) {
                 user.setId(String.valueOf(rs.getString(1)));
@@ -113,8 +119,10 @@ public class DbStore implements Store<User> {
                       CONF.getValue("get.update"))) {
             statement.setString(1, user.getName());
             statement.setString(2, user.getLogin());
-            statement.setString(3, user.getEmail());
-            statement.setInt(4, Integer.valueOf(user.getId()));
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getEmail());
+            statement.setString(5, user.getRole().name());
+            statement.setInt(6, Integer.valueOf(user.getId()));
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -193,8 +201,10 @@ public class DbStore implements Store<User> {
         String id = resultSet.getString(1);
         String name = resultSet.getString(2);
         String login = resultSet.getString(3);
-        String email = resultSet.getString(4);
-        Timestamp create = resultSet.getTimestamp(5);
-        return new User(id, name, login, email, create.getTime());
+        String password = resultSet.getString(4);
+        String email = resultSet.getString(5);
+        Timestamp create = resultSet.getTimestamp(6);
+        Role role = Role.valueOf(resultSet.getString(7));
+        return new User(id, name, login, password, email, create.getTime(), role);
     }
 }

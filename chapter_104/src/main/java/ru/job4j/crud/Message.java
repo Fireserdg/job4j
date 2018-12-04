@@ -35,7 +35,7 @@ public interface Message {
     /**
      * Message about exist user.
      */
-    String MSG_EXIST = "User %s already exists";
+    String MSG_EXIST = "User with login=%s already exists, please input another login";
 
     /**
      * Message about does not exist user.
@@ -43,14 +43,19 @@ public interface Message {
     String MSG_NOT_EXIST = "The user with id=%s does not exist, specify the correct id";
 
     /**
+     * Message about does not exist user by id.
+     */
+    String MSG_ID_NOT_EXIST = "The user with id=%s does not exist, specify the correct id";
+
+    /**
      * Message about successfully update.
      */
-    String MSG_UPDATE = "User with id=%s was successfully updated";
+    String MSG_UPDATE = "User %s was successfully updated";
 
     /**
      * Message about successfully deleted.
      */
-    String MSG_DELETE = "User with id=%s was successfully delete";
+    String MSG_DELETE = "User with login=%s was successfully delete";
 
     /**
      * Message about add user.

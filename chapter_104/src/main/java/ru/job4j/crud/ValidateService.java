@@ -2,8 +2,10 @@ package ru.job4j.crud;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import ru.job4j.crud.models.*;
+import ru.job4j.crud.store.*;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Validate Service
@@ -49,15 +51,17 @@ public class ValidateService {
      * @return msg about add user.
      */
     public String add(final String[] params) {
-        User result = STORE.add(new User(params[0],
-                params[1], params[2], System.currentTimeMillis()));
-        if (result != null) {
-            LOG.info(String.format(Message.MSG_ADD, params[0]));
-            return String.format(Message.MSG_ADD, params[0]);
+        if (checkLogin(params[1])) {
+            User result = STORE.add(new User(params[0], params[1],
+                    params[2], params[3], System.currentTimeMillis(),
+                    Role.valueOf(params[4])));
+            if (result != null) {
+                LOG.info(String.format(Message.MSG_ADD, params[0]));
+                return String.format(Message.MSG_ADD, params[0]);
+            }
         }
-        LOG.error(String.format(Message.MSG_EXIST, params[0]));
-        throw new UserNotFoundException(String.format(Message.MSG_EXIST, params[0]));
-
+        LOG.error(String.format(Message.MSG_EXIST, params[1]));
+        throw new UserLoginException(String.format(Message.MSG_EXIST, params[1]));
     }
 
     /**
@@ -67,14 +71,18 @@ public class ValidateService {
      */
     public String update(final String[] params) {
         User oldUser = this.findById(params[0]);
-        STORE.update(new User(oldUser.getId(),
-                () -> params[1].equals("") ? oldUser.getName() : params[1],
-                () -> params[2].equals("") ? oldUser.getLogin() : params[2],
-                () -> params[3].equals("") ? oldUser.getEmail() : params[3],
-                oldUser.getCreate()));
-        LOG.info(String.format(Message.MSG_UPDATE, params[0]));
-        return String.format(Message.MSG_UPDATE, params[0]);
-
+        if (checkLogin(params[2], oldUser.getId())) {
+            STORE.update(new User(oldUser.getId(),
+                    () -> params[1].equals("") ? oldUser.getName() : params[1],
+                    () -> params[2].equals("") ? oldUser.getLogin() : params[2],
+                    () -> params[3].equals("") ? oldUser.getPassword() : params[3],
+                    () -> params[4].equals("") ? oldUser.getEmail() : params[4],
+                    oldUser.getCreate(), Role.valueOf(params[5])));
+            LOG.info(String.format(Message.MSG_UPDATE, params[1]));
+            return String.format(Message.MSG_UPDATE, params[1]);
+        }
+            LOG.error(String.format(Message.MSG_EXIST, params[2]));
+            throw new UserLoginException(String.format(Message.MSG_EXIST, params[2]));
     }
 
     /**
@@ -82,9 +90,10 @@ public class ValidateService {
      * @param id user id
      */
     public String delete(final String id) {
-        STORE.delete(this.findById(id).getId());
-        LOG.info(String.format(Message.MSG_DELETE, id));
-        return String.format(Message.MSG_DELETE, id);
+        User user = this.findById(id);
+        STORE.delete(user.getId());
+        LOG.info(String.format(Message.MSG_DELETE, user.getLogin()));
+        return String.format(Message.MSG_DELETE, user.getLogin());
     }
 
     /**
@@ -105,6 +114,41 @@ public class ValidateService {
         if (user != null) {
             return user;
         }
-        throw new UserNotFoundException(String.format(Message.MSG_NOT_EXIST, id));
+        throw new UserIdException(String.format(Message.MSG_ID_NOT_EXIST, id));
+    }
+
+    /**
+     * Check login in storage.
+     *
+     * @param login user login
+     * @return true if login is unique.
+     */
+    private boolean checkLogin(String login) {
+        return STORE.findAll().stream().noneMatch(
+                user -> user.getLogin().equals(login));
+    }
+
+    /**
+     * Check login in storage.
+     *
+     * @param login user login
+     * @param id user id
+     * @return true if login is unique.
+     */
+    private boolean checkLogin(String login, String id) {
+        return STORE.findAll().stream().filter(user -> !user.getId().equals(id))
+                .noneMatch(user -> user.getLogin().equals(login));
+    }
+
+    /**
+     * Is Credentials.
+     *
+     * @param login user login
+     * @param password user password
+     * @return Optional for get result in Signings Servlet
+     */
+    public Optional<User> isCredentials(String login, String password) {
+        return STORE.findAll().stream().filter(user -> user.getLogin().equals(login)
+                && user.getPassword().equals(password)).findFirst();
     }
 }

@@ -2,6 +2,10 @@ package ru.job4j.crud;
 
 import org.junit.After;
 import org.junit.Ignore;
+import org.junit.Test;
+import ru.job4j.crud.models.Role;
+import ru.job4j.crud.models.User;
+import ru.job4j.crud.store.DbStore;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -46,9 +51,11 @@ public class DbStoreTest {
     public void whenOperationByUsersThenGetResult() {
         DbStore db = DbStore.getInstance();
         User one = new User("1", "test",
-                "login", "email", System.currentTimeMillis());
+                "login", "123",  "email",
+                System.currentTimeMillis(), Role.USER);
         User two = new User("2", "newName",
-                "newLogin", "NewEmail", System.currentTimeMillis());
+                "newLogin", "123", "NewEmail",
+                System.currentTimeMillis(), Role.ADMIN);
         db.add(one);
         db.add(two);
         assertThat(db.findAll().size(), is(2));
@@ -58,12 +65,14 @@ public class DbStoreTest {
         List<User> result = db.findAll();
         assertThat(result, is(expected));
         User user = new User(one.getId(), "newName",
-                "newLogin", "NewEmail", one.getCreate());
+                "newLogin", "NewEmail", "333",
+                one.getCreate(), Role.ADMIN);
         db.update(user);
         User afterUp = db.findById(user.getId());
         assertThat(afterUp.getName(), is(user.getName()));
         assertThat(afterUp.getLogin(), is(user.getLogin()));
         assertThat(afterUp.getEmail(), is(user.getEmail()));
+        assertThat(afterUp.getRole(), is(user.getRole()));
         db.delete(one.getId());
         assertThat(db.findAll().size(), is(1));
     }

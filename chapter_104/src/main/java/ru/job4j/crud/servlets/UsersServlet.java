@@ -1,4 +1,6 @@
-package ru.job4j.crud;
+package ru.job4j.crud.servlets;
+
+import ru.job4j.crud.ValidateService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +21,7 @@ public class UsersServlet extends HttpServlet {
      * Get Request processing.
      * @param req request from client.
      * @param resp response for client.
+     * @throws ServletException Servlet Exception
      * @throws IOException IO exception.
      */
     @Override
@@ -31,6 +34,7 @@ public class UsersServlet extends HttpServlet {
      * Post Request processing
      * @param req request from client.
      * @param resp response for client.
+     * @throws ServletException Servlet Exception
      * @throws IOException IO exception.
      */
     @Override

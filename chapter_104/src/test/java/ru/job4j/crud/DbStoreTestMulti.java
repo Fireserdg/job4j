@@ -2,6 +2,10 @@ package ru.job4j.crud;
 
 import org.junit.After;
 import org.junit.Ignore;
+import org.junit.Test;
+import ru.job4j.crud.models.Role;
+import ru.job4j.crud.models.User;
+import ru.job4j.crud.store.DbStore;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,21 +50,26 @@ public class DbStoreTestMulti {
         DbStore db = DbStore.getInstance();
         for (int i = 1; i < 300; i++) {
             int count = i;
-            new Thread(() -> db.add(new User(String.valueOf(count), String.format("User%s", count),
+            new Thread(() -> db.add(new User(String.valueOf(count),
+                    String.format("User%s", count),
                     String.format("login.%s", count),
-                    String.format("email%s@.gmail.com", count), System.currentTimeMillis()))
+                    String.format("password.%s", count),
+                    String.format("email%s@.gmail.com", count),
+                    System.currentTimeMillis(), Role.USER))
             ).start();
         }
-        Thread.sleep(500);
+        Thread.sleep(1000);
         int resultSize = db.findAll().size();
         int expectedSize = 299;
         for (int i = 5; i < 30; i++) {
             int countUp = i;
             int countDel = i + 25;
             new Thread(() -> db.update(new User(String.valueOf(countUp),
-                    String.format("UpdateUser%s", countUp), String.format("Updatelogin%s", countUp),
+                    String.format("UpdateUser%s", countUp),
+                    String.format("UpdateLogin%s", countUp),
+                    String.format("UpdatePassword%s", countUp),
                     String.format("UpdateEmail%s@.gmail.com", countUp),
-                    db.findById(String.valueOf(countUp)).getCreate()))
+                    db.findById(String.valueOf(countUp)).getCreate(), Role.USER))
             ).start();
             new Thread(() -> db.delete(String.valueOf(countDel))).start();
         }
