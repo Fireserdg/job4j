@@ -1,6 +1,5 @@
 package ru.job4j.crud.store;
 
-import ru.job4j.crud.models.Role;
 import ru.job4j.crud.models.User;
 
 import java.util.ArrayList;

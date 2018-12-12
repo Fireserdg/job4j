@@ -1,11 +1,11 @@
-package ru.job4j.crud;
+package ru.job4j.crud.store;
 
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
+import ru.job4j.crud.Config;
 import ru.job4j.crud.models.Role;
 import ru.job4j.crud.models.User;
-import ru.job4j.crud.store.DbStore;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

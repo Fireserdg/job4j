@@ -21,6 +21,7 @@
 *.iml
 /target
 *.DS_Store
+out/
 chapter_001/target/
 chapter_002/target/
 chapter_003/target/

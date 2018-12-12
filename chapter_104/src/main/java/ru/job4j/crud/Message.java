@@ -38,11 +38,6 @@ public interface Message {
     String MSG_EXIST = "User with login=%s already exists, please input another login";
 
     /**
-     * Message about does not exist user.
-     */
-    String MSG_NOT_EXIST = "The user with id=%s does not exist, specify the correct id";
-
-    /**
      * Message about does not exist user by id.
      */
     String MSG_ID_NOT_EXIST = "The user with id=%s does not exist, specify the correct id";

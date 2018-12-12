@@ -2,60 +2,48 @@ package ru.job4j.crud;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.job4j.crud.models.*;
-import ru.job4j.crud.store.*;
-import java.util.List;
-import java.util.Optional;
+import ru.job4j.crud.models.Role;
+import ru.job4j.crud.models.User;
+
+import java.util.*;
 
 /**
- * Validate Service
+ * Validate Stub for test
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
- * @since 03.11.18
+ * @since 05.12.18
  */
-public class ValidateService implements Validate {
-
+public class ValidateStub implements Validate {
     /**
      * Contains logger.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(ValidateService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ValidateStub.class);
 
     /**
-     * Contains class instance.
+     * Container for users.
      */
-    private static final Validate VALIDATE = new ValidateService();
+    private final Map<String, User> store = new HashMap<>();
 
     /**
-     * Contains storage.
+     * Count for get id.
      */
-    private static final Store<User> STORE = DbStore.getInstance();
-
-    /**
-     * Constructor.
-     */
-    private ValidateService() {
-    }
-
-    /**
-     * Get instance.
-     * @return instance of ValidateService.
-     */
-    public static Validate getInstance() {
-        return VALIDATE;
-    }
+    private int id = 1;
 
     /**
      * Add user.
      * @param params values of user.
      * @return msg about add user.
      */
-    public String add(final String[] params) {
+    @Override
+    public String add(String[] params) {
         if (checkLogin(params[1])) {
-            User result = STORE.add(new User(params[0], params[1],
+            User user = new User(params[0], params[1],
                     params[2], params[3], System.currentTimeMillis(),
-                    Role.valueOf(params[4])));
-            if (result != null) {
+                    Role.valueOf(params[4]));
+            user.setId(String.valueOf(id++));
+            user = this.store.putIfAbsent(user.getId(), user);
+            if (user == null) {
                 LOG.info(String.format(Message.MSG_ADD, params[0]));
                 return String.format(Message.MSG_ADD, params[0]);
             }
@@ -69,10 +57,11 @@ public class ValidateService implements Validate {
      * @param params parameters for update.
      * @return msg about update user.
      */
-    public String update(final String[] params) {
+    @Override
+    public String update(String[] params) {
         User oldUser = this.findById(params[0]);
         if (checkLogin(params[2], oldUser.getId())) {
-            STORE.update(new User(oldUser.getId(),
+            this.store.computeIfPresent(oldUser.getId(), (k, v) -> new User(oldUser.getId(),
                     () -> params[1].equals("") ? oldUser.getName() : params[1],
                     () -> params[2].equals("") ? oldUser.getLogin() : params[2],
                     () -> params[3].equals("") ? oldUser.getPassword() : params[3],
@@ -81,17 +70,18 @@ public class ValidateService implements Validate {
             LOG.info(String.format(Message.MSG_UPDATE, params[1]));
             return String.format(Message.MSG_UPDATE, params[1]);
         }
-            LOG.error(String.format(Message.MSG_EXIST, params[2]));
-            throw new UserLoginException(String.format(Message.MSG_EXIST, params[2]));
+        LOG.error(String.format(Message.MSG_EXIST, params[2]));
+        throw new UserLoginException(String.format(Message.MSG_EXIST, params[2]));
     }
 
     /**
      * Delete user by id.
      * @param id user id
      */
-    public String delete(final String id) {
+    @Override
+    public String delete(String id) {
         User user = this.findById(id);
-        STORE.delete(user.getId());
+        store.remove(user.getId());
         LOG.info(String.format(Message.MSG_DELETE, user.getLogin()));
         return String.format(Message.MSG_DELETE, user.getLogin());
     }
@@ -100,8 +90,9 @@ public class ValidateService implements Validate {
      * Find all in the container.
      * @return container for user.
      */
+    @Override
     public List<User> findAll() {
-        return STORE.findAll();
+        return new ArrayList<>(this.store.values());
     }
 
     /**
@@ -109,8 +100,9 @@ public class ValidateService implements Validate {
      * @param id user id.
      * @return true if user exist.
      */
+    @Override
     public User findById(String id) {
-        User user = STORE.findById(id);
+        User user = this.store.get(id);
         if (user != null) {
             return user;
         }
@@ -124,7 +116,7 @@ public class ValidateService implements Validate {
      * @return true if login is unique.
      */
     private boolean checkLogin(String login) {
-        return STORE.findAll().stream().noneMatch(
+        return this.store.values().stream().noneMatch(
                 user -> user.getLogin().equals(login));
     }
 
@@ -136,7 +128,7 @@ public class ValidateService implements Validate {
      * @return true if login is unique.
      */
     private boolean checkLogin(String login, String id) {
-        return STORE.findAll().stream().filter(user -> !user.getId().equals(id))
+        return this.store.values().stream().filter(user -> !user.getId().equals(id))
                 .noneMatch(user -> user.getLogin().equals(login));
     }
 
@@ -148,7 +140,7 @@ public class ValidateService implements Validate {
      * @return Optional for get result in Signings Servlet
      */
     public Optional<User> isCredentials(String login, String password) {
-        return STORE.findAll().stream().filter(user -> user.getLogin().equals(login)
+        return this.store.values().stream().filter(user -> user.getLogin().equals(login)
                 && user.getPassword().equals(password)).findFirst();
     }
 }

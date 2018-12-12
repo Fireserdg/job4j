@@ -20,7 +20,7 @@ public class DispatchPattern {
     /**
      * Contains validate.
      */
-    private static final ValidateService VALIDATE = ValidateService.getInstance();
+    private static final Validate VALIDATE = ValidateService.getInstance();
 
     /**
      * Contains destinations.
