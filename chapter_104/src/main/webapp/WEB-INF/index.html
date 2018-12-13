@@ -16,6 +16,24 @@
             text-align: center;
         }
     </style>
+    <script>
+        function validate() {
+            var result = false;
+            function check(value) {
+                if (value.val() === "") {
+                    alert(value.attr('placeholder'));
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            if (check($('#fname')) && check($('#lname'))
+                && check($('#desc'))) {
+                result = true;
+            }
+            return result;
+        }
+    </script>
 </head>
 <body style="background-color: #FAEBD7">
 
@@ -24,7 +42,7 @@
     <form>
         <div class="form-group">
             <label for="fname">First name:</label>
-            <input type="text" class="form-control" id="fname" placeholder="Enter First name">
+            <input type="text" class="form-control" id="fname" placeholder="Enter First name" >
         </div>
         <div class="form-group">
             <label for="lname">Last name:</label>
@@ -35,9 +53,9 @@
         <label class="radio-inline"><input type="radio" name="Sex">Female</label>
         <div class="form-group">
             <label for="desc">Description:</label>
-            <textarea class="form-control" rows="3" id="desc"></textarea>
+            <textarea class="form-control" rows="3" id="desc" placeholder="Enter description"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="return validate()">Submit</button>
     </form>
 </div>
 <div class="container" style="text-align: center; width: 700px">
