@@ -17,19 +17,34 @@
         }
     </style>
     <script>
-        function validate() {
-            var result = false;
-            function check(value) {
-                if (value.val() === "") {
-                    alert(value.attr('placeholder'));
-                    return false;
-                } else {
-                    return true;
+        function validate(arr, radio) {
+            var result = true;
+            $(arr).each(function () {
+               if ($(this).val() === "") {
+                   alert($(this).attr("placeholder"));
+                   result = false;
+                   return result;
+               }
+            });
+            if (result) {
+                if (radio.length === 0) {
+                    alert("Please select sex");
+                    result = false;
                 }
             }
-            if (check($('#fname')) && check($('#lname'))
-                && check($('#desc'))) {
-                result = true;
+            return result;
+        }
+        function addRow() {
+            var arr = [$('#fname'), $('#lname'), $('#desc')];
+            var radio = $('input[name=Sex]:checked');
+            var result = validate(arr, radio);
+            if (result) {
+                var akk = "";
+                $(arr).each(function () {
+                    akk += '<td>' + this.val() + '</td>';
+                });
+                akk+='<td>' + ($(radio).val()) + '</td>';
+                $('#table tr:last').after('<tr>' + akk + '</tr>')
             }
             return result;
         }
@@ -49,32 +64,24 @@
             <input type="text" class="form-control" id="lname" placeholder="Enter Last name">
         </div>
         <label>Sex:</label>
-        <label class="radio-inline"><input type="radio" name="Sex" checked>Male</label>
-        <label class="radio-inline"><input type="radio" name="Sex">Female</label>
+        <label class="radio-inline"><input type="radio" name="Sex" value="Male"/>Male</label>
+        <label class="radio-inline"><input type="radio" name="Sex" value="Female"/>Female</label>
         <div class="form-group">
             <label for="desc">Description:</label>
             <textarea class="form-control" rows="3" id="desc" placeholder="Enter description"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" onclick="return validate()">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="return addRow()">Submit</button>
     </form>
 </div>
 <div class="container" style="text-align: center; width: 700px">
     <h3>Table</h3>
-    <table class="table table-bordered" style="background-color: #FFF9F8">
-        <thead>
+    <table id="table" class="table table-bordered" style="background-color: #FFF9F8">
+        <tbody>
         <tr>
             <th>First name</th>
             <th>Last name</th>
-            <th>Sex</th>
             <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Example</td>
-            <td>Example</td>
-            <td>Example</td>
-            <td>Example</td>
+            <th>Sex</th>
         </tr>
         </tbody>
     </table>
