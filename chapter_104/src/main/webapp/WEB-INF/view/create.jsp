@@ -18,7 +18,7 @@
 <body>
 <div style="text-align: center">
 <h2>Create User</h2>
-    <form action="${pageContext.servletContext.contextPath}/" method="POST">
+    <form action="${pageContext.servletContext.contextPath}\start" method="POST">
         <input type="hidden" name="action" value="add"/>
         <label>
             User name:<input type="text" name="name" required/>
@@ -43,7 +43,7 @@
         <br>
         <input type="submit" value="Submit" class="sub"/>
     </form>
-    <form action="${pageContext.servletContext.contextPath}/" method="GET">
+    <form action="${pageContext.servletContext.contextPath}\start" method="GET">
         <input type="submit" value="Back" class="sub"/>
     </form>
 </div>

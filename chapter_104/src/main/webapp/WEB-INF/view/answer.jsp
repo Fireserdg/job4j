@@ -34,7 +34,7 @@
 <br>
 
 <c:if test="${exit == 'YES'}">
-    <form action="${pageContext.servletContext.contextPath}\" method="GET">
+    <form action="${pageContext.servletContext.contextPath}\start" method="GET">
         <input type="submit" value='Back' class="sub"/>
     </form>
 </c:if>

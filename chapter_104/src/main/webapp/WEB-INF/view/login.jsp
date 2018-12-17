@@ -35,7 +35,7 @@
         <input type="submit" value="Submit" class="sub"/>
     </form>
     <br>
-    <form action="${pageContext.servletContext.contextPath}/" method="GET">
+    <form action="${pageContext.servletContext.contextPath}/start" method="GET">
         <input type="submit" value="Back to guest page" class="sub"/>
     </form>
 </div>
