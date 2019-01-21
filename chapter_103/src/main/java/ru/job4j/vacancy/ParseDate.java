@@ -87,9 +87,9 @@ public class ParseDate {
             this.local = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(
                     "yyyy-MM-dd, HH:mm").withLocale(new Locale("ru")));
         } else {
-            date = date.replace("вчера", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            date = date.replace("вчера", LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yy")));
             local = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(
-                    "yyyy-MM-dd, HH:mm").withLocale(new Locale("ru"))).minusDays(1);
+                    "d MMM yy, HH:mm").withLocale(new Locale("ru"))).minusDays(1);
         }
         return this.local;
     }

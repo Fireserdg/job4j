@@ -35,14 +35,14 @@ public class ParseDocumentTest {
 
     @Test
     public void whenGetListOfVacanciesOfFirstYear() {
-        LocalDateTime minDate = LocalDateTime.parse("2018-01-01T00:00");
+        LocalDateTime minDate = LocalDateTime.parse("2019-01-01T00:00");
         ParseDocument parse = new ParseDocument(config, minDate);
         List<Item> items = parse.getItems();
         assertThat(items.size() > 0, is(true));
-        String firstJava = "Java/BackEnd/Middle Мск/Офис/FullTime (150) [new]";
-        String firstDate = "2018-01-08T14:43";
-        String secondJava = "Java Developer, СПб/Мск/Долгопрудный, ЗП до 200k net [new]";
-        String secondDate = "2018-01-09T15:41";
+        String firstJava = "Ищем Java-разработчика [new]";
+        String firstDate = "2019-01-03T10:04";
+        String secondJava = "Вакансия: Ведущий Java-разработчик [new]";
+        String secondDate = "2019-01-08T11:31";
         assertThat(items.get(0).getVacancy(), is(firstJava));
         assertThat(items.get(0).getCreate().toLocalDateTime().toString(),
                 is(firstDate));
