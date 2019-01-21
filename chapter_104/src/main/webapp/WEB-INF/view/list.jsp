@@ -10,69 +10,76 @@
 <html lang="en">
 <head>
     <title>List of Users</title>
-    <style> .sub {background: #FFF5EE; color: #696969; font-size: 9pt;
-        font-weight: 600; border-radius: 10px;
-        padding: 5px 10px;
-        margin: 0;}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style/list.css">
 </head>
 
 <body>
-<table width="60%" border="1" cellpadding="4" cellspacing="0" bgcolor="#FFF8DC">
+<div class="container">
+    <table class="table table-bordered" style="background-color: #FFF9F8">
 
-        <caption>Current list of users</caption>
-    <tr>
-        <th>Id</th>
-        <th>User name</th>
-        <th>User login</th>
-        <th>User password</th>
-        <th>Create</th>
-        <th>Role</th>
-        <th>Actions</th>
-    </tr>
-
-    <c:if test="${users.size() == 0}">
-        <tr style="background: #FFFAFA; color: #C0C0C0; font-style: italic;">
-            <th>Empty</th>
-            <th>Empty</th>
-            <th>Empty</th>
-            <th>Empty</th>
-            <th>Empty</th>
-            <th>Empty</th>
-            <th>Empty</th>
+        <h3>Current list of users</h3>
+        <tr style="background-color: #FFE4C4">
+            <th class="text-center">Id</th>
+            <th class="text-center">User name</th>
+            <th class="text-center">User login</th>
+            <th class="text-center">User password</th>
+            <th class="text-center">Create</th>
+            <th class="text-center">Role</th>
+            <th class="text-center">Actions</th>
         </tr>
-    </c:if>
-    <c:forEach items="${users}" var="user">
-    <tr>
-        <td align="center"><c:out value="${user.id}"/></td>
-        <td align="center"><c:out value="${user.name}"/></td>
-        <td align="center"><c:out value="${user.login}"/></td>
-        <td align="center"><c:out value="${user.password}"/></td>
-        <td align="center"><c:out value="${user.date}"/></td>
-        <td align="center"><c:out value="${user.role}"/></td>
-        <td align="center">
-            <form action="${pageContext.servletContext.contextPath}/action/edit" method="GET">
-                <input type="hidden" name="id" value="${user.id}"/>
-                <input type="submit" class="sub" value="Update"/>
-            </form>
-            <form action="${pageContext.servletContext.contextPath}/action/main" method="POST">
-                <input type="hidden" name="action" value="delete"/>
-                <input type="hidden" name="id" value="${user.id}"/>
-                <input type="submit" class="sub" value="Delete"/>
-            </form>
-        </td>
-    </tr>
-    </c:forEach>
-</table>
-<p><form action="${pageContext.servletContext.contextPath}/create" method="GET">
-    <input type="submit" value="Add user" class="sub"/>
+
+        <c:if test="${users.size() == 0}">
+            <tr>
+                <th>Empty</th>
+                <th>Empty</th>
+                <th>Empty</th>
+                <th>Empty</th>
+                <th>Empty</th>
+                <th>Empty</th>
+                <th>Empty</th>
+            </tr>
+        </c:if>
+        <c:forEach items="${users}" var="user">
+            <tr class="warning">
+                <td class="text-center"><c:out value="${user.id}"/></td>
+                <td class="text-center"><c:out value="${user.name}"/></td>
+                <td class="text-center"><c:out value="${user.login}"/></td>
+                <td class="text-center"><c:out value="${user.password}"/></td>
+                <td class="text-center"><c:out value="${user.date}"/></td>
+                <td class="text-center"><c:out value="${user.role}"/></td>
+                <td class="text-center">
+                    <form action="${pageContext.servletContext.contextPath}/action/edit" method="GET">
+                        <input type="hidden" name="id" value="${user.id}"/>
+                        <input type="submit" class="btn btn-primary btn-sm" value="Update"/>
+                    </form>
+                    <form action="${pageContext.servletContext.contextPath}/action/main" method="POST">
+                        <input type="hidden" name="action" value="delete"/>
+                        <input type="hidden" name="id" value="${user.id}"/>
+                        <input type="submit" class="btn btn-primary btn-sm" value="Delete"/>
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+</div>
+
+
+<div class="container text-left">
+    <p><form action="${pageContext.servletContext.contextPath}/create" method="GET">
+    <input type="submit" value="Add user" class="btn btn-primary"/>
 </form>
-<p><form action="${pageContext.servletContext.contextPath}/action/main" method="GET">
-    <input type="submit" value="Back to main page" class="sub"/>
+    <p><form action="${pageContext.servletContext.contextPath}/action/main" method="GET">
+    <input type="submit" value="Back to main page" class="btn btn-primary"/>
 </form>
-<div style="text-align: left">
+</div>
+
+<div class="container text-left">
     <form action="${pageContext.servletContext.contextPath}/action/logout" method="GET">
-        <input type="submit" value="End sessions" class="sub"/>
+        <input type="submit" value="End sessions" class="btn btn-primary"/>
     </form>
 </div>
 </body>

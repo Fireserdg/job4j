@@ -1,11 +1,11 @@
-var path = window.location.pathname.replace("/index.html", "");
+var path = window.location.pathname.replace("/json.html", "");
 
 $(loadUsers());
 
 function loadUsers() {
     $.ajax({
         type : "GET",
-        url : path.concat("json"),
+        url : path.concat("/jsonServlet"),
         dataType: "json",
         success : function (data) {
             $.each(data, function (key, value) {
@@ -32,7 +32,7 @@ function createUser() {
             "sex" : radio.val(), "desc" : desc.val()};
         $.ajax({
             type : "POST",
-            url : path.concat("json"),
+            url : path.concat("/jsonServlet"),
             data: JSON.stringify(resp),
             dataType : "json",
             success: function (data) {

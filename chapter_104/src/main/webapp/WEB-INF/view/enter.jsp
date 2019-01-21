@@ -8,21 +8,20 @@
 <html>
 <head>
     <title>Welcome</title>
-    <style> .sub {background: #FFF5EE; color: #696969; font-size: 9pt;
-        font-weight: 600; border-radius: 10px;
-        padding: 5px 10px;
-        margin: 0;}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-<div style="text-align: center">
-    <h3>Please enter you action</h3>
+<body style="background-color: #FAEBD7">
+<div class="container" style="text-align: center">
+    <h3 class="text-primary">Please enter you action</h3>
 
     <form action="${pageContext.servletContext.contextPath}/action/signing" method="GET">
-        <input type="submit" value="Authorization" class="sub"/>
+        <input type="submit" value="Authorization" class="btn btn-primary"/>
     </form>
     <form action="${pageContext.servletContext.contextPath}/create" method="GET">
-        <input type="submit" value="Registration" class="sub"/>
+        <input type="submit" value="Registration" class="btn btn-primary"/>
     </form>
 </div>
 </body>

@@ -89,7 +89,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>GuestServlet</servlet-name>
-        <url-pattern>/start</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -98,7 +98,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>JsonServlet</servlet-name>
-        <url-pattern>/json</url-pattern>
+        <url-pattern>/jsonServlet</url-pattern>
     </servlet-mapping>
 
     <filter>
