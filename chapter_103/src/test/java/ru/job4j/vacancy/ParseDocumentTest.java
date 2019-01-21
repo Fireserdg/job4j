@@ -39,10 +39,10 @@ public class ParseDocumentTest {
         ParseDocument parse = new ParseDocument(config, minDate);
         List<Item> items = parse.getItems();
         assertThat(items.size() > 0, is(true));
-        String firstJava = "Ищем Java-разработчика [new]";
-        String firstDate = "2019-01-03T10:04";
-        String secondJava = "Вакансия: Ведущий Java-разработчик [new]";
-        String secondDate = "2019-01-08T11:31";
+        String firstJava = "Ищем java-разработчиков 1 2 3 все [new]";
+        String firstDate = "2019-01-01T12:16";
+        String secondJava = "Ищем Java-разработчика [new]";
+        String secondDate = "2019-01-04T10:04";
         assertThat(items.get(0).getVacancy(), is(firstJava));
         assertThat(items.get(0).getCreate().toLocalDateTime().toString(),
                 is(firstDate));
