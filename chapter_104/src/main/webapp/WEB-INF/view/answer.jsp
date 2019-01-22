@@ -12,37 +12,33 @@
 <html>
 <head>
     <title>Message about operation</title>
-    <style> .sub {background: #FFF5EE; color: #696969; font-size: 9pt;
-        font-weight: 600; border-radius: 10px;
-        padding: 5px 10px;
-        margin: 0;}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-
-<c:if test="${msg != ''}">
-<div style="text-align: center; background-color: darkseagreen">
-    <c:out value="${msg}"/>
+<body style="background-color: #FAEBD7">
+<div class="container">
+    <c:if test="${msg != ''}">
+        <h5 class="text-center" style="background-color: aquamarine"><c:out value="${msg}"/></h5>
+    </c:if>
+    <c:if test="${exc != ''}">
+        <h5 class="text-center" style="background-color: lightcoral"><c:out value="${exc}"/></h5>
+    </c:if>
+    <c:if test="${exit == 'YES'}">
+        <form action="${pageContext.servletContext.contextPath}/" method="GET">
+            <div class="form-group">
+                <input type="submit" value='Back' class="btn btn-primary"/>
+            </div>
+        </form>
+    </c:if>
+    <c:if test="${exit != 'YES'}">
+        <form action="${pageContext.servletContext.contextPath}/action/main" method="GET">
+            <div class="form-group text-left">
+                <input type="submit" value='Back' class="btn btn-primary"/>
+            </div>
+        </form>
+    </c:if>
 </div>
-</c:if>
-
-<c:if test="${exc != ''}">
-<div style="text-align: center; background-color: red">
-        <c:out value="${exc}"/>
-</div>
-</c:if>
-<br>
-
-<c:if test="${exit == 'YES'}">
-    <form action="${pageContext.servletContext.contextPath}\start" method="GET">
-        <input type="submit" value='Back' class="sub"/>
-    </form>
-</c:if>
-
-<c:if test="${exit != 'YES'}">
-    <form action="${pageContext.servletContext.contextPath}\action\main" method="GET">
-        <input type="submit" value='Back' class="sub"/>
-    </form>
-</c:if>
 </body>
 </html>

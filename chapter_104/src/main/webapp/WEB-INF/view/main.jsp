@@ -9,49 +9,54 @@
 <html>
 <head>
     <title>Main page</title>
-    <style> .sub {background: #FFF5EE; color: #696969; font-size: 9pt;
-        font-weight: 600; border-radius: 10px;
-        padding: 5px 10px;
-        margin: 0;}
-        div {text-align: center}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-<h3><div>
-    Welcome <c:out value="${sessionScope.name}"/>!
-    You current role is [<c:out value="${sessionScope.role}"/>].
-    <br>
-    Please selected action.
-</div></h3>
+<body style="background-color: #FAEBD7">
+<div class="container text-center">
+    <h4 class="text-primary">
+        Welcome <c:out value="${sessionScope.name}"/>!
+        You current role is [<c:out value="${sessionScope.role}"/>].
+        Please selected action.
+    </h4>
+</div>
 
-<c:if test="${sessionScope.role == 'ADMIN'}">
-    <div>
+<div class="container text-center">
+    <c:if test="${sessionScope.role == 'ADMIN'}">
         <form action="${pageContext.servletContext.contextPath}/action/list" method="GET">
-            Go to the page with the list of users
-            <input type="submit" value="Go to page" class="sub"/>
+            <div class="form-group">
+                <label for="goPage">
+                    Go to the page with the list of users
+                </label>
+                <input type="submit" value="Go to page" id="goPage" class="btn btn-primary btn-sm"/>
+            </div>
         </form>
-    </div>
-</c:if>
+    </c:if>
 
-<div>
     <form action="${pageContext.servletContext.contextPath}/action/edit" method="GET">
         <input type="hidden" name="id" value="${sessionScope.id}">
-        Edit your personal information
-        <input type="submit" value="Update" class="sub"/>
+        <div class="form-group">
+            <label for="update">
+                Edit your personal information
+            </label>
+            <input type="submit" value="Update" id="update" class="btn btn-primary btn-sm"/>
+        </div>
     </form>
-</div>
-<div>
     <c:if test="${sessionScope.role == 'USER'}">
         <form action="${pageContext.servletContext.contextPath}/action/main" method="POST">
             <input type="hidden" name='action' value="delete"/>
             <input type="hidden" name='id' value="${sessionScope.id}"/>
-            <input type="submit" value="Delete account" class="sub"/>
+            <div class="form-group">
+                <input type="submit" value="Delete account" class="btn btn-primary btn-sm"/>
+            </div>
         </form>
     </c:if>
-</div>
-<div>
     <form action="${pageContext.servletContext.contextPath}/action/logout" method="GET">
-        <input type="submit" value="End sessions" class="sub"/>
+        <div class="form-group">
+            <input type="submit" value="End sessions" class="btn btn-primary btn-sm"/>
+        </div>
     </form>
 </div>
 </body>

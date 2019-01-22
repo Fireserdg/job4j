@@ -10,35 +10,41 @@
 <html>
 <head>
     <title>User authorization</title>
-    <style> .sub {background: #FFF5EE; color: #696969; font-size: 9pt;
-        font-weight: 600; border-radius: 10px;
-        padding: 5px 10px;
-        margin: 0;}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-
+<body style="background-color: #FAEBD7">
 <c:if test="${error != ''}">
-    <div style="background-color: red">
+    <div class="container text-center" style="background-color: #FF0000; width: 500px">
         <c:out value="${error}"/>
     </div>
-</c:if>
-<h3 style="text-align: center">User authorization</h3>
-<div style="text-align: center">
+    </c:if>
+<div class="container text-center">
+    <h3 class="text-primary">User authorization</h3>
     <form action="${pageContext.servletContext.contextPath}/action/signing" method="POST">
-        <label>
-            User login:<input type="text" name="login" placeholder="your login" required/>
-        </label><br>
-        <label>
-            User password:<input type="password" name="password" placeholder="your password" required/>
-        </label><br>
-        <input type="submit" value="Submit" class="sub"/>
+        <div class="form-group">
+            <label for="login">
+                User login:
+            </label>
+            <input type="text" name="login" id="login" placeholder="your login" required/>
+        </div>
+        <div class="form-group">
+            <label for="password">
+                User password:
+            </label>
+            <input type="password" name="password" id="password" placeholder="your password" required/>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary"/>
+        </div>
     </form>
-    <br>
-    <form action="${pageContext.servletContext.contextPath}/start" method="GET">
-        <input type="submit" value="Back to guest page" class="sub"/>
+    <form action="${pageContext.servletContext.contextPath}/" method="GET">
+        <div class="form-group">
+            <input type="submit" value="Back to guest page" class="btn btn-primary"/>
+        </div>
     </form>
 </div>
-
 </body>
 </html>

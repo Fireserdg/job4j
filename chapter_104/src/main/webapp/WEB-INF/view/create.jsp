@@ -13,12 +13,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <%--<link rel="stylesheet" href="${pageContext.request.contextPath}/style/list.css">--%>
 </head>
 <body style="background-color: #FAEBD7">
 <div class="container text-center">
     <h2 class="text-primary">Create User</h2>
-    <form action="${pageContext.servletContext.contextPath}\start" method="POST">
+    <form action="${pageContext.servletContext.contextPath}/" method="POST">
         <input type="hidden" name="action" value="add"/>
         <div class="form-group">
             <label for="name">
@@ -63,7 +62,7 @@
         </div>
     </form>
     <div>
-        <form action="${pageContext.servletContext.contextPath}\start" method="GET">
+        <form action="${pageContext.servletContext.contextPath}/" method="GET">
             <input type="submit" value="Back" class="btn btn-primary"/>
         </form>
     </div>

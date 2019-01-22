@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/style/list.css">
 </head>
 
-<body>
+<body style="background-color: #FFF9F8">
 <div class="container">
     <table class="table table-bordered" style="background-color: #FFF9F8">
 
-        <h3>Current list of users</h3>
+        <h3 class="text-center">Current list of users</h3>
         <tr style="background-color: #FFE4C4">
             <th class="text-center">Id</th>
             <th class="text-center">User name</th>
