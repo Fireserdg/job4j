@@ -9,43 +9,64 @@
 <html lang="en">
 <head>
     <title>Create User</title>
-    <style> .sub {background: #FFF5EE; color: #696969; font-size: 9pt;
-        font-weight: 600; border-radius: 10px;
-        padding: 5px 10px;
-        margin: 0;}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <%--<link rel="stylesheet" href="${pageContext.request.contextPath}/style/list.css">--%>
 </head>
-<body>
-<div style="text-align: center">
-<h2>Create User</h2>
+<body style="background-color: #FAEBD7">
+<div class="container text-center">
+    <h2 class="text-primary">Create User</h2>
     <form action="${pageContext.servletContext.contextPath}\start" method="POST">
         <input type="hidden" name="action" value="add"/>
-        <label>
-            User name:<input type="text" name="name" required/>
-            <br>
-            User login:<input type="text" name="login" required/>
-            <br>
-            User password:<input type="password" name="password" required/>
-            <br>
-            User email:<input type="text" name="email" required/>
-            <br>
+        <div class="form-group">
+            <label for="name">
+                User name:
+            </label>
+            <input type="text" name="name" id="name" required/>
+        </div>
+        <div class="form-group">
+            <label for="login">
+                User login:
+            </label>
+            <input type="text" name="login" id="login" required/>
+        </div>
+        <div class="form-group">
+            <label for="password">
+                User password:
+            </label>
+            <input type="password" name="password" id="password" required/>
+        </div>
+        <div class="form-group">
+            <label for="email">
+                User email:
+            </label>
+            <input type="text" name="email" id="email" required/>
+        </div>
+        <div class="form-group">
             <c:if test="${sessionScope.role == 'ADMIN'}">
-            Please select role:
-            <select name="role">
-                <option value="ADMIN">Administrator</option>
-                <option value="USER">User</option>
-            </select>
+                <label for="role">
+                    Please select role:
+                </label>
+                <select name="role" id="role">
+                    <option value="ADMIN">Administrator</option>
+                    <option value="USER">User</option>
+                </select>
             </c:if>
             <c:if test="${sessionScope.role == 'GUEST'}">
                 <input type="hidden" name="role" value="USER"/>
             </c:if>
-        </label>
-        <br>
-        <input type="submit" value="Submit" class="sub"/>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary"/>
+        </div>
     </form>
-    <form action="${pageContext.servletContext.contextPath}\start" method="GET">
-        <input type="submit" value="Back" class="sub"/>
-    </form>
+    <div>
+        <form action="${pageContext.servletContext.contextPath}\start" method="GET">
+            <input type="submit" value="Back" class="btn btn-primary"/>
+        </form>
+    </div>
 </div>
 
 </body>
