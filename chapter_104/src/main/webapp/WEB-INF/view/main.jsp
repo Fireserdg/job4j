@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript"><%@include file="/WEB-INF/scripts/mainPage.js"%></script>
 </head>
 <body style="background-color: #FAEBD7">
 <div class="container text-center">
@@ -22,7 +23,6 @@
         Please selected action.
     </h4>
 </div>
-
 <div class="container text-center">
     <c:if test="${sessionScope.role == 'ADMIN'}">
         <form action="${pageContext.servletContext.contextPath}/action/list" method="GET">
@@ -34,7 +34,6 @@
             </div>
         </form>
     </c:if>
-
     <form action="${pageContext.servletContext.contextPath}/action/edit" method="GET">
         <input type="hidden" name="id" value="${sessionScope.id}">
         <div class="form-group">
@@ -44,15 +43,14 @@
             <input type="submit" value="Update" id="update" class="btn btn-primary btn-sm"/>
         </div>
     </form>
-    <c:if test="${sessionScope.role == 'USER'}">
-        <form action="${pageContext.servletContext.contextPath}/action/main" method="POST">
-            <input type="hidden" name='action' value="delete"/>
-            <input type="hidden" name='id' value="${sessionScope.id}"/>
-            <div class="form-group">
-                <input type="submit" value="Delete account" class="btn btn-primary btn-sm"/>
-            </div>
-        </form>
-    </c:if>
+    <form>
+        <input type="hidden" name='action' id="action" value="delete"/>
+        <input type="hidden" name='id' value="${sessionScope.id}"/>
+        <div class="form-group">
+            <input type="button" value="Delete account"
+                   class="btn btn-primary btn-sm" onclick="deleteUser(${sessionScope.id})"/>
+        </div>
+    </form>
     <form action="${pageContext.servletContext.contextPath}/action/logout" method="GET">
         <div class="form-group">
             <input type="submit" value="End sessions" class="btn btn-primary btn-sm"/>

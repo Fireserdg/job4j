@@ -16,12 +16,15 @@
 <body style="background-color: #FAEBD7">
 <div class="container" style="text-align: center">
     <h3 class="text-primary">Please enter you action</h3>
-
     <form action="${pageContext.servletContext.contextPath}/action/signing" method="GET">
-        <input type="submit" value="Authorization" class="btn btn-primary"/>
+        <div class="form-group">
+            <input type="submit" value="Authorization" class="btn btn-primary"/>
+        </div>
     </form>
     <form action="${pageContext.servletContext.contextPath}/create" method="GET">
+        <div class="form-group">
         <input type="submit" value="Registration" class="btn btn-primary"/>
+        </div>
     </form>
 </div>
 </body>

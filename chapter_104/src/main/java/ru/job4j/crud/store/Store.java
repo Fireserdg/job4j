@@ -3,6 +3,7 @@ package ru.job4j.crud.store;
 import ru.job4j.crud.models.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Store.
@@ -44,4 +45,19 @@ public interface Store<T> {
      * @return true if user exist.
      */
     T findById(final String id);
+
+    /**
+     * Get country
+     *
+     * @return map of country
+     */
+    Map<String, String> getCountry();
+
+    /**
+     * Get city
+     *
+     * @param id country id
+     * @return list of country
+     */
+    List<String> getCity(String id);
 }

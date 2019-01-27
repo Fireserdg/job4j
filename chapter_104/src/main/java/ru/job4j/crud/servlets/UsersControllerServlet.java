@@ -1,5 +1,8 @@
 package ru.job4j.crud.servlets;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import ru.job4j.crud.DispatchPattern;
 import ru.job4j.crud.UserIdException;
 import ru.job4j.crud.UserLoginException;
@@ -11,7 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -37,11 +44,16 @@ public class UsersControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
-        User user = ValidateService.getInstance().findById(
-                (String) session.getAttribute("id"));
-        session.setAttribute("name", user.getName());
-        session.setAttribute("role", user.getRole());
-        req.getRequestDispatcher("/WEB-INF/view/main.jsp").forward(req, resp);
+        try {
+            User user = ValidateService.getInstance().findById(
+                    (String) session.getAttribute("id"));
+            session.setAttribute("name", user.getName());
+            session.setAttribute("role", user.getRole());
+            req.getRequestDispatcher("/WEB-INF/view/main.jsp").forward(req, resp);
+        } catch (UserIdException ex) {
+            req.getRequestDispatcher("/WEB-INF/view/enter.jsp").forward(req, resp);
+        }
+
     }
 
     /**
@@ -51,24 +63,59 @@ public class UsersControllerServlet extends HttpServlet {
      * @throws IOException IO exception.
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/json");
+        resp.setCharacterEncoding("UTF-8");
+        BufferedReader reader = req.getReader();
+        StringBuilder sb = new StringBuilder();
+        String rst;
+        while ((rst = reader.readLine()) != null) {
+            sb.append(rst);
+        }
+        reader.close();
+        PrintWriter printWriter = resp.getWriter();
+        printWriter.append(getMessage(getParameter(sb.toString())));
+        printWriter.flush();
+    }
+
+    /**
+     * Get parameter from request
+     * @param param parameter
+     * @return list values
+     * @throws IOException exception
+     */
+    private List<String> getParameter(String param) throws IOException {
+        JsonParser parser  = new JsonFactory().createParser(param);
+        List<String> list = new ArrayList<>();
+        while (!parser.isClosed()) {
+            JsonToken jsonToken = parser.nextToken();
+            if (JsonToken.VALUE_STRING.equals(jsonToken)) {
+                String value = parser.getValueAsString();
+                list.add(value);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Get message about operation
+     *
+     * @param values values request parameters
+     * @return message
+     */
+    private String getMessage(List<String> values) {
+        String msg;
         try {
-            String msg = this.dispatch.init().sent(
-                    () -> req.getParameterMap().values().stream()
-                    .map(n -> n[0] == null ? "" : n[0].replace("<", "&lt;")
-                    .replace(">", "&gt;")
-                    .replace("&", "&amp;")).collect(Collectors.toList()));
-            req.setAttribute("msg", msg);
-        } catch (UserLoginException | UserIdException exc) {
-            req.setAttribute("exc", exc.getMessage());
+            msg = this.dispatch.init().sent(() -> values.stream()
+                    .map(v -> v.replace(
+                    "<", "&lt;").
+                    replace(">", "&gt;").
+                    replace("&", "&amp;"))
+                    .collect(Collectors.toList()));
+        } catch (UserLoginException | UserIdException ex) {
+            msg = ex.getMessage();
         }
-        HttpSession session = req.getSession();
-        if (req.getParameter("action").equals("delete")
-                && req.getParameter("id").equals(session.getAttribute("id"))) {
-            req.setAttribute("exit", "YES");
-            session.invalidate();
-        }
-        req.getRequestDispatcher("/WEB-INF/view/answer.jsp").forward(req, resp);
+        return msg;
     }
 }

@@ -14,13 +14,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/style/list.css">
+    <script type="text/javascript"><%@include file="/WEB-INF/scripts/list.js"%></script>
 </head>
-
 <body style="background-color: #FFF9F8">
 <div class="container">
     <table class="table table-bordered" style="background-color: #FFF9F8">
-
         <h3 class="text-center">Current list of users</h3>
         <tr style="background-color: #FFE4C4">
             <th class="text-center">Id</th>
@@ -31,7 +29,6 @@
             <th class="text-center">Role</th>
             <th class="text-center">Actions</th>
         </tr>
-
         <c:if test="${users.size() == 0}">
             <tr>
                 <th>Empty</th>
@@ -56,18 +53,16 @@
                         <input type="hidden" name="id" value="${user.id}"/>
                         <input type="submit" class="btn btn-primary btn-sm" value="Update"/>
                     </form>
-                    <form action="${pageContext.servletContext.contextPath}/action/main" method="POST">
-                        <input type="hidden" name="action" value="delete"/>
-                        <input type="hidden" name="id" value="${user.id}"/>
-                        <input type="submit" class="btn btn-primary btn-sm" value="Delete"/>
+                    <form>
+                        <input type="hidden" name="action" id="action" value="delete"/>
+                        <input type="hidden" name="id" id="userId" value="${user.id}"/>
+                        <input type="button" class="btn btn-primary btn-sm" value="Delete" onclick="deleteUser(${user.id})"/>
                     </form>
                 </td>
             </tr>
         </c:forEach>
     </table>
 </div>
-
-
 <div class="container text-left">
     <p><form action="${pageContext.servletContext.contextPath}/create" method="GET">
     <input type="submit" value="Add user" class="btn btn-primary"/>
@@ -76,7 +71,6 @@
     <input type="submit" value="Back to main page" class="btn btn-primary"/>
 </form>
 </div>
-
 <div class="container text-left">
     <form action="${pageContext.servletContext.contextPath}/action/logout" method="GET">
         <input type="submit" value="End sessions" class="btn btn-primary"/>

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.job4j.crud.models.*;
 import ru.job4j.crud.store.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -54,7 +55,7 @@ public class ValidateService implements Validate {
         if (checkLogin(params[1])) {
             User result = STORE.add(new User(params[0], params[1],
                     params[2], params[3], System.currentTimeMillis(),
-                    Role.valueOf(params[4])));
+                    Role.valueOf(params[4]), params[5], params[6]));
             if (result != null) {
                 LOG.info(String.format(Message.MSG_ADD, params[0]));
                 return String.format(Message.MSG_ADD, params[0]);
@@ -77,7 +78,7 @@ public class ValidateService implements Validate {
                     () -> params[2].equals("") ? oldUser.getLogin() : params[2],
                     () -> params[3].equals("") ? oldUser.getPassword() : params[3],
                     () -> params[4].equals("") ? oldUser.getEmail() : params[4],
-                    oldUser.getCreate(), Role.valueOf(params[5])));
+                    oldUser.getCreate(), Role.valueOf(params[5]), params[6], params[7]));
             LOG.info(String.format(Message.MSG_UPDATE, params[1]));
             return String.format(Message.MSG_UPDATE, params[1]);
         }
@@ -115,6 +116,26 @@ public class ValidateService implements Validate {
             return user;
         }
         throw new UserIdException(String.format(Message.MSG_ID_NOT_EXIST, id));
+    }
+
+    /**
+     * Get country
+     * @return country
+     */
+    @Override
+    public Map<String, String> getCountry() {
+        return STORE.getCountry();
+    }
+
+    /**
+     * Get city by id
+     *
+     * @param id country id
+     * @return list of city
+     */
+    @Override
+    public List<String> getCity(String id) {
+        return STORE.getCity(id);
     }
 
     /**

@@ -39,7 +39,13 @@
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
         <!--<module name="LineLength"/>-->
         <module name="MethodLength"/>
-        <module name="ParameterNumber"/>
+        <!--Количество параметров в конструкторе (методе)-->
+        <!--<module name="ParameterNumber"/>-->
+        <!--<module name="ParameterNumber">-->
+            <!--<property name="id" value="maxParameterNumber"/>-->
+            <!--<property name="max" value="3"/>-->
+            <!--<property name="tokens" value="METHOD_DEF"/>-->
+        <!--</module>-->
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->

@@ -13,7 +13,7 @@
        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
      </properties>
 
-<dependencies>
+    <dependencies>
     <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-all</artifactId>
@@ -75,6 +75,39 @@
         <module>chapter_103</module>
         <module>chapter_104</module>
     </modules>
+    <!--Профили для liquibase-->
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <db.url>jdbc:postgresql://127.0.0.1:5432/postgres</db.url>
+                <db.username>postgres</db.username>
+                <db.password>7313984</db.password>
+                <db.driver>org.postgresql.Driver</db.driver>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <db.url>jdbc:postgresql://127.0.0.1:5432/postgres</db.url>
+                <db.username>postgres</db.username>
+                <db.password>7313984</db.password>
+                <db.driver>org.postgresql.Driver</db.driver>
+            </properties>
+        </profile>
+        <profile>
+            <id>travis</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <db.url>jdbc:postgresql://127.0.0.1:5432/postgres</db.url>
+                <db.username>postgres</db.username>
+                <db.password></db.password>
+                <db.driver>org.postgresql.Driver</db.driver>
+            </properties>
+        </profile>
+    </profiles>
 <build>
     <plugins>
         <plugin>

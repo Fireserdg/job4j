@@ -16,7 +16,8 @@ notifications:
     on_success: never # default: change
     on_failure: always # default: always
 # Разворачиваем базу данных
+
 services:
   - postgresql
-before_script:
-  - psql -c 'create database tracker;' -U postgres
+before_install:
+- psql -c 'create database tracker;' -U postgres

@@ -26,9 +26,26 @@ public class ValidateStub implements Validate {
     private final Map<String, User> store = new HashMap<>();
 
     /**
+     * Container for country
+     */
+    private final Map<String, String> country = new HashMap<>();
+
+    /**
+     * Container for city
+     */
+    private final Map<String, List<String>> city = new HashMap<>();
+
+    /**
      * Count for get id.
      */
     private int id = 1;
+
+    /**
+     * Constructor
+     */
+    public ValidateStub() {
+        init();
+    }
 
     /**
      * Add user.
@@ -40,7 +57,7 @@ public class ValidateStub implements Validate {
         if (checkLogin(params[1])) {
             User user = new User(params[0], params[1],
                     params[2], params[3], System.currentTimeMillis(),
-                    Role.valueOf(params[4]));
+                    Role.valueOf(params[4]), params[5], params[6]);
             user.setId(String.valueOf(id++));
             user = this.store.putIfAbsent(user.getId(), user);
             if (user == null) {
@@ -66,7 +83,7 @@ public class ValidateStub implements Validate {
                     () -> params[2].equals("") ? oldUser.getLogin() : params[2],
                     () -> params[3].equals("") ? oldUser.getPassword() : params[3],
                     () -> params[4].equals("") ? oldUser.getEmail() : params[4],
-                    oldUser.getCreate(), Role.valueOf(params[5])));
+                    oldUser.getCreate(), Role.valueOf(params[5]), params[6], params[7]));
             LOG.info(String.format(Message.MSG_UPDATE, params[1]));
             return String.format(Message.MSG_UPDATE, params[1]);
         }
@@ -142,5 +159,37 @@ public class ValidateStub implements Validate {
     public Optional<User> isCredentials(String login, String password) {
         return this.store.values().stream().filter(user -> user.getLogin().equals(login)
                 && user.getPassword().equals(password)).findFirst();
+    }
+
+    /**
+     * Get country
+     *
+     * @return map of country
+     */
+    @Override
+    public Map<String, String> getCountry() {
+        return this.country;
+    }
+
+    /**
+     * Get city
+     *
+     * @param id country id
+     * @return list of country
+     */
+    @Override
+    public List<String> getCity(String id) {
+        return new ArrayList<>(this.city.get(id));
+    }
+
+    /**
+     * Init country and city
+     *
+     */
+    private void init() {
+        country.put("1", "Russia");
+        country.put("2", "USA");
+        city.put("1", Arrays.asList("Moscow", "Tver", "Kazan", "Voronezh"));
+        city.put("2", Arrays.asList("Denver", "Boston", "New-York"));
     }
 }

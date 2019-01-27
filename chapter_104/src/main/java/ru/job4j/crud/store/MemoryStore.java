@@ -2,9 +2,7 @@ package ru.job4j.crud.store;
 
 import ru.job4j.crud.models.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,6 +26,16 @@ public class MemoryStore implements Store<User> {
     private final Map<String, User> users = new ConcurrentHashMap<>();
 
     /**
+     * Container for country
+     */
+    private final Map<String, String> country = new ConcurrentHashMap<>();
+
+    /**
+     * Container for city
+     */
+    private final Map<String, List<String>> city = new ConcurrentHashMap<>();
+
+    /**
      * Count for get id.
      */
     private final AtomicInteger counts = new AtomicInteger(1);
@@ -44,6 +52,7 @@ public class MemoryStore implements Store<User> {
      * Private constructor.
      */
     private MemoryStore() {
+        init();
     }
 
     /**
@@ -96,5 +105,39 @@ public class MemoryStore implements Store<User> {
     @Override
     public User findById(final String id) {
         return this.users.get(id);
+    }
+
+    /**
+     * Get country
+     *
+     * @return map of country
+     */
+    @Override
+    public Map<String, String> getCountry() {
+        return this.country;
+    }
+
+    /**
+     * Get city
+     *
+     * @param id country id
+     * @return return list of city
+     */
+    @Override
+    public List<String> getCity(String id) {
+        return new ArrayList<>(this.city.get(id));
+    }
+
+    /**
+     * Init coutry and city
+     *
+     */
+    private void init() {
+        country.put("1", "Russia");
+        country.put("2", "USA");
+        country.put("3", "France");
+        city.put("1", Arrays.asList("Moscow", "Tver", "Kazan", "Voronezh"));
+        city.put("2", Arrays.asList("Denver", "Boston", "New-York"));
+        city.put("3", Arrays.asList("Paris", "Marcel", "Bordo", "Lion"));
     }
 }

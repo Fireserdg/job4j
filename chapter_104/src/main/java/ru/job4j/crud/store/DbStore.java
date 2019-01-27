@@ -8,8 +8,7 @@ import ru.job4j.crud.models.Role;
 import ru.job4j.crud.models.User;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * DataBaseStore
@@ -89,17 +88,20 @@ public class DbStore implements Store<User> {
     public User add(User user) {
         try (Connection conn = SOURCE.getConnection();
              PreparedStatement statement
-                     = conn.prepareStatement(CONF.getValue("get.add"), Statement.RETURN_GENERATED_KEYS);
-             final ResultSet rs = statement.getGeneratedKeys()) {
+                     = conn.prepareStatement(CONF.getValue("get.add"), Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getName());
                 statement.setString(2, user.getLogin());
                 statement.setString(3, user.getPassword());
                 statement.setString(4, user.getEmail());
                 statement.setTimestamp(5, new Timestamp(user.getCreate()));
                 statement.setString(6, user.getRole().name());
+                statement.setString(7, user.getCountry());
+                statement.setString(8, user.getCity());
                 statement.executeUpdate();
-            if (rs.next()) {
-                user.setId(String.valueOf(rs.getString(1)));
+            try (final ResultSet rs = statement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    user.setId(String.valueOf(rs.getInt("id")));
+                }
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -122,7 +124,9 @@ public class DbStore implements Store<User> {
             statement.setString(3, user.getPassword());
             statement.setString(4, user.getEmail());
             statement.setString(5, user.getRole().name());
-            statement.setInt(6, Integer.valueOf(user.getId()));
+            statement.setString(6, user.getCountry());
+            statement.setString(7, user.getCity());
+            statement.setInt(8, Integer.valueOf(user.getId()));
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -191,6 +195,54 @@ public class DbStore implements Store<User> {
     }
 
     /**
+     * Get country
+     *
+     * @return map of country
+     */
+    @Override
+    public Map<String, String> getCountry() {
+        Map<String, String> map = new TreeMap<>();
+        try (Connection conn = SOURCE.getConnection();
+             Statement statement = conn.createStatement()) {
+            try (ResultSet rs = statement.executeQuery(
+                    CONF.getValue("get.getCountry"))) {
+                while (rs.next()) {
+                    map.put(String.valueOf(rs.getInt("id")),
+                            rs.getString("country_name"));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return map;
+    }
+
+    /**
+     * Get city
+     *
+     * @param id country id
+     * @return list of city
+     */
+    @Override
+    public List<String> getCity(String id) {
+        List<String> listCity = new ArrayList<>();
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement statement
+                     = conn.prepareStatement(CONF.getValue("get.getCity"))) {
+            statement.setInt(1, Integer.parseInt(id));
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                   listCity.add(rs.getString("city_name"));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return listCity;
+    }
+
+
+    /**
      * Create user.
      *
      * @param resultSet resultSet from statement.
@@ -198,13 +250,15 @@ public class DbStore implements Store<User> {
      * @throws SQLException If an error occurs.
      */
     private User createUser(ResultSet resultSet) throws SQLException {
-        String id = resultSet.getString(1);
-        String name = resultSet.getString(2);
-        String login = resultSet.getString(3);
-        String password = resultSet.getString(4);
-        String email = resultSet.getString(5);
-        Timestamp create = resultSet.getTimestamp(6);
-        Role role = Role.valueOf(resultSet.getString(7));
-        return new User(id, name, login, password, email, create.getTime(), role);
+        String id = resultSet.getString("id");
+        String name = resultSet.getString("name");
+        String login = resultSet.getString("login");
+        String password = resultSet.getString("password");
+        String email = resultSet.getString("email");
+        Timestamp create = resultSet.getTimestamp("create_date");
+        Role role = Role.valueOf(resultSet.getString("role"));
+        String country = resultSet.getString("country_name");
+        String city = resultSet.getString("city_name");
+        return new User(id, name, login, password, email, create.getTime(), role, country, city);
     }
 }

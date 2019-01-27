@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript"><%@include file="/WEB-INF/scripts/login.js"%></script>
 </head>
 <body style="background-color: #FAEBD7">
 <c:if test="${error != ''}">
@@ -23,21 +24,21 @@
     </c:if>
 <div class="container text-center">
     <h3 class="text-primary">User authorization</h3>
-    <form action="${pageContext.servletContext.contextPath}/action/signing" method="POST">
+    <form>
         <div class="form-group">
             <label for="login">
                 User login:
             </label>
-            <input type="text" name="login" id="login" placeholder="your login" required/>
+            <input type="text" name="login" id="login" placeholder="your login"/>
         </div>
         <div class="form-group">
             <label for="password">
                 User password:
             </label>
-            <input type="password" name="password" id="password" placeholder="your password" required/>
+            <input type="password" name="password" id="password" placeholder="your password"/>
         </div>
         <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-primary"/>
+            <input type="button" value="Submit" class="btn btn-primary" onclick="check()"/>
         </div>
     </form>
     <form action="${pageContext.servletContext.contextPath}/" method="GET">

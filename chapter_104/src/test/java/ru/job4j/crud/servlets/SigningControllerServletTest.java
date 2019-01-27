@@ -8,7 +8,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
@@ -36,12 +39,12 @@ public class SigningControllerServletTest {
     public void whenDoPostCheckLoginAndPassword() throws ServletException, IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
-        when(req.getParameter("login")).thenReturn("333");
-        when(req.getParameter("password")).thenReturn("111");
-        String path = "/WEB-INF/view/login.jsp";
-        RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        when(req.getRequestDispatcher(path)).thenReturn(dispatcher);
+        when(req.getParameter("login")).thenReturn("login");
+        when(req.getParameter("password")).thenReturn("123");
+        PrintWriter writer = mock(PrintWriter.class);
+        when(resp.getWriter()).thenReturn(writer);
+        HttpSession session = mock(HttpSession.class);
+        when(req.getSession()).thenReturn(session);
         new SigningControllerServlet().doPost(req, resp);
-        verify(dispatcher, times(1)).forward(req, resp);
     }
 }

@@ -55,20 +55,36 @@ public class User {
     private Role role;
 
     /**
+     * User country
+     */
+    private final String country;
+
+    /**
+     * User city
+     */
+    private final String city;
+
+    /**
      * Constructor for create user.
      * @param name user name.
      * @param login login.
      * @param email email.
      * @param create create.
+     * @param role user role.
+     * @param country country.
+     * @param city city.
      */
     public User(final String name, final String login, final String password,
-                final String email, final long create, Role role) {
+                final String email, final long create, Role role,
+                final String country, final String city) {
         this.name = name;
         this.login = login;
         this.password = password;
         this.email = email;
         this.create = create;
         this.role = role;
+        this.country = country;
+        this.city = city;
     }
 
     /**
@@ -77,11 +93,15 @@ public class User {
      * @param name user name.
      * @param login login.
      * @param email email.
-     * @param create create.
+     * @param create date.
+     * @param role role.
+     * @param country country.
+     * @param city city.
      */
     public User(final String id, final String name, final String login,
-                final String password, final String email, final long create, Role role) {
-        this(name, login, password, email, create, role);
+                final String password, final String email, final long create,
+                Role role, String country, String city) {
+        this(name, login, password, email, create, role, country, city);
         this.id = id;
     }
 
@@ -92,11 +112,16 @@ public class User {
      * @param login login.
      * @param email email.
      * @param create create.
+     * @param role user role.
+     * @param country country.
+     * @param city city.
      */
     public User(final String id, final Supplier<String> name,
                 final Supplier<String> login, final Supplier<String> password,
-                final Supplier<String> email, final long create, final Role role) {
-        this(id, name.get(), login.get(), password.get(), email.get(), create, role);
+                final Supplier<String> email, final long create,
+                final Role role, final String country, final String city) {
+        this(id, name.get(), login.get(), password.get(),
+                email.get(), create, role, country, city);
     }
 
     /**
@@ -178,6 +203,24 @@ public class User {
      */
     public Role getRole() {
         return this.role;
+    }
+
+    /**
+     * Get country
+     *
+     * @return country
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * Get city
+     *
+     * @return city
+     */
+    public String getCity() {
+        return city;
     }
 
     @Override

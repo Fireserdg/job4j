@@ -64,6 +64,4 @@ public class GuestServletTest {
         Mockito.verify(dispatcher).forward(req, resp);
         Mockito.verify(req, Mockito.never()).getSession();
     }
-
-
 }

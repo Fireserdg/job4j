@@ -101,6 +101,15 @@
         <url-pattern>/jsonServlet</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CountryAndCity</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.JsonUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CountryAndCity</servlet-name>
+        <url-pattern>/action/info</url-pattern>
+    </servlet-mapping>
+    <!--Filter-->
     <filter>
         <filter-name>AuthFilter</filter-name>
         <filter-class>ru.job4j.crud.AuthFilter</filter-class>

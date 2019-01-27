@@ -2,7 +2,6 @@ package ru.job4j.crud.servlets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -14,11 +13,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 /**
@@ -41,9 +39,12 @@ public class UsersServletTest {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
+        HttpSession session = mock(HttpSession.class);
+        when(req.getSession()).thenReturn(session);
+        when(session.getAttribute("id")).thenReturn("1");
         when(req.getRequestDispatcher(path)).thenReturn(dispatcher);
         new UsersServlet().doPost(req, resp);
-        Mockito.verify(dispatcher, times(1)).forward(req, resp);
-        Mockito.verify(req, never()).getSession();
+        verify(dispatcher, times(1)).forward(req, resp);
+        verify(req, times(1)).getSession();
     }
 }

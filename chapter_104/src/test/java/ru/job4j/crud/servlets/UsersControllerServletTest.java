@@ -1,5 +1,6 @@
 package ru.job4j.crud.servlets;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -9,6 +10,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import ru.job4j.crud.Validate;
 import ru.job4j.crud.ValidateService;
 import ru.job4j.crud.ValidateStub;
+import ru.job4j.crud.models.Role;
 import ru.job4j.crud.models.User;
 
 import javax.servlet.RequestDispatcher;
@@ -17,11 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
@@ -48,65 +50,62 @@ public class UsersControllerServletTest {
         Mockito.when(ValidateService.getInstance()).thenReturn(validate);
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
-        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        List<String[]> params = Arrays.asList(
-                new String[]{"action", "add"},
-                new String[]{"name", "Sergey"},
-                new String[]{"login", "login123"},
-                new String[]{"password", "123"},
-                new String[]{"email", "email@gmail.com"},
-                new String[]{"role", "USER"}
-        );
-        Map<String, String[]> value = params.stream().collect(
-                Collectors.toMap(attr -> attr[0],
-                        param -> new String[]{param[1]}, (
-                                v1, v2) -> v1, LinkedHashMap::new));
-        when(req.getParameterMap()).thenReturn(value);
-        when(req.getParameter("action")).thenReturn("add");
-        when(req.getRequestDispatcher("/WEB-INF/view/answer.jsp"))
-                .thenReturn(requestDispatcher);
+        BufferedReader reader = new BufferedReader(new StringReader(
+                getJsonAddUser()));
+        when(req.getReader()).thenReturn(reader);
+        PrintWriter writer = mock(PrintWriter.class);
+        when(resp.getWriter()).thenReturn(writer);
         new UsersControllerServlet().doPost(req, resp);
         List<User> users = validate.findAll();
-        verify(requestDispatcher).forward(req, resp);
-        verify(req, Mockito.times(1)).getSession();
-        assertThat(users.get(0).getName(), is("Sergey"));
-        assertThat(users.get(0).getLogin(), is("login123"));
-        when(req.getParameter("action")).thenReturn("update");
-        when(req.getRequestDispatcher("/WEB-INF/view/answer.jsp"))
-                .thenReturn(requestDispatcher);
-        params = Arrays.asList(
-                new String[]{"action", "update"},
-                new String[]{"id", "1"},
-                new String[]{"name", "Victor"},
-                new String[]{"login", "newLogin"},
-                new String[]{"password", "123"},
-                new String[]{"email", "newEmail@gmail.com"},
-                new String[]{"role", "USER"}
-        );
-        value = params.stream().collect(
-                Collectors.toMap(attr -> attr[0],
-                        param -> new String[]{param[1]}, (
-                                v1, v2) -> v1, LinkedHashMap::new));
-        when(req.getParameterMap()).thenReturn(value);
+        assertThat(users.get(0).getName(), is("Ivan"));
+        assertThat(users.get(0).getLogin(), is("login"));
+        assertThat(users.get(0).getCountry(), is("USA"));
+
+        reader = new BufferedReader(new StringReader(getJsonUpdateUser()));
+        when(req.getReader()).thenReturn(reader);
         new UsersControllerServlet().doPost(req, resp);
         users = validate.findAll();
-        assertThat(users.get(0).getName(), is("Victor"));
         assertThat(users.get(0).getLogin(), is("newLogin"));
+        assertThat(users.get(0).getEmail(), is("333@gmail.com"));
+        assertThat(users.get(0).getRole(), is(Role.ADMIN));
+
         HttpSession session = mock(HttpSession.class);
+        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
         when(req.getSession()).thenReturn(session);
         when(session.getAttribute("id")).thenReturn("1");
-        when(req.getRequestDispatcher("/WEB-INF/view/main.jsp")).thenReturn(requestDispatcher);
+        when(req.getRequestDispatcher("/WEB-INF/view/main.jsp"))
+                .thenReturn(requestDispatcher);
         new UsersControllerServlet().doGet(req, resp);
-        verify(requestDispatcher, Mockito.times(3)).forward(req, resp);
-        params = Arrays.asList(
-                new String[]{"action", "delete"},
-                new String[]{"id", "1"}
-        );
-        value = params.stream().collect(
-                Collectors.toMap(attr -> attr[0],
-                        param -> new String[]{param[1]}, (a, b) -> a, LinkedHashMap::new));
-        when(req.getParameterMap()).thenReturn(value);
+        verify(requestDispatcher, Mockito.times(1)).forward(req, resp);
+        String jsonDelete = "{\"action\" : \"delete\", \"id\" : \"1\"}";
+        reader = new BufferedReader(new StringReader(jsonDelete));
+        when(req.getReader()).thenReturn(reader);
         new UsersControllerServlet().doPost(req, resp);
         assertThat(validate.findAll().size(), is(0));
+    }
+
+    private String getJsonAddUser() {
+        return new StringJoiner(",", "{", "}")
+                .merge(new StringJoiner(":").add("\"action\"").add("\"add\""))
+                .merge(new StringJoiner(":").add("\"name\"").add("\"Ivan\""))
+                .merge(new StringJoiner(":").add("\"login\"").add("\"login\""))
+                .merge(new StringJoiner(":").add("\"password\"").add("\"123\""))
+                .merge(new StringJoiner(":").add("\"email\"").add("\"123@gmail.com\""))
+                .merge(new StringJoiner(":").add("\"role\"").add("\"USER\""))
+                .merge(new StringJoiner(":").add("\"country\"").add("\"USA\""))
+                .merge(new StringJoiner(":").add("\"city\"").add("\"New-York\"")).toString();
+    }
+
+    private String getJsonUpdateUser() {
+        return  new StringJoiner(",", "{", "}")
+                .merge(new StringJoiner(":").add("\"action\"").add("\"update\""))
+                .merge(new StringJoiner(":").add("\"id\"").add("\"1\""))
+                .merge(new StringJoiner(":").add("\"name\"").add("\"Ivan\""))
+                .merge(new StringJoiner(":").add("\"login\"").add("\"newLogin\""))
+                .merge(new StringJoiner(":").add("\"password\"").add("\"123\""))
+                .merge(new StringJoiner(":").add("\"email\"").add("\"333@gmail.com\""))
+                .merge(new StringJoiner(":").add("\"role\"").add("\"ADMIN\""))
+                .merge(new StringJoiner(":").add("\"country\"").add("\"USA\""))
+                .merge(new StringJoiner(":").add("\"city\"").add("\"New-York\"")).toString();
     }
 }

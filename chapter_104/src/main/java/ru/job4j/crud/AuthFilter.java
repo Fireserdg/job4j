@@ -2,9 +2,6 @@ package ru.job4j.crud;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.job4j.crud.models.Role;
-import ru.job4j.crud.models.User;
-import ru.job4j.crud.store.DbStore;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -29,11 +26,13 @@ public class AuthFilter implements Filter {
      */
     private static final Logger LOG = LoggerFactory.getLogger(AuthFilter.class);
 
+    /**
+     * Init filter
+     *
+     * @param filterConfig filterConfig
+     */
     @Override
     public void init(FilterConfig filterConfig) {
-        User admin = new User("admin", "login", "123", "email",
-                System.currentTimeMillis(), Role.ADMIN);
-        DbStore.getInstance().add(admin);
         LOG.info("Init Filter");
     }
 
@@ -44,13 +43,17 @@ public class AuthFilter implements Filter {
         HttpSession session = req.getSession();
         req.setCharacterEncoding("UTF-8");
         if (session.getAttribute("login") != null
-                || req.getRequestURI().matches(".*(/signing|/create)")) {
+                || req.getRequestURI().matches(".*(/signing|/create|/info)")) {
             filterChain.doFilter(request, response);
         } else {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
         }
     }
 
+    /**
+     * Filter destroy
+     *
+     */
     @Override
     public void destroy() {
         Enumeration<Driver> drivers = DriverManager.getDrivers();

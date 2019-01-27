@@ -19,7 +19,6 @@ function loadUsers() {
 
     });
 }
-
 function createUser() {
     var firstName = $('#fname');
     var lastName = $('#lname');

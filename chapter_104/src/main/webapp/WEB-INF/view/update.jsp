@@ -14,13 +14,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <%@include file="/WEB-INF/scripts/updateUser.jsp"%>
 </head>
 <body style="background-color: #FAEBD7">
 <div class="container text-center">
     <h4 class="text-primary">Update User</h4>
-    <form action="${pageContext.servletContext.contextPath}/action/main" method="POST">
-        <input type="hidden" name="action" value="update"/>
-        <input type="hidden" name='id' value="${user.id}"/>
+    <form>
+        <input type="hidden" name="action" id="action" value="update"/>
+        <input type="hidden" name='id' id="userId" value="${user.id}"/>
         <div class="form-group">
             <label for="name">
                 Please enter new name:
@@ -56,7 +57,21 @@
                 <option value="USER">User</option>
             </select>
         </div>
-        <input type="submit" value="submit" class="btn btn-primary"/>
+        <div class="form-group">
+            <label for="country">
+                Please select country:
+                <select name="country" id="country" onchange="getCity()">
+                </select>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="city">
+                Please select city:
+                <select name="city" id="city">
+                </select>
+            </label>
+        </div>
+        <input type="button" value="Submit" class="btn btn-primary" onclick="return createUser()"/>
     </form>
     <form action="${pageContext.servletContext.contextPath}/action/main" method="GET">
         <div class="form-group">

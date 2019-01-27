@@ -44,14 +44,16 @@ public class UserUpdateServletTest {
         HttpServletResponse resp = mock(HttpServletResponse.class);
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
         when(req.getRequestDispatcher(path)).thenReturn(dispatcher);
-        String[] addUser = {"nameUpdate", "login", "password", "email", "USER"};
+        String[] addUser = {"nameUpdate", "login", "password",
+                "email", "USER", "Russia", "Moscow"};
         validate.add(addUser);
         List<User> list = validate.findAll();
         final User user = list.stream().filter(
                 value -> value.getName().equals("nameUpdate")).findFirst().get();
         when(req.getParameter("id")).thenReturn(user.getId());
         new UserUpdateServlet().doPost(req, resp);
-        Mockito.verify(dispatcher, times(1)).forward(req, resp);
+        Mockito.verify(dispatcher, times(
+                1)).forward(req, resp);
         Mockito.verify(req, never()).getSession();
     }
 }

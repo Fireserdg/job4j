@@ -55,7 +55,8 @@ public class DbStoreTestMulti {
                     String.format("login.%s", count),
                     String.format("password.%s", count),
                     String.format("email%s@.gmail.com", count),
-                    System.currentTimeMillis(), Role.USER))
+                    System.currentTimeMillis(), Role.USER,
+                            "default", "default"))
             ).start();
         }
         Thread.sleep(1000);
@@ -69,7 +70,8 @@ public class DbStoreTestMulti {
                     String.format("UpdateLogin%s", countUp),
                     String.format("UpdatePassword%s", countUp),
                     String.format("UpdateEmail%s@.gmail.com", countUp),
-                    db.findById(String.valueOf(countUp)).getCreate(), Role.USER))
+                    db.findById(String.valueOf(countUp)).getCreate(), Role.USER,
+                    "default", "default"))
             ).start();
             new Thread(() -> db.delete(String.valueOf(countDel))).start();
         }

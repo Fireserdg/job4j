@@ -54,7 +54,8 @@ public class PersonTest {
         assertThat(one.equals(two), is(true));
         assertThat(oneHashCode == twoHashCode, is(true));
         Object user = new User("name", "login", "password",
-                "email", System.currentTimeMillis(), Role.USER);
+                "email", System.currentTimeMillis(), Role.USER,
+                "Russia", "Moscow");
         assertThat(one.equals(user), is(false));
         two = one;
         assertThat(one.equals(two), is(true));
