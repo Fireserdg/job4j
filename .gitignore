@@ -30,5 +30,6 @@ chapter_101/target/
 chapter_102/target/
 chapter_103/target/
 chapter_104/target/
+cinema/target/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

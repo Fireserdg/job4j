@@ -74,6 +74,7 @@
         <module>chapter_004</module>
         <module>chapter_103</module>
         <module>chapter_104</module>
+        <module>cinema</module>
     </modules>
     <!--Профили для liquibase-->
     <profiles>

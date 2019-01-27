@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS halls
+  (id SERIAL PRIMARY KEY, halls_name
+  VARCHAR(40) NOT NULL, country_id INTEGER REFERENCES country(id));
+
+CREATE TABLE IF NOT EXISTS accounts
+  (id SERIAL PRIMARY KEY, accounts_name
+  VARCHAR(40) NOT NULL);
