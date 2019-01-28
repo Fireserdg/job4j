@@ -9,7 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>chapter_104</artifactId>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
+    <modules>
+        <module>control_task</module>
+    </modules>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
