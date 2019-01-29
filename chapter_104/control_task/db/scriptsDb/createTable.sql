@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS halls
-  (id SERIAL PRIMARY KEY, halls_name
-  VARCHAR(40) NOT NULL, country_id INTEGER REFERENCES country(id));
+  (id SERIAL PRIMARY KEY, number_row
+  SMALLINT NOT NULL, number_seat SMALLINT NOT NULL);
 
 CREATE TABLE IF NOT EXISTS accounts
-  (id SERIAL PRIMARY KEY, accounts_name
-  VARCHAR(40) NOT NULL);
+  (id INTEGER PRIMARY KEY REFERENCES halls(id), user_name
+  VARCHAR(150) NOT NULL, phone_number VARCHAR(15) NOT NULL);
