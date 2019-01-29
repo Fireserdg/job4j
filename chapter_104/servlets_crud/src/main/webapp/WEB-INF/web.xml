@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>UserController</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.UsersControllerServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/action/main</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>UsersServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.UsersServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UsersServlet</servlet-name>
+        <url-pattern>/action/list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserCreateServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.UserCreateServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserCreateServlet</servlet-name>
+        <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.UserUpdateServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <url-pattern>/action/edit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Logout Session</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.LogoutSessionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Logout Session</servlet-name>
+        <url-pattern>/action/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LoginControllerServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.SigningControllerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginControllerServlet</servlet-name>
+        <url-pattern>/action/signing</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GuestServlet</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.GuestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GuestServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CountryAndCity</servlet-name>
+        <servlet-class>ru.job4j.crud.servlets.JsonUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CountryAndCity</servlet-name>
+        <url-pattern>/action/info</url-pattern>
+    </servlet-mapping>
+    <!--Filter-->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>ru.job4j.crud.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/action/*</url-pattern>
+    </filter-mapping>
+</web-app>
