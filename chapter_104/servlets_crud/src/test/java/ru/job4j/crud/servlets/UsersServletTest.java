@@ -3,6 +3,7 @@ package ru.job4j.crud.servlets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import ru.job4j.crud.Validate;
@@ -28,6 +29,7 @@ import static org.powermock.api.mockito.PowerMockito.mock;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ValidateService.class)
+@PowerMockIgnore({"javax.net.ssl.*", "javax.security.*"})
 public class UsersServletTest {
 
     @Test
