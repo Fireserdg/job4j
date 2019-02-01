@@ -3,6 +3,7 @@ package ru.job4j.persistence;
 import org.slf4j.*;
 import ru.job4j.config.Config;
 import ru.job4j.model.*;
+import ru.job4j.service.Service;
 
 import java.sql.*;
 import java.util.*;
@@ -100,11 +101,11 @@ public class DbStore implements Store {
                 ps.executeUpdate();
             }
             conn.commit();
-            LOG.info("Билет приобретен. Добавлен аккаунт {}", accounts);
-            msg = "Билет успешно приобретен";
+            LOG.info(Service.ADD_ACCOUNT, accounts);
+            msg = Service.BUY_HALL;
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
-            msg = "Билет уже купили";
+            msg = Service.NOT_HALL;
             try {
                 if (conn != null) {
                     conn.rollback();
@@ -150,19 +151,18 @@ public class DbStore implements Store {
      */
     @Override
     public Hall getHallsById(int id) {
-        Hall hall = null;
         try (Connection conn = DriverManager.getConnection(URL, DB_NAME, PASSWORD);
              PreparedStatement ps = conn.prepareStatement(CONFIG.getValue("db.getHallsById"))) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    hall = createHall(rs);
+                    return createHall(rs);
                 }
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        return hall;
+        throw new IllegalArgumentException(String.format("Hall with ID=%s not found", id));
     }
 
     /**

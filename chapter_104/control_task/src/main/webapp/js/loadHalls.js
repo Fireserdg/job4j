@@ -1,6 +1,6 @@
 var path = window.location.pathname.replace("index.html", "");
 $(loadHalls());
-setInterval(loadHalls, 10000);
+setInterval(loadHalls, 15000);
 function loadHalls() {
     $.ajax({
         type : "GET",
@@ -50,7 +50,7 @@ function getPlace() {
             data : {id : place},
             dataType : "text",
             success : function (data) {
-                alert("Вы выбрали место. Нажмите на кнопку ОК");
+                alert(data);
                 window.location.href = path.concat("pages/payment.html")
             }
         });

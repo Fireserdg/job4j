@@ -3,6 +3,7 @@ package ru.job4j.persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.model.*;
+import ru.job4j.service.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,11 +59,12 @@ public class MemoryStore implements Store {
     public String addAccount(Accounts accounts) {
         String msg;
         if (list.get(accounts.getId()) != null) {
-            msg = "Билет уже купили";
+            msg = Service.NOT_HALL;
+            LOG.info(Service.ADD_ACCOUNT, accounts);
         } else {
             list.put(accounts.getId(), accounts);
             halls.get(accounts.getId()).setBooked(true);
-            msg = "Билет успешно приобретен";
+            msg = Service.BUY_HALL;
         }
         return msg;
     }

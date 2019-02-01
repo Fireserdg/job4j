@@ -16,6 +16,10 @@ import java.util.Properties;
  */
 public class Config {
 
+    /**
+     * Contains instance config.
+     *
+     */
     private final static Config INSTANCE = new Config("cinema.properties");
 
     /**

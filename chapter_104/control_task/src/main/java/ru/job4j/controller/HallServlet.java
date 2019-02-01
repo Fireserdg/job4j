@@ -18,11 +18,15 @@ import java.util.*;
  * @since 29.01.19
  */
 public class HallServlet extends HttpServlet {
+
     /**
      * Contains logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(HallServlet.class);
 
+    /**
+     * Contains service.
+     */
     private static final Service SERVICE = HallService.getInstance();
 
     /**
@@ -49,28 +53,26 @@ public class HallServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UtF-8");
+        resp.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
+        PrintWriter writer = resp.getWriter();
         if (req.getParameter("action") != null) {
             Hall hall = SERVICE.getHallsById(
                     Integer.parseInt((String) session.getAttribute("id")));
-            PrintWriter pw = resp.getWriter();
-            new ObjectMapper().writeValue(pw, hall);
+            new ObjectMapper().writeValue(writer, hall);
             session.invalidate();
-            pw.flush();
+            writer.flush();
         } else if (req.getParameter("id") != null) {
             String id = req.getParameter("id");
             session.setAttribute("id", id);
-            LOG.info("id=" + id);
+            writer.append(Service.MESSAGE);
+            writer.flush();
         } else {
             BufferedReader reader = req.getReader();
-            String s = reader.readLine();
+            Accounts accounts = new ObjectMapper().readValue(reader.readLine(), Accounts.class);
+            writer.append(SERVICE.addAccount(accounts));
             reader.close();
-            Accounts accounts = new ObjectMapper().readValue(s, Accounts.class);
-            String s1 = SERVICE.addAccount(accounts);
-            PrintWriter pr = resp.getWriter();
-            pr.append(s1).flush();
-            //Решить с сессией или переехать в фильтр или что то типа Диспатч паттерна сделать.
+            writer.flush();
         }
     }
 

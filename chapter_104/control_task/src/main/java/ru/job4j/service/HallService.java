@@ -1,5 +1,7 @@
 package ru.job4j.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.model.*;
 import ru.job4j.persistence.*;
 
@@ -13,6 +15,11 @@ import java.util.*;
  * @since 29.01.19
  */
 public class HallService implements Service {
+
+    /**
+     * Contains logger.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(HallService.class);
 
     /**
      * Contains service.
@@ -75,8 +82,13 @@ public class HallService implements Service {
      */
     @Override
     public Hall getHallsById(int id) {
-        return STORE.getHallsById(id);
+        Hall hall;
+        try {
+            hall =  STORE.getHallsById(id);
+        } catch (IllegalArgumentException ex) {
+            LOG.error(ex.getMessage(), ex);
+            hall = new Hall(-1, 0, 0, 0, true);
+        }
+        return hall;
     }
-
-
 }

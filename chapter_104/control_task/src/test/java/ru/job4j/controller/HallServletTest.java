@@ -53,6 +53,8 @@ public class HallServletTest {
         HttpSession session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);
         when(request.getParameter("id")).thenReturn("22");
+        StringWriter writer = new StringWriter();
+        when(response.getWriter()).thenReturn(new PrintWriter(writer));
         new HallServlet().doPost(request, response);
         verify(session, times(1)).setAttribute("id", "22");
     }

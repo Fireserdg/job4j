@@ -26,12 +26,21 @@ public class Accounts {
      */
     private String phone;
 
+    /**
+     * Constructor accounts.
+     * @param id account id.
+     * @param username username.
+     * @param phone user phone.
+     */
     public Accounts(int id, String username, String phone) {
         this.username = username;
         this.phone = phone;
         this.id = id;
     }
 
+    /**
+     * Default constructor
+     */
     public Accounts() {
     }
 
@@ -58,30 +67,6 @@ public class Accounts {
     public String getPhone() {
         return phone;
     }
-
-//    /**
-//     * Set account id.
-//     * @param id account id.
-//     */
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    /**
-//     * Set username.
-//     * @param username username.
-//     */
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
-//
-//    /**
-//     * Set user phone.
-//     * @param phone user phone.
-//     */
-//    public void setPhone(String phone) {
-//        this.phone = phone;
-//    }
 
     /**
      * Equals between objects.

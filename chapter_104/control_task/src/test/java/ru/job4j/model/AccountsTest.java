@@ -30,8 +30,7 @@ public class AccountsTest {
                 "Petrov Alex Nikolaevich", "+7(111)2223344");
         Accounts theSame = new Accounts(23,
                 "Petrov Alex Nikolaevich", "+7(111)2223344");
-        Accounts other = new Accounts(23,
-                "Ivanov Ivan Nikolaevich", "+7(222)2223344");
+        Accounts other = new Accounts();
         assertThat(accounts.equals(theSame), is(true));
         assertThat(accounts.equals(other), is(false));
         assertThat(accounts.hashCode() == theSame.hashCode(), is(true));
