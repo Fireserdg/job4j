@@ -1,6 +1,7 @@
 package ru.job4j.persistence;
 
 import ru.job4j.model.Accounts;
+import ru.job4j.model.Hall;
 
 import java.util.List;
 
@@ -11,12 +12,25 @@ import java.util.List;
  * @version 1.0.
  * @since 29.01.19
  */
-public interface Store<T> {
+public interface Store {
 
-    void addAccount(Accounts accounts);
+    /**
+     * Add account.
+     * @param accounts account.
+     * @return message about operation.
+     */
+    String addAccount(Accounts accounts);
 
-    void removeAccount(String id);
+    /**
+     * List of halls.
+     * @return list of halls.
+     */
+    List<Hall> getHalls();
 
-    List<T> getHalls();
-
+    /**
+     * Get hall by id.
+     * @param id hall id.
+     * @return Hall
+     */
+    Hall getHallsById(int id);
 }

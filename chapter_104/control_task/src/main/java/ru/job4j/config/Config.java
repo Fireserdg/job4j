@@ -16,7 +16,7 @@ import java.util.Properties;
  */
 public class Config {
 
-    private final static Config INSTANCE = new Config("app.properties");
+    private final static Config INSTANCE = new Config("cinema.properties");
 
     /**
      * Contains properties.

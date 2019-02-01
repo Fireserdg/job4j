@@ -1,9 +1,7 @@
 package ru.job4j.service;
 
-import ru.job4j.model.Accounts;
-import ru.job4j.model.Halls;
-
-import java.util.List;
+import ru.job4j.model.*;
+import java.util.*;
 
 /**
  * Service
@@ -14,9 +12,23 @@ import java.util.List;
  */
 public interface Service {
 
-    void addAccount(Accounts accounts);
+    /**
+     * Add account.
+     * @param accounts account.
+     * @return message about operation.
+     */
+    String addAccount(Accounts accounts);
 
-    void removeAccount(String id);
+    /**
+     * Map halls.
+     * @return map halls.
+     */
+    Map<Integer, List<Hall>> getHalls();
 
-    List<Halls> getHalls();
+    /**
+     * Get hall by id.
+     * @param id hall id.
+     * @return Hall
+     */
+    Hall getHallsById(int id);
 }

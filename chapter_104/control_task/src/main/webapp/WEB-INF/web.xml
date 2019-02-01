@@ -14,6 +14,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Halls</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/hall</url-pattern>
     </servlet-mapping>
 </web-app>

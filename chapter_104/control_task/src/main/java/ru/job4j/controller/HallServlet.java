@@ -1,25 +1,14 @@
 package ru.job4j.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.job4j.model.Accounts;
-import ru.job4j.model.Halls;
-import ru.job4j.service.HallService;
-import ru.job4j.service.Service;
+import org.slf4j.*;
+import ru.job4j.model.*;
+import ru.job4j.service.*;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.List;
+import javax.servlet.http.*;
+import java.io.*;
+import java.sql.*;
+import java.util.*;
 
 /**
  * Hall servlet for do action from cinema
@@ -34,31 +23,60 @@ public class HallServlet extends HttpServlet {
      */
     private static final Logger LOG = LoggerFactory.getLogger(HallServlet.class);
 
+    private static final Service SERVICE = HallService.getInstance();
+
+    /**
+     * Get Request processing.
+     * @param req request from client.
+     * @param resp response for client.
+     * @throws IOException IO exception.
+     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("json");
         Service service = HallService.getInstance();
-        List<Halls> halls = service.getHalls();
         PrintWriter writer = resp.getWriter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(writer, halls);
+        new ObjectMapper().writeValue(writer, service.getHalls());
         writer.flush();
     }
 
+    /**
+     * Post Request processing
+     * @param req request from client.
+     * @param resp response for client.
+     * @throws IOException IO exception.
+     */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        BufferedReader reader = req.getReader();
-        String value;
-        StringBuilder sb = new StringBuilder();
-        while ((value = reader.readLine()) != null) {
-            sb.append(value);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UtF-8");
+        HttpSession session = req.getSession();
+        if (req.getParameter("action") != null) {
+            Hall hall = SERVICE.getHallsById(
+                    Integer.parseInt((String) session.getAttribute("id")));
+            PrintWriter pw = resp.getWriter();
+            new ObjectMapper().writeValue(pw, hall);
+            session.invalidate();
+            pw.flush();
+        } else if (req.getParameter("id") != null) {
+            String id = req.getParameter("id");
+            session.setAttribute("id", id);
+            LOG.info("id=" + id);
+        } else {
+            BufferedReader reader = req.getReader();
+            String s = reader.readLine();
+            reader.close();
+            Accounts accounts = new ObjectMapper().readValue(s, Accounts.class);
+            String s1 = SERVICE.addAccount(accounts);
+            PrintWriter pr = resp.getWriter();
+            pr.append(s1).flush();
+            //Решить с сессией или переехать в фильтр или что то типа Диспатч паттерна сделать.
         }
-        ObjectMapper objectMapper = new ObjectMapper();
-        Accounts account = objectMapper.readValue(sb.toString(), Accounts.class);
-        Service service = HallService.getInstance();
-        service.addAccount(account);
     }
 
+    /**
+     * Destroy servlet
+     */
     @Override
     public void destroy() {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -66,11 +84,11 @@ public class HallServlet extends HttpServlet {
             Driver element = drivers.nextElement();
             try {
                 DriverManager.deregisterDriver(element);
-                LOG.info("Deregister JDBC driver {}", element);
+                LOG.info("Deregister JDBC driver {}", element.getClass().getSimpleName());
             } catch (SQLException e) {
                 LOG.error("Error deregister JDBC driver {}", element, e, e.getMessage());
             }
         }
-        LOG.info("Filter destroy");
+        LOG.info("Servlet destroy");
     }
 }

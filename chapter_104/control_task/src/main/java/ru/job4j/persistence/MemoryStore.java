@@ -2,9 +2,10 @@ package ru.job4j.persistence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.job4j.model.Accounts;
+import ru.job4j.model.*;
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Memory store
@@ -13,33 +14,85 @@ import java.util.List;
  * @version 1.0.
  * @since 29.01.19
  */
-public class MemoryStore implements Store<Accounts> {
+public class MemoryStore implements Store {
     /**
      * Contains logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(MemoryStore.class);
 
+    /**
+     * Contains halls halls.
+     */
+    private final Map<Integer, Hall> halls = new ConcurrentHashMap<>();
+
+    /**
+     * Contains halls accounts.
+     */
+    private final Map<Integer, Accounts> list = new ConcurrentHashMap<>();
+
+    /**
+     * Instance Memory store.
+     */
     private static final MemoryStore STORE = new MemoryStore();
 
+    /**
+     * Constructor MemoryStore.
+     */
     private MemoryStore() {
     }
 
+    /**
+     * Get instance store.
+     * @return instance store.
+     */
     public static MemoryStore getInstance() {
         return STORE;
     }
 
+    /**
+     * Add account.
+     * @param accounts account.
+     * @return message about operation.
+     */
     @Override
-    public void addAccount(Accounts accounts) {
-
+    public String addAccount(Accounts accounts) {
+        String msg;
+        if (list.get(accounts.getId()) != null) {
+            msg = "Билет уже купили";
+        } else {
+            list.put(accounts.getId(), accounts);
+            halls.get(accounts.getId()).setBooked(true);
+            msg = "Билет успешно приобретен";
+        }
+        return msg;
     }
 
+    /**
+     * List of halls.
+     * @return halls of halls.
+     */
     @Override
-    public void removeAccount(String id) {
-
+    public List<Hall> getHalls() {
+        return new ArrayList<>(this.halls.values());
     }
 
+    /**
+     * Get hall by id.
+     * @param id hall id.
+     * @return Hall
+     */
     @Override
-    public List<Accounts> getHalls() {
-        return null;
+    public Hall getHallsById(int id) {
+        return halls.get(id);
+    }
+
+    /**
+     * Add hall.
+     *
+     * @param hall hall.
+     */
+    public void addHall(Hall hall) {
+        this.halls.putIfAbsent(hall.getId(), hall);
+        LOG.info("Add hall: {}", hall);
     }
 }
