@@ -31,16 +31,45 @@ public class ProfilesTest {
         Profile first = new Profile(new Address("Moscow", "Lenina str", 2, 45));
         Profile second = new Profile(new Address("Omsk", "Pushkina str", 4, 100));
         Profile third = new Profile(new Address("Tver", "Gorky str", 3, 22));
-        profiles = Arrays.asList(first, second, third);
+        Profile fourth = new Profile(new Address("Anapa", "Nikolaevskay str", 5, 44));
+        Profile fifth = new Profile(new Address("Omsk", "Pushkina str", 4, 100));
+        profiles = Arrays.asList(first, second, third, fourth, fifth);
     }
 
     @Test
     public void whenGetListOfAddressFromListOfProfiles() {
         List<Address> list = new Profiles().collect(profiles);
-        assertThat(list.size(), is(3));
+        assertThat(list.size(), is(5));
         assertThat(list.get(0).getHome(), is(2));
         assertThat(list.get(1).getCity(), is("Omsk"));
         assertThat(list.get(2).getApartment(), is(22));
-        assertThat(list.get(0).getStreet(), is("Lenina str"));
+        assertThat(list.get(3).getStreet(), is("Nikolaevskay str"));
+    }
+
+    @Test
+    public void whenGetListOfAddressSortedAndDistinctFromListOfProfiles() {
+        List<Address> list = new Profiles().collectDistinct(profiles);
+        assertThat(list.size(), is(4));
+        assertThat(list.get(0).getCity(), is("Anapa"));
+        assertThat(list.get(list.size() - 1).getCity(), is("Tver"));
+    }
+
+    @Test
+    public void whenUseEqualsAndHashcodeAndToStringForAddress() {
+        List<Address> list = new Profiles().collect(profiles);
+        assertThat(list.get(0).equals(list.get(1)), is(false));
+        Address address = list.get(4);
+        assertThat(list.get(1).equals(address), is(true));
+        assertThat(list.get(1).equals(list.get(2)), is(false));
+        assertThat(list.get(0).hashCode()
+                == list.get(1).hashCode(), is(false));
+        assertThat(list.get(1).hashCode()
+                == list.get(4).hashCode(), is(true));
+        address = null;
+        assertThat(list.get(1).equals(address), is(false));
+        address = list.get(1);
+        assertThat(list.get(1).equals(address), is(true));
+        assertThat(list.get(0).toString(), is(
+                "Address{city=Moscow, street=Lenina str, home=2, apartment=45"));
     }
 }
