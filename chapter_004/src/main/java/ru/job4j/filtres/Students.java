@@ -1,7 +1,7 @@
 package ru.job4j.filtres;
 
 /**
- * Students
+ * Student
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
