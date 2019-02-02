@@ -1,5 +1,5 @@
 /**
- * Convert list to map when use stream.
+ * Convert list to map and matrix to list when use stream.
  *
  * @author Sergey Filippov (serdg1984@yandex.ru)
  * @version $1.0$
