@@ -1,4 +1,7 @@
-package ru.job4j.tracker;
+package ru.job4j.action;
+
+import ru.job4j.input.Input;
+import ru.job4j.tracker.Tracker;
 
 /**
  * Реализация интерфейса UserAction.

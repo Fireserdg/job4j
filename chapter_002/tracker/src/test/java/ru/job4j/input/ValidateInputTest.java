@@ -1,4 +1,4 @@
-package ru.job4j.tracker;
+package ru.job4j.input;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Тестовый класс Validate проверяющий поведение пользователя.

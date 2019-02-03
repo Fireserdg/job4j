@@ -1,4 +1,6 @@
-package ru.job4j.tracker;
+package ru.job4j.input;
+
+import ru.job4j.exception.MenuOutException;
 
 import java.util.List;
 import java.util.Scanner;

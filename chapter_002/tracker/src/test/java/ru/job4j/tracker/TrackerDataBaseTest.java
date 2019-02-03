@@ -2,13 +2,17 @@ package ru.job4j.tracker;
 
 import org.junit.After;
 import org.junit.Test;
-import java.io.*;
+import ru.job4j.item.Item;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  *  Test tracker from database.

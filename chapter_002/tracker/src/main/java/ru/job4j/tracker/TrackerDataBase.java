@@ -1,9 +1,15 @@
 package ru.job4j.tracker;
 
-import org.slf4j.*;
-import java.io.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.job4j.item.Item;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.function.Predicate;
 
 /**
@@ -62,6 +68,11 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
      *
      */
     private void start() {
+        try {
+            Class.forName(prop.getProperty("db.driver"));
+        } catch (ClassNotFoundException e) {
+            LOG.error(e.getMessage(), e);
+        }
         try (final Connection connection = DriverManager.getConnection(prop.getProperty("db.url"),
                 prop.getProperty("db.name"), prop.getProperty("db.password"));
              final Statement st = connection.createStatement();
@@ -90,14 +101,15 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
     @Override
     public Item add(Item item)  {
         try (final PreparedStatement ps = conn.prepareStatement(
-                prop.getProperty("db.add"), Statement.RETURN_GENERATED_KEYS);
-             final ResultSet rs = ps.getGeneratedKeys()) {
+                prop.getProperty("db.add"), Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, item.getName());
             ps.setString(2, item.getDescription());
             ps.setTimestamp(3, new Timestamp(item.getCreate()));
             ps.executeUpdate();
-            if (rs.next()) {
-                item.setId(rs.getString(1));
+            try (final ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    item.setId(rs.getString(1));
+                }
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);

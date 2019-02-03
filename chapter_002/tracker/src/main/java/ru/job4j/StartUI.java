@@ -1,6 +1,12 @@
-package ru.job4j.tracker;
+package ru.job4j;
 
-import java.lang.String;
+import ru.job4j.input.ConsoleInput;
+import ru.job4j.input.Input;
+import ru.job4j.input.ValidateInput;
+import ru.job4j.tracker.MenuTracker;
+import ru.job4j.tracker.Tracker;
+import ru.job4j.tracker.TrackerDataBase;
+
 import java.util.function.Consumer;
 
 /**

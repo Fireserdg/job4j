@@ -1,8 +1,13 @@
-package ru.job4j.tracker;
+package ru.job4j;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.job4j.input.Input;
+import ru.job4j.input.StubInput;
+import ru.job4j.item.Item;
+import ru.job4j.tracker.Tracker;
+import ru.job4j.tracker.TrackerList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -10,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Тестовый класс проверяющий поведение пользователя и вывод на консоль.

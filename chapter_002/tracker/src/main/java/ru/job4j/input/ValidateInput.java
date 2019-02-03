@@ -1,6 +1,9 @@
-package ru.job4j.tracker;
+package ru.job4j.input;
+
+import ru.job4j.exception.MenuOutException;
 
 import java.util.List;
+
 /**
  * Класс для обработки исключительных ситуаций в Tracker.
  *
@@ -34,7 +37,7 @@ public class ValidateInput implements Input {
     /**
      * Метод реализующий проверку корректного ввода от пользователя.
      *
-     * @param question
+     * @param question Передаваемый вопрос.
      * @param range Диапозон пунктов меню.
      * @return Пункт меню.
      */

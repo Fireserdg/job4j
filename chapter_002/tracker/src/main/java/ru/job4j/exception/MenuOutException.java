@@ -1,4 +1,4 @@
-package ru.job4j.tracker;
+package ru.job4j.exception;
 /**
  * Класс принимающий сообщения об ошибках.
  *

@@ -2,12 +2,13 @@ package ru.job4j.tracker;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.job4j.item.Item;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Тестовый класс для проверки работы методов класса Tracker.
