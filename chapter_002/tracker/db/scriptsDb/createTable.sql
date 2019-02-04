@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS items
+(id SERIAL PRIMARY KEY, name VARCHAR(50), description VARCHAR(50), create_time TIMESTAMP);
+
+CREATE TABLE IF NOT EXISTS comments
+(id SERIAL PRIMARY KEY, comment TEXT, items_id INTEGER REFERENCES items(id));

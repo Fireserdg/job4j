@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.item.Item;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,7 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
      * Connect to the database.
      *
      */
-    private Connection conn = null;
+    private Connection conn;
 
     /**
      * Properties for use configuration.
@@ -44,52 +42,9 @@ public class TrackerDataBase implements Tracker, AutoCloseable {
      *
      * @param config configuration file.
      */
-    public TrackerDataBase(final String config) {
-        this.prop = new Properties();
-        this.loadConfig(config);
-        this.start();
-    }
-
-    /**
-     * Load config in properties.
-     * @param config configuration file.
-     */
-    private void loadConfig(final String config) {
-        ClassLoader loader = TrackerDataBase.class.getClassLoader();
-        try (final InputStream inputStream = loader.getResourceAsStream(config)) {
-            this.prop.load(inputStream);
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Get connection to the Database.
-     *
-     */
-    private void start() {
-        try {
-            Class.forName(prop.getProperty("db.driver"));
-        } catch (ClassNotFoundException e) {
-            LOG.error(e.getMessage(), e);
-        }
-        try (final Connection connection = DriverManager.getConnection(prop.getProperty("db.url"),
-                prop.getProperty("db.name"), prop.getProperty("db.password"));
-             final Statement st = connection.createStatement();
-             final ResultSet rs = st.executeQuery(prop.getProperty("db.check"))) {
-            if (rs.next() && rs.getString(1).equals("f")) {
-                st.execute(prop.getProperty("db.createDB"));
-            }
-            this.conn = DriverManager.getConnection(
-                    prop.getProperty("db.urlDB"), prop.getProperty(
-                            "db.name"), prop.getProperty("db.password"));
-            try (final Statement statement = this.conn.createStatement()) {
-                statement.execute(prop.getProperty("db.crTable"));
-                statement.execute(prop.getProperty("db.crTableComm"));
-            }
-        } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
-        }
+    public TrackerDataBase(final Properties config, Connection conn) {
+        this.prop = config;
+        this.conn = conn;
     }
 
     /**

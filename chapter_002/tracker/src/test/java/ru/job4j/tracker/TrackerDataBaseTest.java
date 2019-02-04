@@ -1,74 +1,43 @@
 package ru.job4j.tracker;
 
-import org.junit.After;
 import org.junit.Test;
+import ru.job4j.connection.ConnectionInit;
 import ru.job4j.item.Item;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.*;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
- *  Test tracker from database.
+ *  Test tracker database with rollback
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
- * @version $Id$.
- * @since 30.09.2018.
+ * @version 1.0.
+ * @since 04.02.19
  */
 public class TrackerDataBaseTest {
 
-    /**
-     * Properties for load configurations.
-     *
-     */
-    private final Properties prop = new Properties();
-
-    /**
-     * Create connection to database for drop database tracker.
-     *
-     */
-    @After
-    public void createConnect() {
-        ClassLoader loader = TrackerDataBase.class.getClassLoader();
-        try (final InputStream inputStream = loader.getResourceAsStream("config.properties")) {
-            this.prop.load(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (final Connection connection = DriverManager.getConnection(prop.getProperty("db.url"),
-                prop.getProperty("db.name"), prop.getProperty("db.password"));
-             final Statement statement = connection.createStatement()) {
-            statement.execute(prop.getProperty("db.dropDB"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Test
-    public void whenAddItemByTracker() {
-        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+    public void whenAddItemByTracker() throws SQLException {
+        try (TrackerDataBase tracker = new TrackerDataBase(ConnectionInit.getProperties(),
+                ConnectionInit.creteRollback(ConnectionInit.init()))) {
             Item first = new Item("test1", "testDescription1", System.currentTimeMillis());
             Item second = new Item("test2", "testDescription2", System.currentTimeMillis());
-            Item third = new Item("test3", "testDescription3", System.currentTimeMillis());
             tracker.add(first);
             tracker.add(second);
-            tracker.add(third);
             assertThat(tracker.findAll().get(0).getName(), is("test1"));
-            assertThat(tracker.findAll().get(1).getId(), is("2"));
-            assertThat(tracker.findAll().get(2).getDescription(), is("testDescription3"));
+            assertThat(tracker.findAll().get(1).getDescription(), is("testDescription2"));
         }
     }
 
     @Test
-    public void whenReplaceTheItem() {
-        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+    public void whenReplaceTheItem() throws SQLException {
+        try (TrackerDataBase tracker = new TrackerDataBase(ConnectionInit.getProperties(),
+                ConnectionInit.creteRollback(ConnectionInit.init()))) {
             Item first = new Item("test", "testDescription", System.currentTimeMillis());
             Item second = new Item("test1", "testDescription1", System.currentTimeMillis());
             Item third = new Item("test2", "testDescription2", System.currentTimeMillis());
@@ -84,8 +53,9 @@ public class TrackerDataBaseTest {
     }
 
     @Test
-    public void whenDeleteFromTrackerBD() {
-        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+    public void whenDeleteFromTrackerBD() throws SQLException {
+        try (TrackerDataBase tracker = new TrackerDataBase(ConnectionInit.getProperties(),
+                ConnectionInit.creteRollback(ConnectionInit.init()))) {
             Item first = new Item("test1", "testDescription1", System.currentTimeMillis());
             Item second = new Item("test2", "testDescription2", System.currentTimeMillis());
             Item third = new Item("test3", "testDescription3", System.currentTimeMillis());
@@ -100,22 +70,24 @@ public class TrackerDataBaseTest {
     }
 
     @Test
-    public void whenFindByIdToTrackerBD() {
-        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+    public void whenFindByIdToTrackerBD() throws SQLException {
+        try (TrackerDataBase tracker = new TrackerDataBase(ConnectionInit.getProperties(),
+                ConnectionInit.creteRollback(ConnectionInit.init()))) {
             long currentTime = System.currentTimeMillis();
             Item first = new Item("test1", "testDescription1", System.currentTimeMillis());
             Item second = new Item("test2", "testDescription2", currentTime);
             tracker.add(first);
             tracker.add(second);
             Item result = tracker.findById(id -> id.equals(tracker.findAll().get(1).getId()));
-            assertThat(result.getId(), is("2"));
+            assertThat(result.getName(), is("test2"));
             assertThat(new Timestamp(result.getCreate()).toString(), is(new Timestamp(currentTime).toString()));
         }
     }
 
     @Test
-    public void whenFindByNameThenGetResult() {
-        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+    public void whenFindByNameThenGetResult() throws SQLException {
+        try (TrackerDataBase tracker = new TrackerDataBase(ConnectionInit.getProperties(),
+                ConnectionInit.creteRollback(ConnectionInit.init()))) {
             Item first = new Item("item1", "testDescription1", System.currentTimeMillis());
             Item second = new Item("item2", "testDescription2", System.currentTimeMillis());
             Item third = new Item("item1", "testDescription3", System.currentTimeMillis());
@@ -129,8 +101,9 @@ public class TrackerDataBaseTest {
     }
 
     @Test
-    public void whenAddCommentsByItemThenGetResult() {
-        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+    public void whenAddCommentsByItemThenGetResult() throws SQLException {
+        try (TrackerDataBase tracker = new TrackerDataBase(ConnectionInit.getProperties(),
+                ConnectionInit.creteRollback(ConnectionInit.init()))) {
             Item first = new Item("item1", "testDescription1", System.currentTimeMillis());
             Item second = new Item("item2", "testDescription2", System.currentTimeMillis());
             tracker.add(first);

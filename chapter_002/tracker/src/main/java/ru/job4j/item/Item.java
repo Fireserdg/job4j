@@ -56,7 +56,7 @@ public class Item {
      *
      * @param name Item name.
      * @param description Item description.
-     * @param create create time Item.
+     * @param create init time Item.
      */
     public Item(String name, String description, long create) {
         this.name = name;
@@ -103,7 +103,7 @@ public class Item {
     /**
      * Get creating of item.
      *
-     * @return create time.
+     * @return init time.
      */
     public long getCreate() {
         return this.create;

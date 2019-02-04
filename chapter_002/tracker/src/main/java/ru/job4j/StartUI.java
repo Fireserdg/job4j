@@ -1,12 +1,12 @@
 package ru.job4j;
 
-import ru.job4j.input.ConsoleInput;
-import ru.job4j.input.Input;
-import ru.job4j.input.ValidateInput;
-import ru.job4j.tracker.MenuTracker;
-import ru.job4j.tracker.Tracker;
-import ru.job4j.tracker.TrackerDataBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.job4j.connection.ConnectionInit;
+import ru.job4j.input.*;
+import ru.job4j.tracker.*;
 
+import java.sql.SQLException;
 import java.util.function.Consumer;
 
 /**
@@ -17,6 +17,12 @@ import java.util.function.Consumer;
  * @since 08.05.2018.
  */
 public class StartUI {
+
+    /**
+     * Logger for get information about error.
+     *
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(StartUI.class);
 
     /**
      * Получение данных от пользователя.
@@ -70,8 +76,11 @@ public class StartUI {
      * @param args args
      */
     public static void main(String[] args) {
-        try (TrackerDataBase tracker = new TrackerDataBase("config.properties")) {
+        try (TrackerDataBase tracker = new TrackerDataBase(
+                ConnectionInit.getProperties(), ConnectionInit.init())) {
             new StartUI(new ValidateInput(new ConsoleInput()), tracker).init();
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
         }
     }
 }
