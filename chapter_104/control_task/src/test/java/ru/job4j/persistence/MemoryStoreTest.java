@@ -2,9 +2,7 @@ package ru.job4j.persistence;
 
 import org.junit.Test;
 import ru.job4j.model.Accounts;
-import ru.job4j.model.Hall;
-
-import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -19,13 +17,8 @@ import static org.junit.Assert.*;
 public class MemoryStoreTest {
 
     @Test
-    public void whenAddAccount() {
+    public void whenAddAccount() throws InterruptedException {
         MemoryStore store = MemoryStore.getInstance();
-        store.addHall(new Hall(11, 1, 1, 500, false));
-        store.addHall(new Hall(12, 1, 2, 700, false));
-        store.addHall(new Hall(13, 1, 3, 900, false));
-        List<Hall> halls = store.getHalls();
-        assertThat(halls.size(), is(3));
         String account = store.addAccount(
                 new Accounts(11, "Name", "phone"));
         String accountTheSameId = store.addAccount(
@@ -36,5 +29,17 @@ public class MemoryStoreTest {
         assertThat(accountTheSameId, is(second));
         assertThat(store.getHallsById(12).getPrice(), is(700));
         assertThat(store.getHallsById(11).isBooked(), is(true));
+        IntStream.range(0, 10).forEach(
+                value -> new Thread(() -> store.addAccount(
+                        new Accounts(12, String.format("name:%s", value),
+                                "phone"))).start());
+        IntStream.range(0, 10).forEach(
+                value -> new Thread(() -> store.addAccount(
+                        new Accounts(23, String.format("name:%s", value),
+                                "phone"))).start());
+        Thread.sleep(300);
+        assertThat(store.getHallsById(12).isBooked(), is(true));
+        assertThat(store.getHallsById(23).isBooked(), is(true));
+        assertThat(store.getAccounts().size(), is(3));
     }
 }

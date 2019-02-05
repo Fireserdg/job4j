@@ -1,14 +1,11 @@
 package ru.job4j.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.*;
 import ru.job4j.model.*;
 import ru.job4j.service.*;
 
 import javax.servlet.http.*;
 import java.io.*;
-import java.sql.*;
-import java.util.*;
 
 /**
  * Hall servlet for do action from cinema
@@ -20,14 +17,14 @@ import java.util.*;
 public class HallServlet extends HttpServlet {
 
     /**
-     * Contains logger.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(HallServlet.class);
-
-    /**
      * Contains service.
      */
     private static final Service SERVICE = HallService.getInstance();
+
+    /**
+     * Message about choose place.
+     */
+    private static final String MESSAGE = "Вы выбрали место. Нажмите на кнопку ОК";
 
     /**
      * Get Request processing.
@@ -37,7 +34,6 @@ public class HallServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("json");
         Service service = HallService.getInstance();
         PrintWriter writer = resp.getWriter();
         new ObjectMapper().writeValue(writer, service.getHalls());
@@ -52,8 +48,6 @@ public class HallServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
         PrintWriter writer = resp.getWriter();
         if (req.getParameter("action") != null) {
@@ -65,7 +59,7 @@ public class HallServlet extends HttpServlet {
         } else if (req.getParameter("id") != null) {
             String id = req.getParameter("id");
             session.setAttribute("id", id);
-            writer.append(Service.MESSAGE);
+            writer.append(MESSAGE);
             writer.flush();
         } else {
             BufferedReader reader = req.getReader();
@@ -74,23 +68,5 @@ public class HallServlet extends HttpServlet {
             reader.close();
             writer.flush();
         }
-    }
-
-    /**
-     * Destroy servlet
-     */
-    @Override
-    public void destroy() {
-        Enumeration<Driver> drivers = DriverManager.getDrivers();
-        while (drivers.hasMoreElements()) {
-            Driver element = drivers.nextElement();
-            try {
-                DriverManager.deregisterDriver(element);
-                LOG.info("Deregister JDBC driver {}", element.getClass().getSimpleName());
-            } catch (SQLException e) {
-                LOG.error("Error deregister JDBC driver {}", element, e, e.getMessage());
-            }
-        }
-        LOG.info("Servlet destroy");
     }
 }

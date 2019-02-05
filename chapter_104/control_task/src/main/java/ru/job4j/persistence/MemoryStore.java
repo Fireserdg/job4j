@@ -3,7 +3,6 @@ package ru.job4j.persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.model.*;
-import ru.job4j.service.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,7 +28,7 @@ public class MemoryStore implements Store {
     /**
      * Contains halls accounts.
      */
-    private final Map<Integer, Accounts> list = new ConcurrentHashMap<>();
+    private final Map<Integer, Accounts> userAccounts = new ConcurrentHashMap<>();
 
     /**
      * Instance Memory store.
@@ -40,6 +39,7 @@ public class MemoryStore implements Store {
      * Constructor MemoryStore.
      */
     private MemoryStore() {
+        initHalls();
     }
 
     /**
@@ -52,21 +52,17 @@ public class MemoryStore implements Store {
 
     /**
      * Add account.
-     * @param accounts account.
+     * @param account account.
      * @return message about operation.
      */
     @Override
-    public String addAccount(Accounts accounts) {
-        String msg;
-        if (list.get(accounts.getId()) != null) {
-            msg = Service.NOT_HALL;
-            LOG.info(Service.ADD_ACCOUNT, accounts);
-        } else {
-            list.put(accounts.getId(), accounts);
-            halls.get(accounts.getId()).setBooked(true);
-            msg = Service.BUY_HALL;
-        }
-        return msg;
+    public String addAccount(Accounts account) {
+        Accounts value = userAccounts.computeIfAbsent(
+                account.getId(), key -> {
+            halls.get(account.getId()).setBooked(true);
+            return account;
+        });
+        return getMessage(value, account);
     }
 
     /**
@@ -91,10 +87,42 @@ public class MemoryStore implements Store {
     /**
      * Add hall.
      *
-     * @param hall hall.
      */
-    public void addHall(Hall hall) {
-        this.halls.putIfAbsent(hall.getId(), hall);
-        LOG.info("Add hall: {}", hall);
+    public void initHalls() {
+        halls.put(11, new Hall(11, 1, 1, 500, false));
+        halls.put(12, new Hall(12, 1, 2, 700, false));
+        halls.put(13, new Hall(13, 1, 3, 900, false));
+        halls.put(21, new Hall(21, 2, 1, 900, false));
+        halls.put(22, new Hall(22, 2, 2, 900, false));
+        halls.put(23, new Hall(23, 2, 3, 900, false));
+        halls.put(31, new Hall(31, 3, 1, 900, false));
+        halls.put(32, new Hall(32, 3, 2, 900, false));
+        halls.put(33, new Hall(33, 3, 3, 900, false));
+    }
+
+    /**
+     * Get list of accounts.
+     *
+     * @return list accounts.
+     */
+    public List<Accounts> getAccounts() {
+        return new ArrayList<>(this.userAccounts.values());
+    }
+
+    /**
+     * Get message about operation by add account.
+     * @param resultPut result of adding an account to accounts.
+     * @param newAcc account we want to add.
+     * @return message.
+     */
+    private String getMessage(Accounts resultPut, Accounts newAcc) {
+        String msg;
+        if (Objects.equals(resultPut, newAcc)) {
+            msg = BUY_HALL;
+            LOG.info("Added a new account {}", newAcc);
+        } else {
+            msg = NOT_HALL;
+        }
+        return msg;
     }
 }

@@ -17,6 +17,15 @@
         <servlet-name>Halls</servlet-name>
         <url-pattern>/hall</url-pattern>
     </servlet-mapping>
+    <!--Filters-->
+    <filter>
+        <filter-name>HallsFilter</filter-name>
+        <filter-class>ru.job4j.filters.HallsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HallsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <!--Error page-->
     <error-page>
         <error-code>404</error-code>

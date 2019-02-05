@@ -1,9 +1,9 @@
 package ru.job4j.persistence;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.*;
 import ru.job4j.config.Config;
 import ru.job4j.model.*;
-import ru.job4j.service.Service;
 
 import java.sql.*;
 import java.util.*;
@@ -27,24 +27,10 @@ public class DbStore implements Store {
     private static final Config CONFIG = Config.getInstance();
 
     /**
-     * Url database.
+     * Pool for database.
+     *
      */
-    private static final String URL = CONFIG.getValue("db.url");
-
-    /**
-     * Database name.
-     */
-    private static final String DB_NAME = CONFIG.getValue("db.name");
-
-    /**
-     * Database password.
-     */
-    private static final String PASSWORD = CONFIG.getValue("db.password");
-
-    /**
-     * Database driver.
-     */
-    private static final String DB_DRIVER = CONFIG.getValue("db.driver");
+    private static final BasicDataSource SOURCE = new BasicDataSource();
 
     /**
      * Instance DbStore.
@@ -55,19 +41,13 @@ public class DbStore implements Store {
      * Constructor DbStore.
      */
     private DbStore() {
-        init();
-    }
-
-    /**
-     * Init driver for database.
-     */
-    private void init() {
-        try {
-            Class.forName(DB_DRIVER);
-            LOG.info("Driver {} successfully registered", DB_DRIVER);
-        } catch (ClassNotFoundException e) {
-            LOG.error("Error registered driver{}", DB_DRIVER, e, e.getMessage());
-        }
+        SOURCE.setDriverClassName(CONFIG.getValue("db.driver"));
+        SOURCE.setUrl(CONFIG.getValue("db.url"));
+        SOURCE.setUsername(CONFIG.getValue("db.name"));
+        SOURCE.setPassword(CONFIG.getValue("db.password"));
+        SOURCE.setMinIdle(5);
+        SOURCE.setMaxIdle(10);
+        SOURCE.setMaxOpenPreparedStatements(100);
     }
 
     /**
@@ -87,7 +67,7 @@ public class DbStore implements Store {
         Connection conn = null;
         String msg;
         try {
-            conn = DriverManager.getConnection(URL, DB_NAME, PASSWORD);
+            conn = SOURCE.getConnection();
             conn.setAutoCommit(false);
             try (PreparedStatement ps = conn.prepareStatement(CONFIG.getValue("db.add"))) {
                 ps.setInt(1, accounts.getId());
@@ -101,11 +81,11 @@ public class DbStore implements Store {
                 ps.executeUpdate();
             }
             conn.commit();
-            LOG.info(Service.ADD_ACCOUNT, accounts);
-            msg = Service.BUY_HALL;
+            LOG.info(ADD_ACCOUNT, accounts);
+            msg = BUY_HALL;
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
-            msg = Service.NOT_HALL;
+            msg = NOT_HALL;
             try {
                 if (conn != null) {
                     conn.rollback();
@@ -131,7 +111,7 @@ public class DbStore implements Store {
      */
     public List<Hall> getHalls() {
         List<Hall> list = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(URL, DB_NAME, PASSWORD);
+        try (Connection conn = SOURCE.getConnection();
              Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(CONFIG.getValue("db.getHalls"))) {
             while (rs.next()) {
@@ -151,7 +131,7 @@ public class DbStore implements Store {
      */
     @Override
     public Hall getHallsById(int id) {
-        try (Connection conn = DriverManager.getConnection(URL, DB_NAME, PASSWORD);
+        try (Connection conn = SOURCE.getConnection();
              PreparedStatement ps = conn.prepareStatement(CONFIG.getValue("db.getHallsById"))) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {

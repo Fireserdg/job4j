@@ -15,6 +15,21 @@ import java.util.List;
 public interface Store {
 
     /**
+     * Message about add account.
+     */
+    String ADD_ACCOUNT = "Билет приобретен. Добавлен аккаунт {}";
+
+    /**
+     * Message about buy hall.
+     */
+    String BUY_HALL = "Билет успешно приобретен";
+
+    /**
+     * Message about that place booked.
+     */
+    String NOT_HALL = "Билет уже купили";
+
+    /**
      * Add account.
      * @param accounts account.
      * @return message about operation.

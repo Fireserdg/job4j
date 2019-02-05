@@ -6,6 +6,7 @@ import ru.job4j.model.*;
 import ru.job4j.persistence.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Hall Services
@@ -59,20 +60,8 @@ public class HallService implements Service {
      * @return map halls.
      */
     public Map<Integer, List<Hall>> getHalls() {
-        Map<Integer, List<Hall>> map = new HashMap<>();
-        for (Hall hall : STORE.getHalls()) {
-            if (map.get(hall.getRow()) != null) {
-                map.computeIfPresent(hall.getRow(), (k, v) -> {
-                    v.add(hall);
-                    return v;
-                });
-            } else {
-                List<Hall> list = new ArrayList<>();
-                list.add(hall);
-                map.put(hall.getRow(), list);
-            }
-        }
-        return map;
+        return STORE.getHalls().stream()
+                .collect(Collectors.groupingBy(Hall::getRow));
     }
 
     /**
