@@ -1,4 +1,4 @@
-package ru.job4j.filtres;
+package ru.job4j.filters;
 
 import org.junit.Before;
 import org.junit.Test;

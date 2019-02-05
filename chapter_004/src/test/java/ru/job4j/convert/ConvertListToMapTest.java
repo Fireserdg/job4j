@@ -1,7 +1,7 @@
 package ru.job4j.convert;
 
 import org.junit.Test;
-import ru.job4j.filtres.Students;
+import ru.job4j.filters.Students;
 
 import java.util.Arrays;
 import java.util.List;
