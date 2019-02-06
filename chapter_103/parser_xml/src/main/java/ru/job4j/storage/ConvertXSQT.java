@@ -2,10 +2,17 @@ package ru.job4j.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.xml.transform.*;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *  Convert XML file.

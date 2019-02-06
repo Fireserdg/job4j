@@ -9,6 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>chapter_103</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>parser_xml</module>
+    </modules>
     <!-- build project -->
     <build>
         <plugins>

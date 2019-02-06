@@ -1,13 +1,17 @@
 package ru.job4j.storage;
 
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  *  Test convert XML.
@@ -17,6 +21,16 @@ import static org.junit.Assert.*;
  * @since 04.10.2018.
  */
 public class OptimizationTest {
+
+    @After
+    public void deleteValueFromDb() throws SQLException {
+        Config config = new Config();
+        config.loadConfig("store.properties");
+        try (Connection conn = DriverManager.getConnection(config.getValue("st.url"));
+            Statement statement = conn.createStatement()) {
+            statement.executeUpdate(config.getValue("st.deleteAll"));
+        }
+    }
 
     @Ignore
     public void whenAddManyValuesAndWorkingTimeLessThan5minutes() throws SQLException {
@@ -89,4 +103,6 @@ public class OptimizationTest {
         assertThat(result.get(0).getField(), is(1));
         assertThat(result.get(1).getField(), is(2));
     }
+
+
 }

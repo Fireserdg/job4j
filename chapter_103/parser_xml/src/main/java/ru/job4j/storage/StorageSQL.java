@@ -2,6 +2,7 @@ package ru.job4j.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 /**
@@ -46,8 +47,9 @@ public class StorageSQL {
             try (PreparedStatement ps = conn.prepareStatement(this.config.getValue("st.add"))) {
                 for (int i = 1; i <= n; i++) {
                     ps.setInt(1, i);
-                    ps.executeUpdate();
+                    ps.addBatch();
                 }
+                ps.executeBatch();
                 conn.commit();
                 LOG.info("Values were successfully added to the database");
                 conn.setAutoCommit(true);

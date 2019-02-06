@@ -2,10 +2,14 @@ package ru.job4j.storage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.xml.bind.*;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Store XML
