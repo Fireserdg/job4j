@@ -13,7 +13,10 @@ import java.sql.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
  * Hall Servlet test.
@@ -24,8 +27,14 @@ import static org.mockito.Mockito.*;
  */
 public class HallServletTest {
 
+    /**
+     * Request for mock.
+     */
     private HttpServletRequest request;
 
+    /**
+     * Response for mock.
+     */
     private HttpServletResponse response;
 
     /**
@@ -41,6 +50,8 @@ public class HallServletTest {
 
     @Test
     public void whenRequestAboutAllHallsThenGetResponse() throws IOException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
         StringWriter writer = new StringWriter();
         when(response.getWriter()).thenReturn(new PrintWriter(writer));
         new HallServlet().doGet(request, response);

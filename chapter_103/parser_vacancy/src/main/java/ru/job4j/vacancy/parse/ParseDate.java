@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import static ru.job4j.vacancy.parse.FormatDate.FRM_ONE_DAY;
+import static ru.job4j.vacancy.parse.FormatDate.FRM_TWO_DAYS;
+
 
 /**
  * Parse date.
@@ -29,12 +32,6 @@ public class ParseDate {
     private final String date;
 
     /**
-     * Contains local date and time.
-     *
-     */
-    private LocalDateTime local;
-
-    /**
      * Constructor
      *
      * @param date date
@@ -51,12 +48,8 @@ public class ParseDate {
      * @return local date and time.
      */
     public LocalDateTime convertValue() {
-        if (date.matches(conf.getValue("dataLast.regexp"))) {
-            this.local = convertLastDate(this.date);
-        }  else {
-            local = convertCurrentValue(this.date);
-        }
-        return this.local;
+        return date.matches(conf.getValue("dataLast.regexp"))
+                ? convertLastDate(this.date) : convertCurrentValue(this.date);
     }
 
     /**
@@ -66,15 +59,8 @@ public class ParseDate {
      * @return local date and time
      */
     private LocalDateTime convertLastDate(String date) {
-        date = date.replace("май", "мая");
-        if (date.matches(conf.getValue("dateOneNumber.regexp"))) {
-            this.local = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(
-                    "d MMM yy, HH:mm").withLocale(new Locale("ru")));
-        } else {
-            this.local = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(
-                    "dd MMM yy, HH:mm").withLocale(new Locale("ru")));
-        }
-        return this.local;
+        return date.matches(conf.getValue("dateOneNumber.regexp"))
+                ? LocalDateTime.parse(date, FRM_ONE_DAY) : LocalDateTime.parse(date, FRM_TWO_DAYS);
     }
 
     /**
@@ -83,16 +69,18 @@ public class ParseDate {
      * @param date date
      * @return local date and time
      */
+
     private LocalDateTime convertCurrentValue(String date) {
+        LocalDateTime local;
         if (date.matches(conf.getValue("dateToday.regexp"))) {
             date = date.replace("сегодня", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            this.local = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(
+            local = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(
                     "yyyy-MM-dd, HH:mm").withLocale(new Locale("ru")));
         } else {
             date = date.replace("вчера", LocalDate.now().format(DateTimeFormatter.ofPattern("dd MM yy")));
             local = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(
                     "dd MM yy, HH:mm").withLocale(new Locale("ru"))).minusDays(1);
         }
-        return this.local;
+        return local;
     }
 }

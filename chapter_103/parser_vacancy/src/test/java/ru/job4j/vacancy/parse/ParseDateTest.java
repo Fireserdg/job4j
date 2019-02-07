@@ -61,10 +61,10 @@ public class ParseDateTest {
 
     @Test
     public void whenConvertLastDate() {
-        String date = "19 окт 18, 15:33";
+        String date = "19 май 18, 15:33";
         ParseDate parseDate = new ParseDate(date, config);
         LocalDateTime result = parseDate.convertValue();
-        String expected = "2018-10-19T15:33";
+        String expected = "2018-05-19T15:33";
         assertThat(result.toString(), is(expected));
     }
 }

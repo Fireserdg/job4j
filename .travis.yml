@@ -17,6 +17,9 @@ notifications:
     on_failure: always # default: always
 # Разворачиваем базу данных
 
+jdk:
+  - openjdk11
+
 services:
   - postgresql
 before_install:
