@@ -67,8 +67,10 @@ public class Bank {
      * @return list of account.
      */
     public List<Account> getUserAccounts(String passport) {
-        Optional<List<Account>> value = this.bankAccount.entrySet().stream().filter(entry -> entry.getKey()
-                .equals(searchUser(passport))).map(Map.Entry::getValue).findFirst();
+        Optional<List<Account>> value = this.bankAccount.entrySet().stream()
+                .filter(entry -> entry.getKey()
+                .equals(searchUser(passport)))
+                .map(Map.Entry::getValue).findFirst();
         if (!value.isPresent()) {
             throw new UserHasNotBankAccountException(this.msgAcc);
         }
@@ -83,8 +85,10 @@ public class Bank {
      * @return result if account has user.
      */
     public Account getAccountUser(String passport, String requisite) {
-        return getUserAccounts(passport).stream().filter(account -> account.getRequisites()
-                .equals(requisite)).findFirst().orElseThrow(() -> new UserHasNotBankAccountException(this.msgAcc));
+        return getUserAccounts(passport).stream()
+                .filter(account -> account.getRequisites()
+                .equals(requisite))
+                .findFirst().orElseThrow(() -> new UserHasNotBankAccountException(this.msgAcc));
     }
 
     /**
@@ -93,9 +97,11 @@ public class Bank {
      * @param passport passport of User.
      */
     public User searchUser(String passport) {
-        return this.bankAccount.keySet().stream().filter(user -> user.getPassport()
-                .equals(passport)).findFirst().orElseThrow(() -> new UserDoesNotExistException(
-                this.msgUser));
+        return this.bankAccount.keySet().stream()
+                .filter(user -> user.getPassport()
+                .equals(passport))
+                .findFirst()
+                .orElseThrow(() -> new UserDoesNotExistException(this.msgUser));
     }
 
     /**

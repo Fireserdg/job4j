@@ -29,8 +29,9 @@ public class SortUser {
      * @return list of sort Users.
      */
     public List<User> sortNameLength(List<User> list) {
-        return list.stream().sorted(Comparator.comparingInt(
-                u -> u.getName().length())).collect(Collectors.toList());
+        return list.stream()
+                .sorted(Comparator.comparingInt(u -> u.getName().length()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -40,8 +41,9 @@ public class SortUser {
      * @return list of sort Users.
      */
     public List<User> sortByAllFields(List<User> list) {
-        return list.stream().sorted((u1, u2) -> u1.getName().compareTo(u2.getName()) == 0
-                ? Integer.compare(u1.getAge(), u2.getAge())
-                : u1.getName().compareTo(u2.getName())).collect(Collectors.toList());
+        return list.stream()
+                .sorted((u1, u2) -> u1.getName().compareTo(u2.getName()) == 0
+                ? Integer.compare(u1.getAge(), u2.getAge()) : u1.getName()
+                        .compareTo(u2.getName())).collect(Collectors.toList());
     }
 }

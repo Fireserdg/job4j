@@ -1,7 +1,6 @@
 package ru.job4j.list;
 
 import org.junit.Test;
-import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -23,7 +22,7 @@ public class ConvertMatrix2ListTest {
     @Test
     public void when2to2ArrayThenList4() {
         int[][] input = {{1, 2}, {3, 4}};
-        List<Integer> expect = Arrays.asList(1, 2, 3, 4);
+        List<Integer> expect = List.of(1, 2, 3, 4);
         List<Integer> result = list.toList(input);
         assertThat(result, is(expect));
     }
@@ -31,7 +30,7 @@ public class ConvertMatrix2ListTest {
     @Test
     public void when3to3ArraysThenList9() {
         int[][] input = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        List<Integer> expected = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
         List<Integer> result = list.toList(input);
         assertThat(result, is(expected));
     }
@@ -39,7 +38,7 @@ public class ConvertMatrix2ListTest {
     @Test
     public void when2to4ArraysThenList8() {
         int[][] input = {{1, 2, 3, 4}, {5, 6, 7, 8}};
-        List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
+        List<Integer> expected = List.of(1, 2, 3, 4, 5, 6, 7, 8);
         List<Integer> result = list.toList(input);
         assertThat(result, is(expected));
     }

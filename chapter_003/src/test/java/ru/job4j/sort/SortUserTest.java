@@ -27,9 +27,9 @@ public class SortUserTest {
         User userOne = new User("Ivan", 30);
         User userTwo = new User("Fedor", 25);
         User userThree = new User("Max", 27);
-        List<User> list = Arrays.asList(userOne, userTwo, userThree);
-        Set<User> result = sort.sort(list);
-        assertThat(result.iterator().next(), is(userTwo));
+        Set<User> expected = Set.of(userTwo, userThree, userOne);
+        Set<User> result = sort.sort(List.of(userOne, userTwo, userThree));
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -38,9 +38,9 @@ public class SortUserTest {
         User userTwo = new User("Stepan", 28);
         User userThree = new User("Nikita", 33);
         User userFour = new User("Gena", 25);
-        List<User> list = Arrays.asList(userOne, userTwo, userThree, userFour);
-        Set<User> result = sort.sort(list);
-        assertThat(result.iterator().next().getName(), is("Gena"));
+        Set<User> expected = Set.of(userFour, userTwo, userThree, userOne);
+        Set<User> result = sort.sort(List.of(userOne, userTwo, userThree, userFour));
+        assertThat(result, is(expected));
     }
 
     @Test
