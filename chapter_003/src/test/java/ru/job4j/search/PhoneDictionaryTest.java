@@ -1,7 +1,6 @@
 package ru.job4j.search;
 
 import org.junit.Test;
-import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -19,7 +18,7 @@ public class PhoneDictionaryTest {
     @Test
     public void whenFindByName() {
         phones.add(new Person("Sergey", "Philippov", "5628456", "Moscow"));
-        List<Person> persons = phones.find("Ser");
+        var persons = phones.find("Ser");
         assertThat(persons.iterator().next().getSurname(), is("Philippov"));
     }
 
@@ -27,7 +26,7 @@ public class PhoneDictionaryTest {
     public void whenFindByAddress() {
         phones.add(new Person("Ivan", "Ivanov", "677832", "Tula"));
         phones.add(new Person("Alexandr", "Petrov", "456222", "Tver"));
-        List<Person> persons = phones.find("ula");
+        var persons = phones.find("ula");
         assertThat(persons.iterator().next().getName(), is("Ivan"));
     }
 
@@ -35,7 +34,7 @@ public class PhoneDictionaryTest {
     public void whenFindByPhone() {
         phones.add(new Person("Ivan", "Egorov", "346832", "Orel"));
         phones.add(new Person("Petr", "Lomov", "677234", "Kaluga"));
-        List<Person> persons = phones.find("683");
+        var persons = phones.find("683");
         assertThat(persons.iterator().next().getAddress(), is("Orel"));
     }
 
@@ -43,7 +42,7 @@ public class PhoneDictionaryTest {
     public void whenFindBySurname() {
         phones.add(new Person("Oleg", "Fedorov", "123456", "Penza"));
         phones.add(new Person("Petr", "Lomov", "673982", "Kirov"));
-        List<Person> persons = phones.find("dorov");
+        var persons = phones.find("dorov");
         assertThat(persons.iterator().next().getPhone(), is("123456"));
     }
 }

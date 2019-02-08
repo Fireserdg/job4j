@@ -23,7 +23,7 @@ public class PriorityQueueTest {
         queue.put(new Task("low", 5));
         queue.put(new Task("urgent", 1));
         queue.put(new Task("middle", 3));
-        Task result = queue.take();
+        var result = queue.take();
         assertThat(result.getDesc(), is("urgent"));
     }
 
@@ -32,7 +32,7 @@ public class PriorityQueueTest {
         queue.put(new Task("low", 7));
         queue.put(new Task("middle", 2));
         queue.put(new Task("low", 4));
-        Task result = queue.take();
+        var result = queue.take();
         assertThat(result.getDesc(), is("middle"));
     }
 
@@ -42,7 +42,7 @@ public class PriorityQueueTest {
         queue.put(new Task("very low", 4));
         queue.put(new Task("middle low", 2));
         queue.put(new Task("low", 3));
-        Task result = queue.take();
+        var result = queue.take();
         assertThat(result.getDesc(), is("high low"));
     }
 
@@ -53,7 +53,7 @@ public class PriorityQueueTest {
         queue.put(new Task("middle", 2));
         queue.put(new Task("middle", 4));
         queue.put(new Task("low", 5));
-        Task result = queue.take();
+        var result = queue.take();
         assertThat(result.getDesc(), is("urgent"));
     }
 }

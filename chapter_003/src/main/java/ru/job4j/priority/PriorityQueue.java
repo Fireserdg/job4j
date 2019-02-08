@@ -21,7 +21,7 @@ public class PriorityQueue {
      * @param task received task.
      */
     public void put(Task task) {
-        Task result = this.tasks.stream().filter(
+        var result = this.tasks.stream().filter(
                 value -> task.getPriority() < value.getPriority())
                 .findFirst().orElse(null);
         tasks.add(tasks.indexOf(result) == -1
