@@ -6,6 +6,8 @@
         <property name="connection.username">postgres</property>
         <property name="connection.password">7313984</property>
         <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
-    <mapping resource="ru/job4j/todo/models/User.hbm.xml"/>
+        <property name="show_sql">true</property>
+        <!--<property name="hbm2ddl.auto" value="update"/>-->
+    <mapping resource="ru/job4j/todo/models/Item.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

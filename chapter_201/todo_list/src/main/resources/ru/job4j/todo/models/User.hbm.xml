@@ -1,9 +1,0 @@
-<hibernate-mapping>
-    <class name="ru.job4j.todo.models.User" table="users_ex">
-        <id name="id" column="id">
-            <generator class="identity"/>
-        </id>
-        <property name="login" column="login"/>
-        <property name="password" column="password"/>
-    </class>
-</hibernate-mapping>
