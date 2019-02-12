@@ -3,6 +3,7 @@ package ru.job4j.todo.store;
 import ru.job4j.todo.models.Item;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Store for contains items.
@@ -13,13 +14,18 @@ import java.util.List;
  */
 public interface Store {
 
-    boolean addItem(Item item);
+    int addItem(Item item);
 
-    Item findItemById(int id);
+    Optional<Item> findItemById(int id);
 
     void deleteItem(int id);
 
     void updateItem(Item item);
 
     List<Item> getAllItems();
+
+    default void close() {
+        throw new UnsupportedOperationException();
+    }
+
 }

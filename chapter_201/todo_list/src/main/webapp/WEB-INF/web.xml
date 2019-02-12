@@ -9,14 +9,14 @@
     </welcome-file-list>
 
     <!--Servlets-->
-    <!--<servlet>-->
-        <!--<servlet-name>Halls</servlet-name>-->
-        <!--<servlet-class>ru.job4j.controller.HallServlet</servlet-class>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>Halls</servlet-name>-->
-        <!--<url-pattern>/hall</url-pattern>-->
-    <!--</servlet-mapping>-->
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>ru.job4j.todo.servlets.ControllerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/items</url-pattern>
+    </servlet-mapping>
     <!--Filters-->
     <!--<filter>-->
         <!--<filter-name>HallsFilter</filter-name>-->

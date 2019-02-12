@@ -3,41 +3,126 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Hall with rows</title>
+    <title>Items</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        var path = window.location.pathname.replace("index.html", "");
+        $(loadItem());
+        function loadItem() {
+            $.ajax({
+                type : "GET",
+                url : path.concat("items"),
+                dataType : "json",
+                success : function (data) {
+                    console.log("Данные: " + data);
+                    var check = $('#check').is(':checked');
+                    console.log("check: " + check);
+                    var table = $("table tbody");
+                    table.empty();
+
+                   // data.forEach(function (value) {
+                   //     console.log(value.desc);
+                   //  });
+
+                    $.each(data, function (index, item) {
+
+                        if (check) {
+                            var raw = '<tr><td>' + item.id + '</td>';
+                            raw += '<td>' + item.desc + '</td>';
+                            raw += '<td>' + item.created + '</td>';
+                            raw += '<td>';
+                            if (item.done) {
+                                raw += 'Done: <input type="checkbox" disabled checked/>';
+                            } else {
+                                raw += 'Not done: <input type="checkbox" disabled/>';
+                            }
+                            raw += '</td></tr>';
+                            table.append(raw);
+                        } else if(!check && !item.done) {
+                            var raw = '<tr><td>' + item.id + '</td>';
+                            raw += '<td>' + item.desc + '</td>';
+                            raw += '<td>' + item.created + '</td>';
+                            raw += '<td>';
+                            raw += 'Not done: <input type="checkbox" disabled/>';
+                            raw += '</td></tr>';
+                            table.append(raw);
+                        }
+                    })
+                }
+            })
+        }
+
+        function addItem() {
+            var desc = $('#area').val();
+            if (desc ==="") {
+                alert("Please input description");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url : path.concat("items"),
+                    data : {desc : desc},
+                    dataType: "json",
+                    success : function (data) {
+                        console.log("append" + data);
+                            var table = $("table tbody");
+                            var akk = '<tr>';
+                            akk+='<td>' + data.id + '</td>';
+                            akk+='<td>' + data.desc + '</td>';
+                            akk+='<td>' + data.created + '</td>';
+                            akk+='<td>';
+                            akk+='Not done: <input type="checkbox" disabled/>';
+                            akk+='</td>';
+                            akk+='</tr>';
+                            table.append(akk);
+                    }
+                });
+            }
+        }
+
+    </script>
 </head>
 <body>
 <div class="container">
     <div class="row pt-3">
+        <h3>
+            Add item
+        </h3>
+        <form>
+            <div class="form-group">
+                <label for="area">Description:</label>
+                <textarea class="form-control" rows="3" style="width: 300px;" id="area" placeholder="Input description item"></textarea>
+            </div>
+            <div class="form-group">
+            <input type="button" class="btn btn-success" value="Add item" onclick="addItem()"/>
+            </div>
+        </form>
+    </div>
+
+    <div class="row pt-3">
         <h4>
+            List of task
         </h4>
         <table class="table table-bordered">
             <thead>
-            <tr>
-                <th style="width: 120px;"></th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
+            <tr style="background-color: #FFE4C4">
+                <th>Id</th>
+                <th>Description</th>
+                <th>Created</th>
+                <th>
+                    <label for="check">
+                        Show all
+                    </label>
+                    <input type="checkbox" id="check" onchange="loadItem()" checked/>
+                </th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
-    </div>
-    <div class="row float-right">
-        <button type="button" class="btn btn-success" onclick="getPlace()">Оплатить</button>
     </div>
 </div>
 </body>

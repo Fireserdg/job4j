@@ -1,10 +1,13 @@
 package ru.job4j.todo.store;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.todo.models.Item;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -18,25 +21,66 @@ import static org.junit.Assert.*;
  */
 public class DbStoreTest {
 
-    @Test
-    public void whenAddItemThenUpdateFindByIdThenDelete() {
-        DbStore instance = DbStore.INSTANCE;
+    private static DbStore instance = DbStore.INSTANCE;
+
+    private Timestamp created = new Timestamp(System.currentTimeMillis());
+
+    @Before
+    public void before() {
         Item item = new Item();
         item.setDesc("123");
-        item.setCreated(new Timestamp(System.currentTimeMillis()));
+        item.setCreated(created);
         item.setDone(false);
         instance.addItem(item);
-        List<Item> allItems = instance.getAllItems();
-        assertThat(allItems.size(), is(1));
-        assertThat(allItems.get(0).getDesc(), is("123"));
-        assertThat(allItems.get(0).isDone(), is(false));
-        int id = allItems.get(0).getId();
-        Item find = instance.findItemById(id);
-        assertThat(find.getDesc(), is("123"));
+    }
+
+    @After
+    public void after() {
+        List<Item> items = instance.getAllItems();
+        Item item = items.get(items.size() - 1);
+        instance.deleteItem(item.getId());
+    }
+
+    @Test
+    public void whenAddItemToDataBase() {
+        Item item = new Item();
+        item.setDesc("testItem");
+        item.setCreated(created);
+        item.setDone(false);
+        instance.addItem(item);
+        int id = instance.addItem(item);
+        List<Item> items = instance.getAllItems();
+        assertThat(items.get(items.size() - 1).getId(), is(id));
+        assertThat(items.get(items.size() - 1).getDesc(), is("testItem"));
+    }
+
+    @Test
+    public void whenGetAllItem() {
+        List<Item> items = instance.getAllItems();
+        assertThat(items.get(items.size() - 1).getDesc(), is("123"));
+        assertThat(items.get(items.size() - 1).getCreated(), is(created));
+    }
+
+    @Test
+    public void whenUpdateItem() {
+        List<Item> items = instance.getAllItems();
+        Item item = items.get(items.size() - 1);
         item.setDone(true);
         instance.updateItem(item);
-        assertThat(instance.getAllItems().get(0).isDone(), is(true));
+        assertThat(instance.findItemById(item.getId()).get().isDone(), is(true));
+    }
+
+    @Test
+    public void whenFindItemById() {
+        Item item = new Item();
+        item.setDesc("test");
+        item.setCreated(created);
+        item.setDone(false);
+        int id = instance.addItem(item);
+        Optional<Item> expected = instance.findItemById(id);
+        Item finds = expected.isEmpty() ? new Item() : expected.get();
+        assertThat(finds.getDesc(), is("test"));
+        assertThat(finds.getId(), is(id));
         instance.deleteItem(id);
-        assertThat(instance.getAllItems().size(), is(0));
     }
 }

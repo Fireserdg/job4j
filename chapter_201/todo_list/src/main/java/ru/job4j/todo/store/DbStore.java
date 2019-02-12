@@ -4,16 +4,18 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.slf4j.Logger;
 import ru.job4j.todo.models.Item;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * DbStore
+ * Data base store.
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
@@ -37,45 +39,58 @@ public enum DbStore implements Store {
      * Session factory.
      *
      */
-    private final SessionFactory factory = new Configuration()
-            .configure()
-            .buildSessionFactory();
+    private final SessionFactory factory;
+
+    /**
+     * Constructor Database store.
+     *
+     */
+    DbStore() {
+        factory = new Configuration()
+                .configure()
+                .buildSessionFactory();
+    }
 
 
     @Override
-    public boolean addItem(Item item) {
+    public int addItem(Item item) {
+        LOG.info("Item before={}", item);
+        int result = -1;
         Session session = factory.openSession();
         Transaction trans = session.beginTransaction();
         LOG.info("Start transaction");
         try (session) {
             session.save(item);
             trans.commit();
+            result = item.getId();
+            LOG.info("Add item {}", item);
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
             trans.rollback();
         }
-        return false;
+        LOG.info("Item after ={}", item);
+        return result;
     }
 
+    // Возвращаемый тип Optional<Item>
     @Override
-    public Item findItemById(int id) {
+    public Optional<Item> findItemById(int id) {
         Session session = factory.openSession();
         Transaction trans = session.beginTransaction();
+        Optional<Item> item = Optional.empty();
         try (session) {
-            Query<Item> query = session.createQuery(
-                    "from Item where id=:id", Item.class);
-            query.setParameter("id", id);
+            Item query = session.get(Item.class, id);
+//            Query<Item> query = session.createQuery(
+//                    "from Item where id=:id", Item.class);
+//            query.setParameter("id", id);
             trans.commit();
-            List<Item> list = query.list();
-            Item singleResult = query.getSingleResult();
-            LOG.info("This list {}", list);
-            LOG.info("This single result {}", singleResult);
-            return singleResult;
+            item = Optional.of(query);
+            LOG.info("This single result {}", item);
         } catch (Exception ex) {
             trans.rollback();
             LOG.error(ex.getMessage(), ex);
-            throw ex;
         }
+        return item;
     }
 
     @Override
@@ -111,15 +126,22 @@ public enum DbStore implements Store {
     public List<Item> getAllItems() {
         Session session = factory.openSession();
         Transaction trans = session.beginTransaction();
+        List<Item> list = Collections.emptyList();
         try (session) {
-            Query<Item> fromItem = session.createQuery("from Item", Item.class);
+            list = session.createQuery("from Item", Item.class).list();
             trans.commit();
-            return fromItem.list();
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
-            System.out.println(trans.isActive());
             trans.rollback();
-            throw ex;
+        }
+        return list;
+    }
+
+    @Override
+    public void close() {
+        if (factory != null) {
+            factory.close();
+            LOG.info("SessionFactory close");
         }
     }
 }

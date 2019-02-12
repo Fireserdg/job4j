@@ -1,5 +1,7 @@
 package ru.job4j.todo.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 /**
@@ -15,10 +17,10 @@ public class Item {
 
     private String desc;
 
+    @JsonFormat(pattern = "dd-MM-yyy HH:mm", timezone = "GMT+3")
     private Timestamp created;
 
     private boolean done;
-
 
     public int getId() {
         return id;
@@ -54,6 +56,6 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" + "id=" + id + ", desc='" + desc + '\'' + ", created=" + created + ", done=" + done + '}';
+        return String.format("Item{id=%d, desc=%s, created=%s, done=%s}", id, desc, created, done);
     }
 }
