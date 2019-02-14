@@ -10,17 +10,11 @@
         </layout>
     </appender>
 
-    <!--<appender name="file" class="org.apache.log4j.RollingFileAppender">-->
-        <!--<param name="append" value="false"/>-->
-        <!--<param name="maxFileSize" value="1MB"/>-->
-        <!--<param name="maxBackupIndex" value="3"/>-->
-        <!--<param name="file" value="${catalina.home}/logs/logger_todo.log"/>-->
-        <!--<layout class="org.apache.log4j.PatternLayout">-->
-            <!--<param name="ConversionPattern"-->
-                   <!--value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>-->
-        <!--</layout>-->
-    <!--</appender>-->
     <logger name="ru.job4j.todo.store.DbStore" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="ru.job4j.todo.filters.TodoFilter" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="console"/>
     </logger>
@@ -28,6 +22,5 @@
     <root>
         <level value="WARN"/>
         <appender-ref ref="console"/>
-        <!--<appender-ref ref="file"/>-->
     </root>
 </log4j:configuration>

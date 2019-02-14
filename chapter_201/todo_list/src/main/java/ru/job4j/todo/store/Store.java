@@ -3,7 +3,6 @@ package ru.job4j.todo.store;
 import ru.job4j.todo.models.Item;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Store for contains items.
@@ -12,20 +11,42 @@ import java.util.Optional;
  * @version 1.0.
  * @since 2019-02-11
  */
-public interface Store {
+public interface Store<T> {
 
-    int addItem(Item item);
+    /**
+     * Add Item to database.
+     *
+     * @param item item.
+     * @return item id;
+     */
+    Item addItem(T item);
 
-    Optional<Item> findItemById(int id);
+    /**
+     * Find item by id
+     *
+     * @param id item id
+     * @return item
+     */
+    Item findItemById(long id);
 
-    void deleteItem(int id);
+    /**
+     * Delete item
+     *
+     * @param id item id
+     */
+    void deleteItem(long id);
 
-    void updateItem(Item item);
+    /**
+     * Update item
+     *
+     * @param item item
+     */
+    void updateItem(T item);
 
-    List<Item> getAllItems();
-
-    default void close() {
-        throw new UnsupportedOperationException();
-    }
-
+    /**
+     * Get all items from database.
+     *
+     * @return list of items
+     */
+    List<T> getAllItems();
 }

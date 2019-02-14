@@ -5,4 +5,5 @@ CREATE TABLE IF NOT EXISTS items
   done BOOLEAN NOT NULL);
 
 INSERT INTO items (description, created, done)
-VALUES ('test_desc1', NOW(), false),('test_desc2', NOW(), false), ('test_desc2', NOW(), true);
+VALUES ('test_desc1', NOW(), false),('test_desc2', NOW(), true),
+       ('test_desc3', NOW(), false), ('test_desc4', NOW(), true);

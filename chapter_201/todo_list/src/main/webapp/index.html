@@ -9,86 +9,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-        var path = window.location.pathname.replace("index.html", "");
-        $(loadItem());
-        function loadItem() {
-            $.ajax({
-                type : "GET",
-                url : path.concat("items"),
-                dataType : "json",
-                success : function (data) {
-                    console.log("Данные: " + data);
-                    var check = $('#check').is(':checked');
-                    console.log("check: " + check);
-                    var table = $("table tbody");
-                    table.empty();
-
-                   // data.forEach(function (value) {
-                   //     console.log(value.desc);
-                   //  });
-
-                    $.each(data, function (index, item) {
-
-                        if (check) {
-                            var raw = '<tr><td>' + item.id + '</td>';
-                            raw += '<td>' + item.desc + '</td>';
-                            raw += '<td>' + item.created + '</td>';
-                            raw += '<td>';
-                            if (item.done) {
-                                raw += 'Done: <input type="checkbox" disabled checked/>';
-                            } else {
-                                raw += 'Not done: <input type="checkbox" disabled/>';
-                            }
-                            raw += '</td></tr>';
-                            table.append(raw);
-                        } else if(!check && !item.done) {
-                            var raw = '<tr><td>' + item.id + '</td>';
-                            raw += '<td>' + item.desc + '</td>';
-                            raw += '<td>' + item.created + '</td>';
-                            raw += '<td>';
-                            raw += 'Not done: <input type="checkbox" disabled/>';
-                            raw += '</td></tr>';
-                            table.append(raw);
-                        }
-                    })
-                }
-            })
-        }
-
-        function addItem() {
-            var desc = $('#area').val();
-            if (desc ==="") {
-                alert("Please input description");
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url : path.concat("items"),
-                    data : {desc : desc},
-                    dataType: "json",
-                    success : function (data) {
-                        console.log("append" + data);
-                            var table = $("table tbody");
-                            var akk = '<tr>';
-                            akk+='<td>' + data.id + '</td>';
-                            akk+='<td>' + data.desc + '</td>';
-                            akk+='<td>' + data.created + '</td>';
-                            akk+='<td>';
-                            akk+='Not done: <input type="checkbox" disabled/>';
-                            akk+='</td>';
-                            akk+='</tr>';
-                            table.append(akk);
-                    }
-                });
-            }
-        }
-
-    </script>
+    <script src="js/viewJS.js"></script>
 </head>
 <body>
 <div class="container">
     <div class="row pt-3">
-        <h3>
+        <h3 class="text-info">
             Add item
         </h3>
         <form>
@@ -97,13 +23,19 @@
                 <textarea class="form-control" rows="3" style="width: 300px;" id="area" placeholder="Input description item"></textarea>
             </div>
             <div class="form-group">
-            <input type="button" class="btn btn-success" value="Add item" onclick="addItem()"/>
+                <button class="btn btn-success" onclick="return addItem()">Add item</button>
             </div>
         </form>
     </div>
 
+    <div class="row pt-3 text-warning">
+        <label for="check">Show all items
+            <input type="checkbox" id="check" onchange="loadItem()" checked/>
+        </label>
+    </div>
+
     <div class="row pt-3">
-        <h4>
+        <h4 class="text-center">
             List of task
         </h4>
         <table class="table table-bordered">
@@ -112,12 +44,7 @@
                 <th>Id</th>
                 <th>Description</th>
                 <th>Created</th>
-                <th>
-                    <label for="check">
-                        Show all
-                    </label>
-                    <input type="checkbox" id="check" onchange="loadItem()" checked/>
-                </th>
+                <th>Done</th>
             </tr>
             </thead>
             <tbody>

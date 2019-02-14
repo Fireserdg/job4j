@@ -11,24 +11,24 @@
     <!--Servlets-->
     <servlet>
         <servlet-name>Controller</servlet-name>
-        <servlet-class>ru.job4j.todo.servlets.ControllerServlet</servlet-class>
+        <servlet-class>ru.job4j.todo.controller.ControllerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
         <url-pattern>/items</url-pattern>
     </servlet-mapping>
     <!--Filters-->
-    <!--<filter>-->
-        <!--<filter-name>HallsFilter</filter-name>-->
-        <!--<filter-class>ru.job4j.filters.HallsFilter</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>HallsFilter</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</filter-mapping>-->
+    <filter>
+        <filter-name>HallsFilter</filter-name>
+        <filter-class>ru.job4j.todo.filters.TodoFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HallsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <!--Error page-->
-    <!--<error-page>-->
-        <!--<error-code>404</error-code>-->
-        <!--<location>/WEB-INF/jsp/error-page.jsp</location>-->
-    <!--</error-page>-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error-page404.jsp</location>
+    </error-page>
 </web-app>
