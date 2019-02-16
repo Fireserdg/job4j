@@ -6,6 +6,7 @@ import ru.job4j.todo.models.Item;
 import ru.job4j.todo.services.SessionUtil;
 
 import java.util.*;
+import java.util.function.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -44,19 +45,11 @@ public enum DbStore implements Store<Item> {
      */
     @Override
     public Item addItem(Item item) {
-        try (Session session = factory.openSession()) {
-            try {
-                session.beginTransaction();
-                session.save(item);
-                session.getTransaction().commit();
-                LOG.info("{} successfully added", item);
-                return item;
-            } catch (Exception ex) {
-                LOG.error("Exception when add Item", ex);
-                session.getTransaction().rollback();
-                throw ex;
-            }
-        }
+        return getTransactionResult(session -> {
+            session.save(item);
+            LOG.info("{} successfully added", item);
+            return item;
+        });
     }
 
     /**
@@ -67,18 +60,7 @@ public enum DbStore implements Store<Item> {
      */
     @Override
     public Item findItemById(long id) {
-        try (Session session = factory.openSession()) {
-            try {
-                session.beginTransaction();
-                Item item = session.get(Item.class, id);
-                session.getTransaction().commit();
-                return item;
-            } catch (Exception ex) {
-                LOG.error("Exception findById", ex);
-                session.getTransaction().rollback();
-                throw ex;
-            }
-        }
+        return getTransactionResult(session -> session.get(Item.class, id));
     }
 
     /**
@@ -88,20 +70,12 @@ public enum DbStore implements Store<Item> {
      */
     @Override
     public void deleteItem(long id) {
-        try (Session session = factory.openSession()) {
-            try {
-                session.beginTransaction();
-                Item item = new Item();
-                item.setId(id);
-                session.delete(item);
-                session.getTransaction().commit();
-                LOG.info("User with id={} successfully deleted", item.getId());
-            } catch (Exception ex) {
-                LOG.error("Exception when deleteItem", ex);
-                session.getTransaction().rollback();
-                throw ex;
-            }
-        }
+        doTransaction(session -> {
+            Item item = new Item();
+            item.setId(id);
+            session.delete(item);
+            LOG.info("User with id={} successfully deleted", item.getId());
+        });
     }
 
     /**
@@ -111,18 +85,10 @@ public enum DbStore implements Store<Item> {
      */
     @Override
     public void updateItem(Item item) {
-        try (Session session = factory.openSession()) {
-            try {
-                session.beginTransaction();
-                session.update(item);
-                session.getTransaction().commit();
-                LOG.info("User with id={} was updated", item.getId());
-            } catch (Exception ex) {
-                LOG.error("Exception when updateItem", ex);
-                session.getTransaction().rollback();
-                throw ex;
-            }
-        }
+        doTransaction(session -> {
+            session.update(item);
+            LOG.info("User with id={} was updated", item.getId());
+        });
     }
 
     /**
@@ -132,14 +98,45 @@ public enum DbStore implements Store<Item> {
      */
     @Override
     public List<Item> getAllItems() {
+        return getTransactionResult(
+                session -> session.createQuery("from Item", Item.class).list());
+    }
+
+    /**
+     * Get result after success transaction.
+     *
+     * @param command command
+     * @param <T> type of parameter.
+     * @return transaction result.
+     */
+    private <T> T getTransactionResult(final Function<Session, T> command) {
         try (Session session = factory.openSession()) {
             try {
                 session.beginTransaction();
-                List<Item> list = session.createQuery("from Item", Item.class).list();
+                T apply = command.apply(session);
                 session.getTransaction().commit();
-                return list;
+                return apply;
             } catch (Exception ex) {
-                LOG.error("Exception when getAllItem", ex);
+                LOG.error("Error for action DB layer", ex);
+                session.getTransaction().rollback();
+                throw ex;
+            }
+        }
+    }
+
+    /**
+     * Do transaction
+     *
+     * @param command command for action
+     */
+    private void doTransaction(final Consumer<Session> command) {
+        try (Session session = factory.openSession()) {
+            try {
+                session.beginTransaction();
+                command.accept(session);
+                session.getTransaction().commit();
+            } catch (Exception ex) {
+                LOG.error("Error for action DB layer", ex);
                 session.getTransaction().rollback();
                 throw ex;
             }
