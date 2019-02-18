@@ -1,0 +1,28 @@
+ CREATE TABLE CAR_BODY
+ (
+ 	id SERIAL PRIMARY KEY,
+ 	body_name VARCHAR(40) NOT NULL
+ ); 
+
+ CREATE TABLE ENGINE
+ (
+ 	id SERIAL PRIMARY KEY,
+ 	engine_name VARCHAR(40) NOT NULL
+ ); 
+
+ CREATE TABLE TRANSMISSION
+ (
+ 	id SERIAL PRIMARY KEY,
+ 	trans_name VARCHAR(40) NOT NULL
+ );
+
+ CREATE TABLE CAR (
+  	id SERIAL PRIMARY KEY,
+  	model VARCHAR(40) NOT NULL,
+  	car_body_id INTEGER,
+  	engine_id INTEGER,
+  	transmission_id INTEGER,
+  	FOREIGN KEY(car_body_id) REFERENCES CAR_BODY (id),
+  	FOREIGN KEY(engine_id) REFERENCES ENGINE (id),
+  	FOREIGN KEY(transmission_id) REFERENCES TRANSMISSION (id)
+ );

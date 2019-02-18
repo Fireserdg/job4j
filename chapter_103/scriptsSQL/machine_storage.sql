@@ -1,4 +1,4 @@
- CREATE DATABASE mаchine_storage;
+ CREATE DATABASE machine_storage;
  \c mаchine_storage
 
  CREATE TABLE car_body
@@ -18,7 +18,7 @@
  	id SERIAL PRIMARY KEY,
  	trans_name VARCHAR(40) NOT NULL
  );
- --Поменять имя Модели
+
  CREATE TABLE car (
   	id SERIAL PRIMARY KEY,
   	model VARCHAR(40) NOT NULL,

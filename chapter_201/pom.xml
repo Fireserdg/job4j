@@ -12,6 +12,16 @@
     <artifactId>chapter_201</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <hibernate.ver>5.4.1.Final</hibernate.ver>
+        <servlet.ver>4.0.1</servlet.ver>
+        <jackson.ver>2.9.5</jackson.ver>
+        <jstl.ver>1.2</jstl.ver>
+        <taglibs.ver>1.1.2</taglibs.ver>
+        <powermock.ver>2.0.0-RC.4</powermock.ver>
+        <liquibase.ver>3.6.2</liquibase.ver>
+    </properties>
+
     <modules>
         <module>todo_list</module>
         <module>car_storage</module>
@@ -22,44 +32,44 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.1.Final</version>
+            <version>${hibernate.ver}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <version>${servlet.ver}</version>
             <scope>provided</scope>
         </dependency>
         <!--Jackson JSON-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.5</version>
+            <version>${jackson.ver}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/jstl/jstl -->
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <version>${jstl.ver}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/taglibs/standard -->
         <dependency>
             <groupId>taglibs</groupId>
             <artifactId>standard</artifactId>
-            <version>1.1.2</version>
+            <version>${taglibs.ver}</version>
         </dependency>
         <!--PowerMockito-->
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
-            <version>2.0.0-RC.4</version>
+            <version>${powermock.ver}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>
-            <version>2.0.0-RC.4</version>
+            <version>${powermock.ver}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
