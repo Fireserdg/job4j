@@ -28,11 +28,6 @@
         <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>net.jcip</groupId>
-        <artifactId>jcip-annotations</artifactId>
-        <version>1.0</version>
-    </dependency>
-    <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>1.7.25</version>
@@ -59,7 +54,7 @@
         <module>chapter_104</module>
         <module>chapter_201</module>
     </modules>
-    <!--Профили для liquibase-->
+    <!--Profile for liquibase-->
     <profiles>
         <profile>
             <id>test</id>
