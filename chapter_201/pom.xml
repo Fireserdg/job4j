@@ -25,6 +25,7 @@
     <modules>
         <module>todo_list</module>
         <module>car_storage</module>
+        <module>mapping</module>
     </modules>
 
     <dependencies>
