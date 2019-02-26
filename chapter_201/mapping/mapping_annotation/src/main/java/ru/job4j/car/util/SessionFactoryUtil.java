@@ -19,6 +19,10 @@ public class SessionFactoryUtil {
      */
     private static final Logger LOG = LoggerFactory.getLogger(SessionFactoryUtil.class);
 
+    /**
+     * Session factory
+     *
+     */
     private static SessionFactory factory;
 
     static {
@@ -29,11 +33,19 @@ public class SessionFactoryUtil {
         }
     }
 
-
+    /**
+     * Private constructor
+     *
+     */
     private SessionFactoryUtil() {
 
     }
 
+    /**
+     * Get session factory
+     *
+     * @return session factory
+     */
     public static SessionFactory getSessionFactory() {
         return factory;
     }

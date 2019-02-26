@@ -1,12 +1,7 @@
 package ru.job4j.car.models;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.car.util.SessionFactoryUtil;
-
-import java.util.Scanner;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -16,42 +11,61 @@ import static org.junit.Assert.*;
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
- * @since 2019-02-20
+ * @since 2019-02-23
  */
 public class CarTest {
 
-    @Ignore
-    public void test() {
+    /**
+     * Car
+     *
+     */
+    private Car first = null;
 
-        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            CarBody carBody = new CarBody("Sedan");
-            Engine engine = new Engine("Engine2");
-            Transmission transmission = new Transmission("Transmission");
-            session.save(carBody);
-//            System.out.println(ex);
-            session.save(engine);
-            session.save(transmission);
+    @Before
+    public void init() {
+        first = new Car("BMW", new CarBody("Body"),
+                new Engine("Engine"),
+                new Transmission("Trans"));
+        first.setId(1L);
+    }
 
-            session.getTransaction().commit();
+    @Test
+    public void whenCreateCarThenGetResult() {
+        assertThat(first.getId(), is(1L));
+        assertThat(first.getName(), is("BMW"));
+        assertThat(first.getBody(), is(new CarBody("Body")));
+        assertThat(first.getEngine(), is(new Engine("Engine")));
+        assertThat(first.getTransmission(), is(new Transmission("Trans")));
+    }
 
-            session.beginTransaction();
-            Car car = new Car("BMW", carBody, engine, transmission);
-            session.save(car);
-//            engine.getCars().add(car);
+    @Test
+    public void whenUpdateCarThenGetResult() {
+        first.setBody(new CarBody("BodyTwo"));
+        first.setEngine(new Engine("EngineTwo"));
+        first.setTransmission(new Transmission("TransTwo"));
+        assertThat(first.getBody().getName(), is("BodyTwo"));
+        assertThat(first.getEngine().getName(), is("EngineTwo"));
+        assertThat(first.getTransmission().getName(), is("TransTwo"));
+    }
 
+    @Test
+    public void whenCheckEqualsAndHashCode() {
+        var second = new Car("BMW", new CarBody("Body"),
+                new Engine("Engine"),
+                new Transmission("Trans"));
+        second.setId(1L);
+        Object engine = new Engine("Engine2");
+        assertThat(first.equals(second), is(true));
+        assertThat(first.equals(engine), is(false));
+        assertThat(first.hashCode(), is(second.hashCode()));
+        second.setId(2L);
+        assertThat(first.equals(second), is(false));
+        assertThat(first.hashCode() == second.hashCode(), is(false));
+    }
 
-//            System.out.println(engine.getCars());
-            System.out.println("id: " + carBody.getId());
-
-            session.getTransaction().commit();
-
-//            System.out.println(carBody.getCars());
-            System.out.println(engine.getCars());
-//            System.out.println(transmission.getCars());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
+    @Test
+    public void whenGetStringRepresentation() {
+        var expect = "Car{id=1, name=BMW}";
+        assertThat(first.toString(), is(expect));
     }
 }

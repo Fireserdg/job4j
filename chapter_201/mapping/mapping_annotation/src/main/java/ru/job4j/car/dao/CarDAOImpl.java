@@ -11,43 +11,87 @@ import java.util.List;
  * @version 1.0.
  * @since 2019-02-20
  */
-public class CarDAOImpl extends AbstractEntityDAO<Car> {
+public class CarDAOImpl implements CarEntityDAO {
 
+    /**
+     * Transaction wrapper
+     *
+     */
+    private final TransactionWrapper tx;
 
-    private static final EntityDAO<Car> INSTANSE = new CarDAOImpl();
-
-    private CarDAOImpl() {
-
+    /**
+     * Constructor
+     *
+     * @param wrapper action
+     */
+    public CarDAOImpl(TransactionWrapper wrapper) {
+        this.tx = wrapper;
     }
 
-    public static EntityDAO<Car> getInstance() {
-        return INSTANSE;
-    }
-
+    /**
+     * Add car
+     *
+     * @param car car
+     * @return car
+     */
     @Override
     public Long add(Car car) {
-        return getTransactionResult(session -> (Long) session.save(car));
+        return this.tx.getTransactionResult(session -> (Long) session.save(car));
     }
 
+    /**
+     * Update car
+     *
+     * @param car car for update
+     */
     @Override
     public void update(Car car) {
-        doTransaction(session -> session.update(car)
-        );
+        this.tx.doTransaction(session -> session.update(car));
     }
 
+    /**
+     * Delete car
+     *
+     * @param car car
+     */
     @Override
-    public void delete(Long id) {
-        doTransaction(session -> session.delete(new Car(id)));
+    public void delete(Car car) {
+        this.tx.doTransaction(session -> session.delete(car));
     }
 
+    /**
+     * Find car by id
+     *
+     * @param id car id
+     * @return car
+     */
     @Override
     public Car findById(Long id) {
-        return getTransactionResult(session -> session.get(Car.class, id));
+        return this.tx.getTransactionResult(session -> session.get(Car.class, id));
     }
 
+    /**
+     * Find all car
+     *
+     * @return list of car
+     */
     @Override
     public List<Car> findAll() {
-        return getTransactionResult(session -> session.createQuery(
+        return this.tx.getTransactionResult(session -> session.createQuery(
                 "from Car", Car.class).list());
+    }
+
+    /**
+     * Find car by name
+     *
+     * @param name car name
+     * @return car
+     */
+    @Override
+    public Car findByName(String name) {
+        return this.tx.getTransactionResult(session -> session.createQuery(
+                "from Car where name=:param", Car.class)
+                .setParameter("param", name)
+                .getSingleResult());
     }
 }

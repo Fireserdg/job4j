@@ -1,6 +1,6 @@
 package ru.job4j.car.dao;
 
-import org.hibernate.query.Query;
+import ru.job4j.car.models.Car;
 import ru.job4j.car.models.CarBody;
 
 import java.util.List;
@@ -12,51 +12,89 @@ import java.util.List;
  * @version 1.0.
  * @since 2019-02-20
  */
-public class CarBodyDAOImpl extends AbstractEntityDAO<CarBody> {
+public class CarBodyDAOImpl implements DetailEntityDAO<CarBody> {
 
-    private static final EntityDAO<CarBody> INSTANCE = new CarBodyDAOImpl();
+    /**
+     * Transaction wrapper
+     *
+     */
+    private final TransactionWrapper tx;
 
-    private CarBodyDAOImpl() {
-
+    /**
+     * Constructor
+     *
+     * @param wrapper Transaction function
+     */
+    public CarBodyDAOImpl(TransactionWrapper wrapper) {
+        this.tx = wrapper;
     }
 
-    public static EntityDAO<CarBody> getInstance() {
-        return INSTANCE;
-    }
-
+    /**
+     * Add CarBody
+     *
+     * @param type CarBody
+     * @return identifier
+     */
     @Override
     public Long add(CarBody type) {
-        return getTransactionResult(session -> (Long) session.save(type));
+        return this.tx.getTransactionResult(session -> (Long) session.save(type));
     }
 
+    /**
+     * Update CarBody
+     *
+     * @param type CarBody
+     */
     @Override
     public void update(CarBody type) {
-        doTransaction(session -> session.update(type));
+        this.tx.doTransaction(session -> session.update(type));
     }
 
+    /**
+     * Delete CarBody
+     *
+     * @param type CarBody
+     */
     @Override
-    public void delete(Long id) {
-        doTransaction(session -> session.delete(new CarBody(id)));
+    public void delete(CarBody type) {
+        this.tx.doTransaction(session -> session.delete(type));
     }
 
-    public CarBody findByModel(String model) {
-        return getTransactionResult(session -> {
-                    Query<CarBody> query = session.createQuery(
-                            "from CarBody where name=:paramName", CarBody.class);
-                    query.setParameter("paramName", model);
-                    return query.getSingleResult();
-                }
-        );
-    }
-
+    /**
+     * Find CarBody by id
+     *
+     * @param id CarBody id
+     * @return CarBody
+     */
     @Override
     public CarBody findById(Long id) {
-        return getTransactionResult(session -> session.get(CarBody.class, id));
+        return this.tx.getTransactionResult(session -> session.get(CarBody.class, id));
     }
 
+    /**
+     * Find all type of CarBody
+     *
+     * @return list of CarBody
+     */
     @Override
     public List<CarBody> findAll() {
-        return getTransactionResult(session -> session.createQuery(
+        return this.tx.getTransactionResult(session -> session.createQuery(
                 "from CarBody", CarBody.class).list());
+    }
+
+    /**
+     * Find element by CarBody name
+     *
+     * @param name name of parameter
+     * @return list of cars
+     */
+    @Override
+    public List<Car> findAllElementsByNameDetail(String name) {
+        return this.tx.getTransactionResult(session -> session.createQuery(
+                "from CarBody where name=:param", CarBody.class)
+                .setParameter("param", name)
+                .setHint("javax.persistence.fetchgraph",
+                        session.getEntityGraph("bodyGraph"))
+                .getSingleResult().getCars());
     }
 }

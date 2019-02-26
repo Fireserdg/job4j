@@ -3,10 +3,9 @@ package ru.job4j.car.models;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
- * Engine
+ * Engine detail
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
@@ -16,55 +15,60 @@ import java.util.Objects;
 @Table(name = "ENGINE")
 @AttributeOverride(
         name = "name",
-        column = @Column(name = "engine_name", nullable = false)
+        column = @Column(name = "engine_name", nullable = false, unique = true)
 )
+@NamedEntityGraph(name = "enGraph",
+        attributeNodes = @NamedAttributeNode(value = "cars"))
 public class Engine extends AbstractBaseEntity {
 
-    @OneToMany(mappedBy = "engine")
+    /**
+     * List of cars
+     *
+     */
+    @OneToMany(mappedBy = "engine", cascade = CascadeType.ALL)
     private List<Car> cars = new ArrayList<>();
 
+    /**
+     * Default constructor
+     *
+     */
     public Engine() {
 
     }
 
+    /**
+     * Constructor with engine id
+     *
+     * @param id id
+     */
     public Engine(Long id) {
         super(id);
     }
+
+    /**
+     * Constructor with name
+     *
+     * @param name name
+     */
     public Engine(String name) {
         super(name);
     }
 
+    /**
+     * Get list of cars
+     *
+     * @return list of cars
+     */
     public List<Car> getCars() {
         return cars;
     }
 
+    /**
+     * Set list cars
+     *
+     * @param cars list of cars
+     */
     public void setCars(List<Car> cars) {
         this.cars = cars;
-    }
-
-//    @Override
-//    public String toString() {
-//        return "Engine{" +
-//                "id=" + getId() +
-//                ", name='" + getName() + '\'' +
-//                '}';
-//    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Engine engine = (Engine) o;
-        return Objects.equals(cars, engine.cars);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cars);
     }
 }

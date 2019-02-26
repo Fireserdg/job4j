@@ -1,5 +1,6 @@
 package ru.job4j.car.dao;
 
+import ru.job4j.car.models.Car;
 import ru.job4j.car.models.Transmission;
 
 import java.util.List;
@@ -11,43 +12,91 @@ import java.util.List;
  * @version 1.0.
  * @since 2019-02-21
  */
-public class TransmissionDAOImpl extends AbstractEntityDAO<Transmission> {
+public class TransmissionDAOImpl implements DetailEntityDAO<Transmission> {
 
-    private static final EntityDAO<Transmission> INSTANCE = new TransmissionDAOImpl();
+    /**
+     * Transaction wrapper
+     *
+     */
+    private final TransactionWrapper tx;
 
-    private TransmissionDAOImpl() {
-
+    /**
+     * Constructor
+     *
+     * @param wrapper wrapper
+     */
+    public TransmissionDAOImpl(TransactionWrapper wrapper) {
+        this.tx = wrapper;
     }
 
-    public static EntityDAO<Transmission> getInstance() {
-        return INSTANCE;
-    }
-
+    /**
+     * Add Transmission
+     *
+     * @param type Transmission
+     * @return identifier
+     */
     @Override
     public Long add(Transmission type) {
-        return getTransactionResult(session -> (Long) session.save(type)
+        return this.tx.getTransactionResult(session -> (Long) session.save(type)
         );
     }
 
+    /**
+     * Update Transmission
+     *
+     * @param type Transmission
+     */
     @Override
     public void update(Transmission type) {
-        doTransaction(session -> session.update(type));
+        this.tx.doTransaction(session -> session.update(type));
     }
 
+    /**
+     * Delete Transmission
+     *
+     * @param type Transmission
+     */
     @Override
-    public void delete(Long id) {
-        doTransaction(session -> session.delete(new Transmission(id)));
+    public void delete(Transmission type) {
+        this.tx.doTransaction(session -> session.delete(type));
     }
 
+    /**
+     * Find Transmission by id
+     *
+     * @param id Transmission id
+     * @return Transmission id
+     */
     @Override
     public Transmission findById(Long id) {
-        return getTransactionResult(session -> session.get(Transmission.class, id));
+        return this.tx.getTransactionResult(session -> session.get(Transmission.class, id));
     }
 
+    /**
+     * Find all Transmission
+     *
+     * @return list of engines
+     */
     @Override
     public List<Transmission> findAll() {
-        return getTransactionResult(session -> session.createQuery(
+        return this.tx.getTransactionResult(session -> session.createQuery(
                 "from Transmission", Transmission.class).list()
         );
+    }
+
+    /**
+     * Find Cars by name if engine
+     *
+     * @param name name of parameter
+     * @return list of cars
+     */
+    @Override
+    public List<Car> findAllElementsByNameDetail(String name) {
+        return this.tx.getTransactionResult(session -> session.createQuery(
+                "from Transmission where name=:param", Transmission.class)
+                    .setParameter("param", name)
+                    .setHint("javax.persistence.fetchgraph",
+                            session.getEntityGraph("transGraph"))
+                    .getSingleResult().getCars());
     }
 }

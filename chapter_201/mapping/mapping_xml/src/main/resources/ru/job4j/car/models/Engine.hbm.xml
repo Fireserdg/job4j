@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="ru.job4j.car.models.Engine" table="ENGINE_XML">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="name" column="engine_name" not-null="true" unique="true"/>
+
+        <bag name ="cars" table="CARS_XML" cascade="all-delete-orphan" inverse="true">
+            <key column="engine_id" not-null="true"/>
+            <one-to-many class="ru.job4j.car.models.Car"/>
+        </bag>
+    </class>
+</hibernate-mapping>

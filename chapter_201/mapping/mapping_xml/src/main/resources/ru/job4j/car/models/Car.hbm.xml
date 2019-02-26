@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="ru.job4j.car.models.Car" table="CARS_XML">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="model" column="model" not-null="true"/>
+
+        <many-to-one name="carBody" class ="ru.job4j.car.models.CarBody" lazy="false" fetch="join">
+            <column name="body_id" not-null="true"/>
+        </many-to-one>
+
+        <many-to-one name="engine" class ="ru.job4j.car.models.Engine" lazy="false" fetch="join">
+            <column name="engine_id" not-null="true"/>
+        </many-to-one>
+
+        <many-to-one name="transmission" class ="ru.job4j.car.models.Transmission" lazy="false" fetch="join">
+            <column name="trans_id" not-null="true"/>
+        </many-to-one>
+
+    </class>
+</hibernate-mapping>

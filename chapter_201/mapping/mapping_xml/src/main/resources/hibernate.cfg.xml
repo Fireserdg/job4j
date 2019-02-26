@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
+    <session-factory>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">7313984</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
+        <property name="show_sql">true</property>
+        <property name="connection.pool_size">40</property>
+        <!--<property name="hbm2ddl.auto">create</property>-->
+        <!--<property name="hibernate.format_sql">true</property>-->
+        <!--XML Entity mapping-->
+        <mapping resource="ru/job4j/car/models/Car.hbm.xml"/>
+        <mapping resource="ru/job4j/car/models/CarBody.hbm.xml"/>
+        <mapping resource="ru/job4j/car/models/Engine.hbm.xml"/>
+        <mapping resource="ru/job4j/car/models/Transmission.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

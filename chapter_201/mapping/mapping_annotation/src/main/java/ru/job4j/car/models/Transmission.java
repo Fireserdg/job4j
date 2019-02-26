@@ -2,10 +2,9 @@ package ru.job4j.car.models;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 /**
- * Transmission
+ * Transmission detail
  *
  * @author Sergey Filippov (serdg1984@yandex.ru).
  * @version 1.0.
@@ -13,60 +12,62 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "TRANSMISSION")
-
 @AttributeOverride(
         name = "name",
-        column = @Column(name = "trans_name", nullable = false)
+        column = @Column(name = "trans_name", nullable = false, unique = true)
 )
+@NamedEntityGraph(name = "transGraph",
+        attributeNodes = @NamedAttributeNode(value = "cars"))
 public class Transmission extends AbstractBaseEntity {
 
-    @OneToMany(mappedBy = "transmission")
+    /**
+     * List of cars
+     *
+     */
+    @OneToMany(mappedBy = "transmission", cascade = CascadeType.ALL)
     private List<Car> cars;
 
+    /**
+     * Default constructor
+     *
+     */
     public Transmission() {
 
     }
 
+    /**
+     * Constructor with transmission id
+     *
+     * @param id id
+     */
     public Transmission(Long id) {
         super(id);
     }
 
+    /**
+     * Constructor with name
+     *
+     * @param name name
+     */
     public Transmission(String name) {
         super(name);
     }
 
-
+    /**
+     * Get list of cars
+     *
+     * @return list of cars
+     */
     public List<Car> getCars() {
         return cars;
     }
 
+    /**
+     * Set list cars
+     *
+     * @param cars list of cars
+     */
     public void setCars(List<Car> cars) {
         this.cars = cars;
-    }
-
-    @Override
-    public String toString() {
-        return "Transmission{"
-                + "id=" + getId()
-                + ", name='" + getName() + '\''
-                + '}';
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Transmission that = (Transmission) o;
-        return Objects.equals(cars, that.cars);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cars);
     }
 }
