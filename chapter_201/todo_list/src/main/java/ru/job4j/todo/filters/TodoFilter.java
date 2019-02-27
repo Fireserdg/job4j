@@ -1,6 +1,7 @@
 package ru.job4j.todo.filters;
 
 import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
 import org.slf4j.*;
 import ru.job4j.todo.services.SessionUtil;
 
@@ -73,8 +74,9 @@ public class TodoFilter implements Filter {
      */
     private void closeSessionFactory() {
         try {
-            if (SessionUtil.getFactory() != null && !SessionUtil.getFactory().isClosed()) {
-                SessionUtil.getFactory().close();
+            SessionFactory factory = SessionUtil.getInstance().getFactory();
+            if (factory != null && !factory.isClosed()) {
+                factory.close();
                 LOG.info("SessionFactory close");
             }
         } catch (HibernateException he) {

@@ -35,7 +35,7 @@ public enum DbStore implements Store<Item> {
      * Session factory.
      *
      */
-    private final SessionFactory factory = SessionUtil.getFactory();
+    private final SessionFactory factory = SessionUtil.getInstance().getFactory();
 
     /**
      * Add Item to database.
@@ -99,7 +99,8 @@ public enum DbStore implements Store<Item> {
     @Override
     public List<Item> getAllItems() {
         return getTransactionResult(
-                session -> session.createQuery("from Item", Item.class).list());
+                session -> session.createQuery(
+                        "from Item order by id", Item.class).list());
     }
 
     /**

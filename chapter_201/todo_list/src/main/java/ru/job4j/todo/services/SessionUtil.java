@@ -1,9 +1,7 @@
 package ru.job4j.todo.services;
 
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.slf4j.*;
 
 /**
  * Session util.
@@ -12,27 +10,34 @@ import org.slf4j.*;
  * @version 1.0.
  * @since 2019-02-13
  */
-public final class SessionUtil {
+public class SessionUtil {
 
     /**
-     * Contains logger.
+     * Instance for SessionUtil
      */
-    private static final Logger LOG = LoggerFactory.getLogger(SessionUtil.class);
+    private static final SessionUtil INSTANCE = new SessionUtil();
 
     /**
      * Session factory.
-     *
      */
-    private static SessionFactory factory;
+    private final SessionFactory factory;
 
-    static {
-        try {
-            factory = new Configuration()
+    /**
+     * Default private constructor
+     */
+    private SessionUtil() {
+            this.factory = new Configuration()
                     .configure()
                     .buildSessionFactory();
-        } catch (HibernateException ex) {
-            LOG.error("Build SessionFactory error", ex);
-        }
+    }
+
+    /**
+     * Get instance Session Util
+     *
+     */
+
+    public static SessionUtil getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -40,7 +45,7 @@ public final class SessionUtil {
      *
      * @return Session factory
      */
-    public static SessionFactory getFactory() {
+    public SessionFactory getFactory() {
         return factory;
     }
 }

@@ -86,9 +86,4 @@ public class DbStoreTest {
         assertThat(expected.getId(), is(id));
         instance.deleteItem(id);
     }
-
-//    @Test
-//    public void whenDelete() {
-//        instance.deleteItem(1000);
-//    }
 }
