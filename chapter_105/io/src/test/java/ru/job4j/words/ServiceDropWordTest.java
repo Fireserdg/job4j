@@ -7,6 +7,7 @@ import ru.job4j.number.ServiceNumber;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -38,13 +39,13 @@ public class ServiceDropWordTest {
     }
 
     @Test
-    public void dropAbusesFromTextWhereHasAbuses() throws IOException {
+    public void dropAbusesFromTextWhereHasAbusesIgnoreCase() throws IOException {
         var stopWords = new String[]{"first", "five"};
-        var str = "first, second, third, forth, five";
+        var str = "first, second, third, forth, five, FirSt";
         try (var in = new ByteArrayInputStream(str.getBytes());
             var out = new ByteArrayOutputStream()) {
             service.dropAbuses(in, out, stopWords);
-            assertThat(out.toString(), is("second, third, forth,"));
+            assertThat(out.toString(), is(", second, third, forth, , "));
         }
     }
 
@@ -68,7 +69,7 @@ public class ServiceDropWordTest {
             service.dropAbuses(in, out, stopWords);
             assertThat(out.toString(), is(new StringJoiner(System.lineSeparator())
                     .add("Here's the next topic you need to learn.")
-                    .add("You can it but you might lose information.")
+                    .add("You can  it but you might lose  information.")
                     .toString()));
         }
     }
@@ -87,7 +88,7 @@ public class ServiceDropWordTest {
         }
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = UncheckedIOException.class)
     public void whenCloseStreamThenGetException() throws IOException {
         var stopWords = new String[]{"Tik", "Tak"};
         try (var in = ServiceNumber.class.getClassLoader()

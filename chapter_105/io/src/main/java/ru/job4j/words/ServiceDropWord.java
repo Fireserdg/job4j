@@ -2,7 +2,6 @@ package ru.job4j.words;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -25,18 +24,16 @@ public class ServiceDropWord {
     public void dropAbuses(InputStream in, OutputStream out, String[] abuse) throws IOException {
         try (var reader = new BufferedReader(new InputStreamReader(in));
              var writer = new BufferedWriter(new OutputStreamWriter(out))) {
-            var stringSet = Arrays.stream(abuse).collect(Collectors.toSet());
-            var words = reader.readLine();
-            while (words != null) {
-                writer.write(Arrays.stream(words.split("(\\s)"))
-                        .filter(value -> !stringSet.contains(
-                                value.replaceAll("[^A-Za-zА-Яа-я0-9]+", "")))
-                        .collect(Collectors.joining(" ")));
-                words = reader.readLine();
-                if ((words) != null) {
-                    writer.newLine();
-                }
-            }
+            var regEx = getRegExp(abuse);
+            writer.write(reader.lines()
+                    .map(line -> line.replaceAll(regEx, ""))
+                    .collect(Collectors.joining(System.lineSeparator())));
         }
+    }
+
+    private String getRegExp(String[] abuse) {
+        return Arrays.stream(abuse)
+                .collect(Collectors.collectingAndThen(Collectors.joining("|", "(", ")"),
+                        rst -> String.format("%s%s", "(?i)", rst)));
     }
 }
