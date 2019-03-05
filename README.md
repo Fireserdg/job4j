@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/Fireserdg/job4j.svg?branch=master)](https://travis-ci.org/Fireserdg/job4j)
 [![codecov](https://codecov.io/gh/Fireserdg/job4j/branch/master/graph/badge.svg)](https://codecov.io/gh/Fireserdg/job4j)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/69d149a67b474d2aacc8ec11f3783198)](https://www.codacy.com/app/Fireserdg/job4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Fireserdg/job4j&amp;utm_campaign=Badge_Grade)
 # Репозиторий Филиппов Сергей
 Всем привет, я прохожу стажировку в качестве Java Developer на job4j. 
 Ссылка: http://job4j.ru/index.html
