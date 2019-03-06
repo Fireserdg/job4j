@@ -54,7 +54,7 @@ public class ServiceNumberTest {
     public void whenHasNotEvenNumberToFileThenReadAndGetResult() throws IOException {
         try (var stream = ServiceNumber.class
                 .getClassLoader().getResourceAsStream("uneven.txt")) {
-            boolean result = service.isNumber(stream);
+            var result = service.isNumber(stream);
             assertThat(result, is(false));
         }
     }
