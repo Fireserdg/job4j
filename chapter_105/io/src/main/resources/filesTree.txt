@@ -1,0 +1,9 @@
+dir1/folders1/jpg_2.jpg
+dir1/folders1/temp_1.txt
+dir1/folders2/temp_2.txt
+dir1/folders2/jpg_1.jpg
+dir2/folders1/temp_3.txt
+dir2/folders1/xml_file_1.xml
+dir3/folders1/temp.xsd
+dir3/folders2/in/temp_4.txt
+dir3/folders2/in/xml_file_2.xml
