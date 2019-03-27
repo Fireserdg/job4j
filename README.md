@@ -57,5 +57,5 @@
     
     [Перейти по ссылке к проекту](https://github.com/Fireserdg/job4j/tree/master/chapter_104/control_task).
 
-
+    "В курсе производилась работа с ветках git."
 
