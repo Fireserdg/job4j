@@ -2,7 +2,9 @@ package ru.job4j.car.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.car.models.Car;
 import ru.job4j.car.models.CarBody;
@@ -27,26 +29,40 @@ public class CarDAOImplTest {
      * CarDAO
      *
      */
-    private CarEntityDAO carDAO;
+    private static CarEntityDAO carDAO;
 
     /**
      * Engine DAO
      *
      */
-    private DetailEntityDAO<Engine> engineDAO;
+    private static DetailEntityDAO<Engine> engineDAO;
+
+    /**
+     * Factory
+     *
+     */
+    private static SessionFactory factory;
 
     /**
      * Init car DAO
      *
      */
-    @Before
-    public void init() {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+    @BeforeClass
+    public static void init() {
+        factory = new Configuration().configure().buildSessionFactory();
         TransactionWrapper wrapper = new TransactionWrapper(factory);
         carDAO = new CarDAOImpl(wrapper);
         engineDAO = new EngineDAOImpl(wrapper);
     }
 
+    /**
+     * Close factory
+     *
+     */
+    @AfterClass
+    public static void close() {
+        factory.close();
+    }
     @Test
     public void whenFindCarById() {
         Car car = carDAO.findById(1L);

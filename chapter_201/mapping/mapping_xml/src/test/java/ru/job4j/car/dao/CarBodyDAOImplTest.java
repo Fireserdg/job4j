@@ -2,7 +2,9 @@ package ru.job4j.car.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.car.models.Car;
 import ru.job4j.car.models.CarBody;
@@ -28,38 +30,53 @@ public class CarBodyDAOImplTest {
      * Car body DAO
      *
      */
-    private DetailEntityDAO<CarBody> bodyDAO;
+    private static DetailEntityDAO<CarBody> bodyDAO;
 
     /**
      * Engine DAO
      *
      */
-    private DetailEntityDAO<Engine> engineDAO;
+    private static DetailEntityDAO<Engine> engineDAO;
 
     /**
      * Car DAO
      *
      */
-    private CarEntityDAO carDAO;
+    private static CarEntityDAO carDAO;
 
     /**
      * Wrapper for transaction
      *
      */
-    private DetailEntityDAO<Transmission> transDAO;
+    private static DetailEntityDAO<Transmission> transDAO;
+
+    /**
+     * Factory
+     *
+     */
+    private static SessionFactory factory;
 
     /**
      * Init instance Car body DAO
      *
      */
-    @Before
-    public void init() {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+    @BeforeClass
+    public static void init() {
+        factory = new Configuration().configure().buildSessionFactory();
         TransactionWrapper wrapper = new TransactionWrapper(factory);
         bodyDAO = new CarBodyDAOImpl(wrapper);
         engineDAO = new EngineDAOImpl(wrapper);
         carDAO = new CarDAOImpl(wrapper);
         transDAO = new TransmissionDAOImpl(wrapper);
+    }
+
+    /**
+     * Close factory
+     *
+     */
+    @AfterClass
+    public static void close() {
+        factory.close();
     }
 
     @Test
