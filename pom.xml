@@ -54,6 +54,7 @@
         <module>chapter_104</module>
         <module>chapter_105</module>
         <module>chapter_201</module>
+        <module>chapter_202</module>
     </modules>
     <!--Profile for liquibase-->
     <profiles>
